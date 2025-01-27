@@ -27,14 +27,19 @@ using System.Runtime.InteropServices;
 namespace Jitter2.LinearMath;
 
 /// <summary>
+/// 角度 <br></br><br></br>
+/// 一个表示角度的32位浮点数变量。这个结构的存在是为了消除Jitter API中角度和弧度之间的歧义。<br></br><br></br>
 /// A 32-bit floating point variable representing an angle. This structure exists to eliminate
 /// ambiguity between radians and degrees in the Jitter API.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 1*sizeof(Real))]
 public struct JAngle : IEquatable<JAngle>
 {
+    /// <summary>
+    /// 弧度制角度
+    /// </summary>
     [field: FieldOffset(0*sizeof(Real))]
-    public Real Radiant { get; set; }
+    public Real Radiant { get; set; }//To do : should named "Radian"
 
     /// <summary>
     /// Returns a string representation of the <see cref="JAngle"/>.
@@ -59,17 +64,30 @@ public struct JAngle : IEquatable<JAngle>
         return Radiant.GetHashCode();
     }
 
+    /// <summary>
+    /// 角度制角度
+    /// </summary>
     public Real Degree
     {
         readonly get => Radiant / MathR.PI * (Real)180.0;
         set => Radiant = value / (Real)180.0 * MathR.PI;
     }
 
+    /// <summary>
+    /// 从弧度制获取角度
+    /// </summary>
+    /// <param name="rad"></param>
+    /// <returns></returns>
     public static JAngle FromRadiant(Real rad)
     {
         return new JAngle { Radiant = rad };
     }
 
+    /// <summary>
+    /// 从角度制获取角度
+    /// </summary>
+    /// <param name="deg"></param>
+    /// <returns></returns>
     public static JAngle FromDegree(Real deg)
     {
         return new JAngle { Degree = deg };

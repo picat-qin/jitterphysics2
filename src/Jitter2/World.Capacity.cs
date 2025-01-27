@@ -25,8 +25,12 @@ using System;
 
 namespace Jitter2;
 
+// 容量
 public partial class World
 {
+    /// <summary>
+    /// 容量
+    /// </summary>
     public struct Capacity : IEquatable<Capacity>
     {
         // Offsets for customizable counts
@@ -36,13 +40,27 @@ public partial class World
         private int smallConstraintCountOffset;
 
         // Default values for each property
+        /// <summary>
+        /// 默认物体数量
+        /// </summary>
         public const int DefaultBodyCount = 32768;
+        /// <summary>
+        /// 默认接触数量
+        /// </summary>
         public const int DefaultContactCount = 65536;
+        /// <summary>
+        /// 默认约束数量
+        /// </summary>
         public const int DefaultConstraintCount = 32768;
+        /// <summary>
+        /// 默认小约束数量
+        /// </summary>
         public const int DefaultSmallConstraintCount = 32768;
 
         /// <summary>
+        /// 获取或设置物体的总数量。<br></br><br></br>
         /// Gets or sets the total number of bodies.
+        /// 这个数必须始终大于 <see cref="DefaultBodyCount"/>.<br></br><br></br>
         /// The value will always be at least <see cref="DefaultBodyCount"/>.
         /// </summary>
         public int BodyCount
@@ -57,6 +75,7 @@ public partial class World
         }
 
         /// <summary>
+        /// 使用默认值创建世界。<br></br><br></br>
         /// Uses the default values for world creation.
         /// </summary>
         /// <remarks>
@@ -71,6 +90,7 @@ public partial class World
         public static Capacity Default => new Capacity();
 
         /// <summary>
+        /// 接触数量 <br></br><br></br>
         /// Gets or sets the total number of contacts.
         /// </summary>
         public int ContactCount
@@ -85,6 +105,7 @@ public partial class World
         }
 
         /// <summary>
+        /// 约束数量 <br></br><br></br>
         /// Gets or sets the total number of constraints.
         /// </summary>
         public int ConstraintCount
@@ -99,6 +120,7 @@ public partial class World
         }
 
         /// <summary>
+        /// 小约束数量 <br></br><br></br>
         /// Gets or sets the total number of small constraints.
         /// </summary>
         public int SmallConstraintCount

@@ -30,6 +30,7 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 固定角度约束, 限制两个物体之间的相对方向，消除三个旋转自由度。<br></br><br></br>
 /// Constrains the relative orientation between two bodies, eliminating three degrees of rotational freedom.
 /// </summary>
 public unsafe class FixedAngle : Constraint

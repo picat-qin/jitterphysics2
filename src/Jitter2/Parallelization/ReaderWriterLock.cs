@@ -26,6 +26,8 @@ using System.Threading;
 namespace Jitter2.Parallelization;
 
 /// <summary>
+/// 读写锁<br></br><br></br>
+/// 一种高效的读写锁实现，针对罕见的写入事件进行了优化。<br></br><br></br>
 /// An efficient reader-writer lock implementation optimized
 /// for rare write events.
 /// </summary>
@@ -35,6 +37,7 @@ public struct ReaderWriterLock
     private volatile int reader;
 
     /// <summary>
+    /// 进入读锁 <br></br><br></br>
     /// Enters the critical read section.
     /// </summary>
     public void EnterReadLock()
@@ -50,6 +53,7 @@ public struct ReaderWriterLock
     }
 
     /// <summary>
+    /// 进入写锁 <br></br><br></br>
     /// Enters the critical write section.
     /// </summary>
     public void EnterWriteLock()
@@ -69,6 +73,7 @@ public struct ReaderWriterLock
     }
 
     /// <summary>
+    /// 退出读锁 <br></br><br></br>
     /// Exits the read section.
     /// </summary>
     public void ExitReadLock()
@@ -77,6 +82,7 @@ public struct ReaderWriterLock
     }
 
     /// <summary>
+    /// 退出写锁 <br></br><br></br>
     /// Exits the write section.
     /// </summary>
     public void ExitWriteLock()

@@ -28,18 +28,28 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Parallelization;
 
 /// <summary>
+/// 并行类拓展方法
 /// Provides a ParallelForBatch extension for <see cref="PartitionedBuffer{T}"/> and <see
 /// cref="PartitionedBuffer{T}"/>.
 /// </summary>
 public static class ParallelExtensions
 {
     /// <summary>
+    /// 批量遍历数组中的元素。<br></br><br></br>
     /// Loop in batches over the elements of an array.
     /// </summary>
-    /// <param name="taskThreshold">If the number of elements is less than this value, only
-    /// one batch is generated.</param>
-    /// <param name="execute">True if <see cref="ThreadPool.Execute"/> should be called.</param>
-    /// <returns>The number of batches(/tasks) generated.</returns>
+    /// <param name="taskThreshold">
+    /// 如果元素数量小于此值，则只生成一个批次。<br></br><br></br>
+    /// If the number of elements is less than this value, onl one batch is generated.
+    /// </param>
+    /// <param name="execute">
+    /// >如果应调用<see cref="ThreadPool.Execute"/>，则为true。<br></br><br></br>
+    /// True if <see cref="ThreadPool.Execute"/> should be called.
+    /// </param>
+    /// <returns>
+    /// 生成的批次（/任务）的数量。<br></br><br></br>
+    /// The number of batches(/tasks) generated.
+    /// </returns>
     public static int ParallelForBatch<T>(this Array array, int taskThreshold,
         Action<Parallel.Batch> action, bool execute = true) where T : unmanaged
     {
@@ -52,11 +62,16 @@ public static class ParallelExtensions
     }
 
     /// <summary>
+    /// 批量遍历 <see cref="PartitionedBuffer{T}"/> 的活动元素。<br></br><br></br>
     /// Loop in batches over the active elements of the <see cref="PartitionedBuffer{T}"/>.
     /// </summary>
-    /// <param name="taskThreshold">If the number of elements is less than this value, only
+    /// <param name="taskThreshold">
+    /// 如果元素数量小于此值，则只 生成一个批次。<br></br><br></br>
+    /// If the number of elements is less than this value, only
     /// one batch is generated.</param>
-    /// <param name="execute">True if <see cref="ThreadPool.Execute"/> should be called.</param>
+    /// <param name="execute">
+    /// 如果应调用<see cref="ThreadPool.Execute"/>，则为true。<br></br><br></br>
+    /// True if <see cref="ThreadPool.Execute"/> should be called.</param>
     /// <returns>The number of batches(/tasks) generated.</returns>
     public static int ParallelForBatch<T>(this PartitionedBuffer<T> list, int taskThreshold,
         Action<Parallel.Batch> action, bool execute = true) where T : unmanaged
@@ -70,12 +85,17 @@ public static class ParallelExtensions
     }
 
     /// <summary>
+    /// 批量遍历 <see cref="ReadOnlyPartitionedSet{T}"/> 的活动元素。<br></br><br></br>
     /// Loop in batches over the active elements of the <see cref="ReadOnlyPartitionedSet{T}"/>.
     /// </summary>
-    /// <param name="taskThreshold">If the number of elements is less than this value, only
+    /// <param name="taskThreshold">
+    /// 如果元素数量小于此值，则只生成一个批次。<br></br><br></br>
+    /// If the number of elements is less than this value, only
     /// one batch is generated.</param>
-    /// <param name="execute">True if <see cref="ThreadPool.Execute"/> should be called.</param>
-    /// <returns>The number of batches(/tasks) generated.</returns>
+    /// <param name="execute">
+    /// 如果应调用<see cref="ThreadPool.Execute"/>，则为true。<br></br><br></br>
+    /// True if <see cref="ThreadPool.Execute"/> should be called.</param>
+    /// <returns>生成的批次（/任务）的数量。<br></br><br></br> The number of batches(/tasks) generated.</returns>
     public static int ParallelForBatch<T>(this ReadOnlyPartitionedSet<T> list, int taskThreshold,
         Action<Parallel.Batch> action, bool execute = true) where T : class, IPartitionedSetIndex
     {
@@ -88,12 +108,17 @@ public static class ParallelExtensions
     }
 
     /// <summary>
+    /// 批量遍历 <see cref="PartitionedSet{T}"/> 的活动元素。<br></br><br></br>
     /// Loop in batches over the active elements of the <see cref="PartitionedSet{T}"/>.
     /// </summary>
-    /// <param name="taskThreshold">If the number of elements is less than this value, only
+    /// <param name="taskThreshold">
+    /// 如果元素数量小于此值，则只生成一个批次。<br></br><br></br>
+    /// If the number of elements is less than this value, only
     /// one batch is generated.</param>
-    /// <param name="execute">True if <see cref="ThreadPool.Execute"/> should be called.</param>
-    /// <returns>The number of batches(/tasks) generated.</returns>
+    /// <param name="execute">
+    /// 如果应调用<see cref="ThreadPool.Execute"/>，则为true。<br></br><br></br>
+    /// True if <see cref="ThreadPool.Execute"/> should be called.</param>
+    /// <returns>生成的批次（/任务）的数量。<br></br><br></br> The number of batches(/tasks) generated.</returns>
     internal static int ParallelForBatch<T>(this PartitionedSet<T> partitionedSet, int taskThreshold,
         Action<Parallel.Batch> action, bool execute = true) where T : class, IPartitionedSetIndex
     {

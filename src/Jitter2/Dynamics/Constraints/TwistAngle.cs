@@ -31,6 +31,7 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 扭曲约束, 限制两个物体的相对扭曲。此约束移除一个角度
 /// Constrains the relative twist of two bodies. This constraint removes one angular
 /// degree of freedom when the limit is enforced.
 /// </summary>

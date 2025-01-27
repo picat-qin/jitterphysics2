@@ -31,11 +31,16 @@ using System.Threading;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 一个存储 (int, int) 值对的哈希集实现。<br></br>
+/// 该实现基于开放寻址。<br></br><br></br>
 /// A hash set implementation which stores pairs of (int, int) values.
 /// The implementation is based on open addressing.
 /// </summary>
 internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
 {
+    /// <summary>
+    /// 值对
+    /// </summary>
     [StructLayout(LayoutKind.Explicit, Size = 8)]
     public readonly struct Pair
     {
@@ -45,6 +50,9 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
 
         [FieldOffset(4)] public readonly int ID2;
 
+        /// <summary>
+        /// 零
+        /// </summary>
         public static Pair Zero = new Pair();
 
         public Pair(int id1, int id2)
@@ -65,6 +73,9 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         }
     }
 
+    /// <summary>
+    /// 枚举器
+    /// </summary>
     public struct Enumerator : IEnumerator<Pair>
     {
         private readonly PairHashSet hashSet;
@@ -75,6 +86,9 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
             this.hashSet = hashSet;
         }
 
+        /// <summary>
+        /// 当前
+        /// </summary>
         public readonly Pair Current => hashSet.Slots[index];
 
         readonly object IEnumerator.Current => Current;
@@ -101,13 +115,25 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         }
     }
 
+    /// <summary>
+    /// 插槽
+    /// </summary>
     public Pair[] Slots = Array.Empty<Pair>();
     private int count;
 
     // 16384*8/1024 KB = 128 KB
+    /// <summary>
+    /// 最小尺寸
+    /// </summary>
     public const int MinimumSize = 16384;
+    /// <summary>
+    /// 修剪因子
+    /// </summary>
     public const int TrimFactor = 8;
 
+    /// <summary>
+    /// 数量
+    /// </summary>
     public int Count => count;
 
     private static int PickSize(int size = -1)
@@ -121,6 +147,9 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         return p2;
     }
 
+    /// <summary>
+    /// 清楚插槽
+    /// </summary>
     public void Clear()
     {
         Array.Clear(Slots, 0, Slots.Length);
@@ -131,6 +160,10 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         Resize(PickSize());
     }
 
+    /// <summary>
+    /// 调整插槽大小
+    /// </summary>
+    /// <param name="size"></param>
     private void Resize(int size)
     {
         if (Slots.Length == size) return;
@@ -166,6 +199,11 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         }
     }
 
+    /// <summary>
+    /// 是否包含某值对
+    /// </summary>
+    /// <param name="pair"></param>
+    /// <returns></returns>
     public bool Contains(Pair pair)
     {
         int hash = pair.GetHash();
@@ -173,6 +211,11 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         return Slots[hashIndex].ID != 0;
     }
 
+    /// <summary>
+    /// 添加值对
+    /// </summary>
+    /// <param name="pair"></param>
+    /// <returns></returns>
     public bool Add(Pair pair)
     {
         int hash = pair.GetHash();
@@ -196,6 +239,11 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
 
     private Jitter2.Parallelization.ReaderWriterLock rwLock;
 
+    /// <summary>
+    /// 并发添加值对
+    /// </summary>
+    /// <param name="pair"></param>
+    /// <returns></returns>
     public bool ConcurrentAdd(Pair pair)
     {
         int hash = pair.GetHash();
@@ -246,6 +294,11 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         } // fixed
     }
 
+    /// <summary>
+    /// 移除指定插槽
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <returns></returns>
     public bool Remove(int slot)
     {
         int modder = Slots.Length - 1;
@@ -288,6 +341,11 @@ internal unsafe class PairHashSet : IEnumerable<PairHashSet.Pair>
         return true;
     }
 
+    /// <summary>
+    /// 移除指定值对
+    /// </summary>
+    /// <param name="pair"></param>
+    /// <returns></returns>
     public bool Remove(Pair pair)
     {
         int hash = pair.GetHash();

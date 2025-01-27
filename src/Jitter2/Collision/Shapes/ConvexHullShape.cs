@@ -30,6 +30,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示一般的凸形。<br></br><br></br>
 /// Represents a generic convex shape.
 /// </summary>
 public class ConvexHullShape : RigidBodyShape
@@ -85,9 +86,15 @@ public class ConvexHullShape : RigidBodyShape
     private JVector shifted;
 
     /// <summary>
+    /// 初始化凸包形状类的新实例，创建凸包。<br></br><br></br>
     /// Initializes a new instance of the ConvexHullShape class, creating a convex hull.
     /// </summary>
-    /// <param name="triangles">A list containing all vertices defining the convex hull. The vertices must strictly lie on the surface of the convex hull to avoid incorrect results or indefinite hangs in the collision algorithm. Note that the passed triangle list is not referenced and can be modified after calling the constructor without side effects.</param>
+    /// <param name="triangles">
+    /// 包含定义凸包的所有顶点的列表。<br></br><br></br>
+    /// 顶点必须严格位于凸包的表面上，以避免碰撞算法中出现错误结果或无限期挂起。<br></br>
+    /// 请注意，传递的三角形列表未被引用，并且可以在调用构造函数后进行修改，而不会产生副作用。<br></br><br></br>
+    /// A list containing all vertices defining the convex hull. The vertices must strictly lie on the surface of the convex hull to avoid incorrect results or indefinite hangs in the collision algorithm. Note that the passed triangle list is not referenced and can be modified after calling the constructor without side effects.
+    /// </param>
     public ConvexHullShape(List<JTriangle> triangles)
     {
         Build(triangles);
@@ -173,9 +180,13 @@ public class ConvexHullShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 创建凸包形状的克隆。请注意，底层数据结构在实例之间共享。<br></br><br></br>
     /// Creates a clone of the convex hull shape. Note that the underlying data structure is shared among instances.
     /// </summary>
-    /// <returns>A new instance of the ConvexHullShape class that shares the same underlying data structure as the original instance.</returns>
+    /// <returns>
+    /// 凸包形状类的新实例，与原始实例共享相同的底层数据结构。<br></br><br></br>
+    /// A new instance of the ConvexHullShape class that shares the same underlying data structure as the original instance.
+    /// </returns>
     public ConvexHullShape Clone()
     {
         ConvexHullShape result = new()
@@ -192,6 +203,9 @@ public class ConvexHullShape : RigidBodyShape
         return result;
     }
 
+    /// <summary>
+    /// 转移?
+    /// </summary>
     public JVector Shift
     {
         get => shifted;
@@ -202,6 +216,9 @@ public class ConvexHullShape : RigidBodyShape
         }
     }
 
+    /// <summary>
+    /// 更新形状
+    /// </summary>
     public void UpdateShape()
     {
         CalculateMassInertia();
@@ -215,6 +232,9 @@ public class ConvexHullShape : RigidBodyShape
         mass = cachedMass;
     }
 
+    /// <summary>
+    /// 计算质量惯性
+    /// </summary>
     public void CalculateMassInertia()
     {
         cachedCenter = JVector.Zero;
@@ -320,7 +340,7 @@ public class ConvexHullShape : RigidBodyShape
         ushort current = 0;
         Real dotProduct = JVector.Dot(vertices[current].Vertex, direction);
 
-        again:
+    again:
         var min = vertices[current].NeighborMinIndex;
         var max = vertices[current].NeighborMaxIndex;
 

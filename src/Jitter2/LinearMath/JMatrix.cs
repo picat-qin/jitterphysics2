@@ -28,22 +28,30 @@ using System.Runtime.InteropServices;
 namespace Jitter2.LinearMath;
 
 /// <summary>
+/// 三乘三矩阵 <br></br><br></br>
+/// 其组件的类型为 <see cref="Real"/>。<br></br><br></br>
 /// Represents a three-by-three matrix with components of type <see cref="Real"/>.
 /// </summary>
-[StructLayout(LayoutKind.Explicit, Size = 9*sizeof(Real))]
+[StructLayout(LayoutKind.Explicit, Size = 9 * sizeof(Real))]
 public struct JMatrix : IEquatable<JMatrix>
 {
-    [FieldOffset(0*sizeof(Real))] public Real M11;
-    [FieldOffset(1*sizeof(Real))] public Real M21;
-    [FieldOffset(2*sizeof(Real))] public Real M31;
-    [FieldOffset(3*sizeof(Real))] public Real M12;
-    [FieldOffset(4*sizeof(Real))] public Real M22;
-    [FieldOffset(5*sizeof(Real))] public Real M32;
-    [FieldOffset(6*sizeof(Real))] public Real M13;
-    [FieldOffset(7*sizeof(Real))] public Real M23;
-    [FieldOffset(8*sizeof(Real))] public Real M33;
+    [FieldOffset(0 * sizeof(Real))] public Real M11;
+    [FieldOffset(1 * sizeof(Real))] public Real M21;
+    [FieldOffset(2 * sizeof(Real))] public Real M31;
+    [FieldOffset(3 * sizeof(Real))] public Real M12;
+    [FieldOffset(4 * sizeof(Real))] public Real M22;
+    [FieldOffset(5 * sizeof(Real))] public Real M32;
+    [FieldOffset(6 * sizeof(Real))] public Real M13;
+    [FieldOffset(7 * sizeof(Real))] public Real M23;
+    [FieldOffset(8 * sizeof(Real))] public Real M33;
 
+    /// <summary>
+    /// 单位矩阵
+    /// </summary>
     public static readonly JMatrix Identity;
+    /// <summary>
+    /// 空矩阵
+    /// </summary>
     public static readonly JMatrix Zero;
 
     static JMatrix()
@@ -71,6 +79,13 @@ public struct JMatrix : IEquatable<JMatrix>
         M33 = m33;
     }
 
+    /// <summary>
+    /// 从三个向量按列创建矩阵
+    /// </summary>
+    /// <param name="col1"></param>
+    /// <param name="col2"></param>
+    /// <param name="col3"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix FromColumns(in JVector col1, in JVector col2, in JVector col3)
     {
@@ -81,6 +96,11 @@ public struct JMatrix : IEquatable<JMatrix>
         return res;
     }
 
+    /// <summary>
+    /// 获取矩阵中向量
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe ref JVector UnsafeGet(int index)
     {
@@ -88,6 +108,11 @@ public struct JMatrix : IEquatable<JMatrix>
         return ref ptr[index];
     }
 
+    /// <summary>
+    /// 获取矩阵中某列向量
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe JVector GetColumn(int index)
     {
@@ -98,6 +123,12 @@ public struct JMatrix : IEquatable<JMatrix>
         }
     }
 
+    /// <summary>
+    /// 矩阵相乘
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="matrix2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix Multiply(in JMatrix matrix1, in JMatrix matrix2)
     {
@@ -105,6 +136,12 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 矩阵乘转置转置矩阵
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="matrix2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix MultiplyTransposed(in JMatrix matrix1, in JMatrix matrix2)
     {
@@ -112,6 +149,12 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 矩阵转置后乘矩阵
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="matrix2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix TransposedMultiply(in JMatrix matrix1, in JMatrix matrix2)
     {
@@ -119,6 +162,12 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 创建矩阵
+    /// </summary>
+    /// <param name="axis"></param>
+    /// <param name="angle"></param>
+    /// <returns></returns>
     public static JMatrix CreateRotationMatrix(JVector axis, Real angle)
     {
         Real c = MathR.Cos(angle / (Real)2.0);
@@ -129,6 +178,12 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 矩阵相乘
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="matrix2"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Multiply(in JMatrix matrix1, in JMatrix matrix2, out JMatrix result)
     {
@@ -161,6 +216,7 @@ public struct JMatrix : IEquatable<JMatrix>
     }
 
     /// <summary>
+    /// 矩阵转置后乘矩阵 <br></br><br></br>
     /// Calculates matrix1 \times matrix2^\mathrm{T}.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -187,6 +243,15 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M33 = num8;
     }
 
+    /// <summary>
+    /// 创建 X 旋转矩阵
+    /// </summary>
+    /// <param name="radians">弧度制角度</param>
+    /// <returns>
+    /// [  1  0  0  ] <br></br>
+    /// [  0  c -s  ] <br></br>
+    /// [  0  s  c  ] <br></br>
+    /// </returns>
     public static JMatrix CreateRotationX(Real radians)
     {
         JMatrix result = Identity;
@@ -205,6 +270,15 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 创建 Y 旋转矩阵
+    /// </summary>
+    /// <param name="radians">弧度制角度</param>
+    /// <returns>
+    /// [  c  0  s  ] <br></br>
+    /// [  0  1  0  ] <br></br>
+    /// [ -s  0  c  ] <br></br>
+    /// </returns>
     public static JMatrix CreateRotationY(Real radians)
     {
         JMatrix result = Identity;
@@ -223,6 +297,15 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 创建 Z 旋转矩阵
+    /// </summary>
+    /// <param name="radians">弧度制角度</param>
+    /// <returns>
+    /// [  c -s  0  ] <br></br>
+    /// [  s  c  0  ] <br></br>
+    /// [  0  0  1  ] <br></br>
+    /// </returns>
     public static JMatrix CreateRotationZ(Real radians)
     {
         JMatrix result = Identity;
@@ -242,8 +325,10 @@ public struct JMatrix : IEquatable<JMatrix>
     }
 
     /// <summary>
+    ///  创建一个比例矩阵。<br></br><br></br>
     /// Create a scaling matrix.
     /// </summary>
+    /// <param name="scale">比例向量</param>
     /// <returns></returns>
     public static JMatrix CreateScale(in JVector scale)
     {
@@ -257,6 +342,7 @@ public struct JMatrix : IEquatable<JMatrix>
     }
 
     /// <summary>
+    ///  创建一个比例矩阵。<br></br><br></br>
     /// Create a scaling matrix.
     /// </summary>
     /// <returns></returns>
@@ -266,6 +352,7 @@ public struct JMatrix : IEquatable<JMatrix>
     }
 
     /// <summary>
+    /// 矩阵转置后乘矩阵 <br></br><br></br>
     /// Calculates matrix1^\mathrm{T} \times matrix2.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -292,6 +379,12 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M33 = num8;
     }
 
+    /// <summary>
+    /// 矩阵和
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="matrix2"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Add(in JMatrix matrix1, in JMatrix matrix2, out JMatrix result)
     {
@@ -306,6 +399,12 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M33 = matrix1.M33 + matrix2.M33;
     }
 
+    /// <summary>
+    /// 矩阵差
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="matrix2"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Subtract(in JMatrix matrix1, in JMatrix matrix2, out JMatrix result)
     {
@@ -320,6 +419,10 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M33 = matrix1.M33 - matrix2.M33;
     }
 
+    /// <summary>
+    /// 行列式
+    /// </summary>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly Real Determinant()
     {
@@ -327,6 +430,12 @@ public struct JMatrix : IEquatable<JMatrix>
                M31 * M22 * M13 - M32 * M23 * M11 - M33 * M21 * M12;
     }
 
+    /// <summary>
+    /// 求逆矩阵
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <param name="result"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Inverse(in JMatrix matrix, out JMatrix result)
     {
@@ -363,6 +472,12 @@ public struct JMatrix : IEquatable<JMatrix>
         return true;
     }
 
+    /// <summary>
+    /// 矩阵乘标量
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="scaleFactor"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix Multiply(JMatrix matrix1, Real scaleFactor)
     {
@@ -370,6 +485,12 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 矩阵乘标量
+    /// </summary>
+    /// <param name="matrix1"></param>
+    /// <param name="scaleFactor"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Multiply(in JMatrix matrix1, Real scaleFactor, out JMatrix result)
     {
@@ -384,7 +505,11 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M32 = matrix1.M32 * num;
         result.M33 = matrix1.M33 * num;
     }
-
+    /// <summary>
+    /// 通过四元数创建矩阵
+    /// </summary>
+    /// <param name="quaternion"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix CreateFromQuaternion(JQuaternion quaternion)
     {
@@ -392,6 +517,11 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 求矩阵绝对值
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Absolute(in JMatrix matrix, out JMatrix result)
     {
@@ -406,6 +536,11 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M33 = Math.Abs(matrix.M33);
     }
 
+    /// <summary>
+    /// 通过四元数创建矩阵
+    /// </summary>
+    /// <param name="quaternion"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void CreateFromQuaternion(in JQuaternion quaternion, out JMatrix result)
     {
@@ -425,6 +560,11 @@ public struct JMatrix : IEquatable<JMatrix>
         result.M33 = (Real)1.0 - (Real)2.0 * (i * i + j * j);
     }
 
+    /// <summary>
+    /// 矩阵转置
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JMatrix Transpose(in JMatrix matrix)
     {
@@ -433,6 +573,7 @@ public struct JMatrix : IEquatable<JMatrix>
     }
 
     /// <summary>
+    /// 创建交叉矩阵 <br></br><br></br>
     /// Returns JMatrix(0, -vec.Z, vec.Y, vec.Z, 0, -vec.X, -vec.Y, vec.X, 0)-
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -441,6 +582,11 @@ public struct JMatrix : IEquatable<JMatrix>
         return new JMatrix(0, -vec.Z, vec.Y, vec.Z, 0, -vec.X, -vec.Y, vec.X, 0);
     }
 
+    /// <summary>
+    /// 矩阵转置
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void Transpose(in JMatrix matrix, out JMatrix result)
     {
@@ -471,6 +617,10 @@ public struct JMatrix : IEquatable<JMatrix>
         return result;
     }
 
+    /// <summary>
+    /// 迹
+    /// </summary>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Real Trace()
     {

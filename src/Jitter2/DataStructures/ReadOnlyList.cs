@@ -27,6 +27,7 @@ using System.Collections.Generic;
 namespace Jitter2.DataStructures;
 
 /// <summary>
+/// 为 <see cref="List{T}"/> 实现包装器，消除枚举期间的垃圾收集 (GC) 开销。<br></br><br></br>
 /// Implements a wrapper for <see cref="List{T}"/>, eliminating garbage collection (GC) overhead during enumeration.
 /// </summary>
 public readonly struct ReadOnlyList<T> : IReadOnlyCollection<T>

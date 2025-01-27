@@ -30,6 +30,9 @@ using Vertex = Jitter2.Collision.MinkowskiDifference.Vertex;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 对刚体进行真正的碰撞检测<br></br>
+/// 为一般凸物体提供高效、准确的碰撞检测算法<br></br>
+/// 由支撑函数隐式定义，参见<see cref="ISupportMappable"/>。<br></br><br></br>
 /// Provides efficient and accurate collision detection algorithms for general convex objects
 /// implicitly defined by a support function, see <see cref="ISupportMappable"/>.
 /// </summary>
@@ -37,6 +40,9 @@ public static class NarrowPhase
 {
     private const Real NumericEpsilon = (Real)1e-16;
 
+    /// <summary>
+    /// 求解器
+    /// </summary>
     private struct Solver
     {
         private ConvexPolytope convexPolytope;
@@ -78,7 +84,7 @@ public static class NarrowPhase
                 distSq = v.LengthSquared();
             }
 
-            converged:
+        converged:
 
             return true;
         }
@@ -138,7 +144,7 @@ public static class NarrowPhase
                 distSq = v.LengthSquared();
             }
 
-            converged:
+        converged:
 
             Real nlen2 = normal.LengthSquared();
 
@@ -209,7 +215,7 @@ public static class NarrowPhase
                 distSq = v.LengthSquared();
             }
 
-            converged:
+        converged:
 
             simplexSolver.GetClosest(out p1, out p2);
 
@@ -267,7 +273,7 @@ public static class NarrowPhase
 
             return false;
 
-            converged:
+        converged:
 
             convexPolytope.CalculatePoints(ctri, out point1, out point2);
 
@@ -653,7 +659,7 @@ public static class NarrowPhase
 
             return false;
 
-            converged:
+        converged:
 
             convexPolytope.CalculatePoints(ctri, out point1, out point2);
 
@@ -671,11 +677,21 @@ public static class NarrowPhase
     [ThreadStatic] private static Solver solver;
 
     /// <summary>
+    /// 检查某个点是否位于形状内。<br></br><br></br>
     /// Check if a point is inside a shape.
     /// </summary>
-    /// <param name="support">Support map representing the shape.</param>
-    /// <param name="point">Point to check.</param>
-    /// <returns>Returns true if the point is contained within the shape, false otherwise.</returns>
+    /// <param name="support">
+    /// 支撑map作为形状。<br></br><br></br> 
+    /// Support map representing the shape.
+    /// </param>
+    /// <param name="point">
+    /// 要检查的点。<br></br><br></br> 
+    /// Point to check.
+    /// </param>
+    /// <returns>
+    /// 如果该点包含在形状内，则返回 true，否则返回 false。<br></br><br></br>
+    /// Returns true if the point is contained within the shape, false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool PointTest(in ISupportMappable support, in JVector point)
     {
@@ -683,13 +699,17 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 检查某个点是否位于形状内。<br></br><br></br>
     /// Check if a point is inside a shape.
     /// </summary>
-    /// <param name="support">Support map representing the shape.</param>
-    /// <param name="orientation">Orientation of the shape.</param>
-    /// <param name="position">Position of the shape.</param>
-    /// <param name="point">Point to check.</param>
-    /// <returns>Returns true if the point is contained within the shape, false otherwise.</returns>
+    /// <param name="support">支撑map作为形状。<br></br> Support map representing the shape.</param>
+    /// <param name="orientation">形状的方向 <br></br> Orientation of the shape.</param>
+    /// <param name="position">形状的位置 <br> </br>Position of the shape.</param>
+    /// <param name="point">要检查的点 <br></br> Point to check.</param>
+    /// <returns>
+    /// 如果该点包含在形状内，则返回 true，否则返回 false。<br></br><br></br>
+    /// Returns true if the point is contained within the shape, false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool PointTest(in ISupportMappable support, in JMatrix orientation,
         in JVector position, in JVector point)
@@ -699,15 +719,22 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 对某个形状进行射线投射。<br></br><br></br>
     /// Performs a ray cast against a shape.
     /// </summary>
-    /// <param name="support">The support function of the shape.</param>
-    /// <param name="orientation">The orientation of the shape in world space.</param>
-    /// <param name="position">The position of the shape in world space.</param>
-    /// <param name="origin">The origin of the ray.</param>
-    /// <param name="direction">The direction of the ray; normalization is not necessary.</param>
-    /// <param name="lambda">Specifies the hit point of the ray, calculated as 'origin + lambda * direction'.</param>
+    /// <param name="support">支撑map作为形状。<br></br> Support map representing the shape.</param>
+    /// <param name="orientation">世界空间中形状的方向 <br></br> The orientation of the shape in world space.</param>
+    /// <param name="position">世界空间中形状的位置 <br></br><br> </br>The position of the shape in world space.</param>
+    /// <param name="origin">射线的原点 <br></br><br></br> The origin of the ray.</param>
+    /// <param name="direction">
+    /// 射线的方向, 通常非必要 <br></br><br></br> 
+    /// The direction of the ray; normalization is not necessary.
+    /// </param>
+    /// <param name="lambda">
+    /// 指定射线的命中点，计算为“原点 + 波长 * 方向”。<br></br><br></br>
+    /// Specifies the hit point of the ray, calculated as 'origin + lambda * direction'.</param>
     /// <param name="normal">
+    /// 垂直于表面的法线向量，指向外部。如果射线未击中，则此参数为零。<br></br><br></br>
     /// The normalized normal vector perpendicular to the surface, pointing outwards. If the ray does not
     /// hit, this parameter will be zero.
     /// </param>
@@ -729,17 +756,28 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 对某个形状进行射线投射。<br></br><br></br>
     /// Performs a ray cast against a shape.
     /// </summary>
-    /// <param name="support">The support function of the shape.</param>
-    /// <param name="origin">The origin of the ray.</param>
-    /// <param name="direction">The direction of the ray; normalization is not necessary.</param>
-    /// <param name="lambda">Specifies the hit point of the ray, calculated as 'origin + lambda * direction'.</param>
+    /// <param name="support">形状的支撑函数 <br></br><br></br>The support function of the shape.</param>
+    /// <param name="origin">射线的原点 <br></br><br></br>The origin of the ray.</param>
+    /// <param name="direction">
+    /// 射线的方向, 通常非必要 <br></br><br></br> 
+    /// The direction of the ray; normalization is not necessary.
+    /// </param>
+    /// <param name="lambda">
+    /// 指定射线的命中点，计算为“原点 + 波长 * 方向”。<br></br><br></br>
+    /// Specifies the hit point of the ray, calculated as 'origin + lambda * direction'.
+    /// </param>
     /// <param name="normal">
+    /// 垂直于表面的法线向量，指向外部。如果射线未击中，则此参数为零。<br></br><br></br>
     /// The normalized normal vector perpendicular to the surface, pointing outwards. If the ray does not
     /// hit, this parameter will be zero.
     /// </param>
-    /// <returns>Returns true if the ray intersects with the shape; otherwise, false.</returns>
+    /// <returns>
+    /// 如果射线与形状相交，则返回 true；否则返回 false。<br></br><br></br>
+    /// Returns true if the ray intersects with the shape; otherwise, false.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool RayCast(in ISupportMappable support, in JVector origin, in JVector direction, out Real lambda, out JVector normal)
     {
@@ -747,30 +785,43 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 确定两个凸形是否重叠，为重叠和分离的情况提供详细信息。它假设支撑形状 A 位于零位置且未旋转。<br></br>
+    /// 在内部，该方法采用扩展多面体算法 (EPA) 来收集碰撞信息。<br></br><br></br>
     /// Determines whether two convex shapes overlap, providing detailed information for both overlapping and separated
     /// cases. It assumes that support shape A is at position zero and not rotated.
     /// Internally, the method employs the Expanding Polytope Algorithm (EPA) to gather collision information.
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationB">The orientation of shape B.</param>
-    /// <param name="positionB">The position of shape B.</param>
+    /// <param name="supportA">形状A的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状B的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationB">形状B的方向 <br></br><br></br> The orientation of shape B.</param>
+    /// <param name="positionB">形状B的位置 <br></br><br></br> The position of shape B.</param>
     /// <param name="pointA">
+    /// 对于重叠的情况：形状 A 上的最深点位于形状 B 内；<br></br>
+    /// 对于分离的情况：最近点在形状 A 和 B 之间。<br></br><br></br>
     /// For the overlapping case: the deepest point on shape A inside shape B; for the separated case: the
     /// closest point on shape A to shape B.
     /// </param>
     /// <param name="pointB">
+    /// 对于重叠的情况：形状 B 在形状 A 内的最深点；<br></br>
+    /// 对于分离的情况：最近点在形状 A 和 B 之间。<br></br><br></br>
     /// For the overlapping case: the deepest point on shape B inside shape A; for the separated case: the
     /// closest point on shape B to shape A.
     /// </param>
     /// <param name="normal">
+    /// 从点B指向点A的标准碰撞法向量。<br></br><br></br>
+    /// 即使点A和点B重合，这个法线仍然有定义。它表示形状应该沿着这个方向移动最小距离（由穿透深度定义），
+    /// 以在重叠的情况下将它们分开，或在分离的情况下将它们接触。<br></br><br></br>
     /// The normalized collision normal pointing from pointB to pointA. This normal remains defined even
     /// if pointA and pointB coincide. It denotes the direction in which the shapes should be moved by the minimum distance
     /// (defined by the penetration depth) to either separate them in the overlapping case or bring them into contact in
     /// the separated case.
     /// </param>
-    /// <param name="penetration">The penetration depth.</param>
+    /// <param name="penetration">
+    /// 穿透深度 <br></br><br></br>
+    /// The penetration depth.
+    /// </param>
     /// <returns>
+    /// 如果算法成功完成，则返回true，否则返回false。在算法收敛失败的情况下，碰撞信息将恢复为该类型的默认值。<br></br><br></br>
     /// Returns true if the algorithm completes successfully, false otherwise. In case of algorithm convergence
     /// failure, collision information reverts to the type's default values.
     /// </returns>
@@ -792,31 +843,42 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 确定两个凸形状是否重叠<br></br>
+    /// 并为重叠和分离的情况提供详细信息。在内部，该方法使用扩展多面体算法（EPA）来收集碰撞信息。<br></br><br></br>
     /// Determines whether two convex shapes overlap, providing detailed information for both overlapping and separated
     /// cases. Internally, the method employs the Expanding Polytope Algorithm (EPA) to gather collision information.
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationA">The orientation of shape A in world space.</param>
-    /// <param name="orientationB">The orientation of shape B in world space.</param>
-    /// <param name="positionA">The position of shape A in world space.</param>
-    /// <param name="positionB">The position of shape B in world space.</param>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationA">形状 A 在世界空间中的方向 <br></br><br></br> The orientation of shape A in world space.</param>
+    /// <param name="orientationB">形状 A 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionA">形状 A 在世界空间中的位置 <br></br><br></br> The position of shape A in world space.</param>
+    /// <param name="positionB">形状 A 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
     /// <param name="pointA">
+    /// 对于重叠的情况：形状 A 上的最深点位于形状 B 内；<br></br>
+    /// 对于分离的情况：最近点在 A 和 B 之间。<br></br><br></br>
     /// For the overlapping case: the deepest point on shape A inside shape B; for the separated case: the
     /// closest point on shape A to shape B.
     /// </param>
     /// <param name="pointB">
+    /// 对于重叠的情况：形状 B 上的最深点位于形状 A 内；<br></br>
+    /// 对于分离的情况：最近点在 A 和 B 之间。<br></br><br></br>
     /// For the overlapping case: the deepest point on shape B inside shape A; for the separated case: the
     /// closest point on shape B to shape A.
     /// </param>
     /// <param name="normal">
+    /// 从点B指向点A的标准碰撞法向量。<br></br><br></br>
+    /// 即使点A和点B重合，这个法线仍然有定义。它表示形状应该沿着这个方向移动最小距离（由穿透深度定义），
+    /// 以在重叠的情况下将它们分开，或在分离的情况下将它们接触。<br></br><br></br>
     /// The normalized collision normal pointing from pointB to pointA. This normal remains defined even
     /// if pointA and pointB coincide. It denotes the direction in which the shapes should be moved by the minimum distance
     /// (defined by the penetration depth) to either separate them in the overlapping case or bring them into contact in
     /// the separated case.
     /// </param>
-    /// <param name="penetration">The penetration depth.</param>
+    /// <param name="penetration">穿透深度 <br></br><br></br> The penetration depth.</param>
     /// <returns>
+    /// 如果算法成功完成，则返回 true，否则返回 false。<br></br>
+    /// 如果算法收敛 失败，碰撞信息将恢复为类型的默认值。<br></br><br></br>
     /// Returns true if the algorithm completes successfully, false otherwise. In case of algorithm convergence
     /// failure, collision information reverts to the type's default values.
     /// </returns>
@@ -850,18 +912,22 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 提供非重叠形状的距离和最近点。<br></br>
+    /// 它假设支持形状 A 位于位置零且未旋转。<br></br><br></br> 
     /// Provides the distance and closest points for non overlapping shapes. It
     /// assumes that support shape A is located at position zero and not rotated.
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationB">The orientation of shape B in world space.</param>
-    /// <param name="positionB">The position of shape B in world space.</param>
-    /// <param name="pointA">Closest point on shape A. Zero if shapes overlap.</param>
-    /// <param name="pointB">Closest point on shape B. Zero if shapes overlap.</param>
-    /// <param name="distance">The distance between the separating shapes. Zero if shapes overlap.</param>
-    /// <returns>Returns true if the shapes do not overlap and distance information
-    /// can be provided.</returns>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationB">形状 B 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionB">形状 B 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="pointA">形状 A 上的最近点, 如果重叠则为 0 <br></br><br></br> Closest point on shape A. Zero if shapes overlap.</param>
+    /// <param name="pointB">形状 B 上的最近点, 如果重叠则为 0 <br></br><br></br> Closest point on shape B. Zero if shapes overlap.</param>
+    /// <param name="distance">两个形状的距离, 如果重叠则为 0 <br></br><br></br> The distance between the separating shapes. Zero if shapes overlap.</param>
+    /// <returns>
+    /// 如果形状不重叠并且可以提供距离信息，则返回 true。<br></br><br></br>
+    /// Returns true if the shapes do not overlap and distance information can be provided.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Distance(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationB, in JVector positionB,
@@ -878,19 +944,22 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 提供非重叠形状的距离和最近点。<br></br><br></br>
     /// Provides the distance and closest points for non overlapping shapes.
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationA">The orientation of shape A in world space.</param>
-    /// <param name="orientationB">The orientation of shape B in world space.</param>
-    /// <param name="positionA">The position of shape A in world space.</param>
-    /// <param name="positionB">The position of shape B in world space.</param>
-    /// <param name="pointA">Closest point on shape A. Zero if shapes overlap.</param>
-    /// <param name="pointB">Closest point on shape B. Zero if shapes overlap.</param>
-    /// <param name="distance">The distance between the separating shapes. Zero if shapes overlap.</param>
-    /// <returns>Returns true if the shapes do not overlap and distance information
-    /// can be provided.</returns>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationA">形状 A 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="orientationB">形状 B 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionA">形状 A 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="positionB">形状 B 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="pointA">形状 A 上的最近点, 如果重叠则为 0 <br></br><br></br> Closest point on shape A. Zero if shapes overlap.</param>
+    /// <param name="pointB">形状 B 上的最近点, 如果重叠则为 0 <br></br><br></br> Closest point on shape B. Zero if shapes overlap.</param>
+    /// <param name="distance">两个形状的距离, 如果重叠则为 0 <br></br><br></br> The distance between the separating shapes. Zero if shapes overlap.</param>
+    /// <returns>
+    /// 如果形状不重叠并且可以提供距离信息，则返回 true。<br></br><br></br>
+    /// Returns true if the shapes do not overlap and distance information can be provided.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Distance(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationA, in JQuaternion orientationB,
@@ -921,14 +990,18 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 执行重叠测试。假设支撑形状 A 位于位置零且未旋转。<br></br><br></br>
     /// Performs an overlap test. It assumes that support shape A is located
     /// at position zero and not rotated.
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationB">The orientation of shape B in world space.</param>
-    /// <param name="positionB">The position of shape B in world space.</param>
-    /// <returns>Returns true of the shapes overlap, and false otherwise.</returns>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationB">形状 B 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionB">形状 B 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <returns>
+    /// 如果形状重叠则返回 true，否则返回 false。<br></br><br></br>
+    /// Returns true of the shapes overlap, and false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Overlap(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationB, in JVector positionB)
@@ -944,15 +1017,19 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 执行重叠测试。<br></br><br></br>
     /// Performs an overlap test.
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationA">The orientation of shape A in world space.</param>
-    /// <param name="orientationB">The orientation of shape B in world space.</param>
-    /// <param name="positionA">The position of shape A in world space.</param>
-    /// <param name="positionB">The position of shape B in world space.</param>
-    /// <returns>Returns true of the shapes overlap, and false otherwise.</returns>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationA">形状 A 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="orientationB">形状 B 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionA">形状 A 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="positionB">形状 B 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <returns>
+    /// 如果形状重叠则返回 true，否则返回 false。<br></br><br></br>
+    /// Returns true of the shapes overlap, and false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Overlap(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationA, in JQuaternion orientationB,
@@ -972,26 +1049,35 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 检测两个凸形状是否重叠，并为重叠形状提供详细的碰撞信息。<br></br>
+    /// 内部，此方法利用闵可夫斯基门户细化（MPR）来获取碰撞信息。
+    /// 尽管MPR不精确，但它提供了穿透深度的严格上界。<br></br>
+    /// 如果上界超过预定义的阈值，则使用扩展多面体算法（EPA）进一步细化结果。<br></br><br></br>
     /// Detects whether two convex shapes overlap and provides detailed collision information for overlapping shapes.
     /// Internally, this method utilizes the Minkowski Portal Refinement (MPR) to obtain the collision information.
     /// Although MPR is not exact, it delivers a strict upper bound for the penetration depth. If the upper bound surpasses
     /// a predefined threshold, the results are further refined using the Expanding Polytope Algorithm (EPA).
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationA">The orientation of shape A in world space.</param>
-    /// <param name="orientationB">The orientation of shape B in world space.</param>
-    /// <param name="positionA">The position of shape A in world space.</param>
-    /// <param name="positionB">The position of shape B in world space.</param>
-    /// <param name="pointA">The deepest point on shape A that is inside shape B.</param>
-    /// <param name="pointB">The deepest point on shape B that is inside shape A.</param>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationA">形状 A 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="orientationB">形状 B 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionA">形状 A 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="positionB">形状 B 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="pointA">形状 A 上位于形状 B 内部的最深点。<br></br><br></br> The deepest point on shape A that is inside shape B.</param>
+    /// <param name="pointB">形状 B 上位于形状 A 内部的最深点。<br></br><br></br> The deepest point on shape B that is inside shape A.</param>
     /// <param name="normal">
+    /// 从点 B 指向点 A 的标准碰撞法向量。<br></br>
+    /// 即使点 A 和点 B 重合，此法向量仍然保持定义，表示形状必须以最小距离（由穿透深度决定）分隔的方向，以避免重叠。<br></br><br></br>
     /// The normalized collision normal pointing from pointB to pointA. This normal remains defined even
     /// if pointA and pointB coincide, representing the direction in which the shapes must be separated by the minimal
     /// distance (determined by the penetration depth) to avoid overlap.
     /// </param>
-    /// <param name="penetration">The penetration depth.</param>
-    /// <returns>Returns true if the shapes overlap (collide), and false otherwise.</returns>
+    /// <param name="penetration">穿透深度。<br></br><br></br> The penetration depth.</param>
+    /// <returns>
+    /// 如果形状重叠（碰撞）则返回 true，否则返回 false。<br></br><br></br>
+    /// Returns true if the shapes overlap (collide), and false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MPREPA(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationA, in JQuaternion orientationB,
@@ -1021,25 +1107,35 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 检测两个凸形是否重叠，并提供重叠形状的详细碰撞信息。<br></br><br></br>
+    /// 假设支撑形状 A 位于零位置且未旋转。<br></br>
+    /// 在内部，该方法利用 Minkowski Portal Refinement (MPR) 来获取碰撞信息。
+    /// 虽然 MPR 并不精确，但它为穿透深度提供了严格的上限。如果上限超过
+    /// 预定义的阈值，则使用扩展多面体算法 (EPA) 进一步细化结果。<br></br><br></br>
     /// Detects whether two convex shapes overlap and provides detailed collision information for overlapping shapes.
     /// It assumes that support shape A is at position zero and not rotated.
     /// Internally, this method utilizes the Minkowski Portal Refinement (MPR) to obtain the collision information.
     /// Although MPR is not exact, it delivers a strict upper bound for the penetration depth. If the upper bound surpasses
     /// a predefined threshold, the results are further refined using the Expanding Polytope Algorithm (EPA).
     /// </summary>
-    /// <param name="supportA">The support function of shape A.</param>
-    /// <param name="supportB">The support function of shape B.</param>
-    /// <param name="orientationB">The orientation of shape B.</param>
-    /// <param name="positionB">The position of shape B.</param>
-    /// <param name="pointA">The deepest point on shape A that is inside shape B.</param>
-    /// <param name="pointB">The deepest point on shape B that is inside shape A.</param>
+    /// <param name="supportA">形状 A 的支撑函数 <br></br><br></br> The support function of shape A.</param>
+    /// <param name="supportB">形状 B 的支撑函数 <br></br><br></br> The support function of shape B.</param>
+    /// <param name="orientationB">形状 B 在世界空间中的方向 <br></br><br></br> The orientation of shape B in world space.</param>
+    /// <param name="positionB">形状 B 在世界空间中的位置 <br></br><br></br> The position of shape B in world space.</param>
+    /// <param name="pointA">形状 A 上位于形状 B 内部的最深点。<br></br><br></br> The deepest point on shape A that is inside shape B.</param>
+    /// <param name="pointB">形状 B 上位于形状 A 内部的最深点。<br></br><br></br> The deepest point on shape B that is inside shape A.</param>
     /// <param name="normal">
+    /// 从点 B 指向点 A 的标准化碰撞法向量。<br></br>
+    /// 如果点 A 和点 B 重合，此法线保持 d ，表示形状必须保持距离（由穿透深度决定）的方向以避免重叠。<br></br><br></br>
     /// The normalized collision normal pointing from pointB to pointA. This normal remains d
     /// if pointA and pointB coincide, representing the direction in which the shapes must be
     /// distance (determined by the penetration depth) to avoid overlap.
     /// </param>
-    /// <param name="penetration">The penetration depth.</param>
-    /// <returns>Returns true if the shapes overlap (collide), and false otherwise.</returns>
+    /// <param name="penetration">穿透深度。<br></br><br></br> The penetration depth.</param>
+    /// <returns>
+    /// 如果形状重叠（碰撞），则返回 true，否则返回 false。<br></br><br></br>
+    /// eturns true if the shapes overlap (collide), and false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool MPREPA(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationB, in JVector positionB,
@@ -1058,14 +1154,21 @@ public static class NarrowPhase
     }
 
     /// <summary>
-    /// Calculates the time of impact and the collision points in world space for two shapes with velocities
-    /// sweepA and sweepB.
+    /// 计算两个形状在速度 sweepA 和 sweepB 下发生碰撞的时间和世界空间中的碰撞点。<br></br><br></br>
+    /// Calculates the time of impact and the collision points in world space for two shapes with velocities sweepA and sweepB.
     /// </summary>
-    /// <param name="pointA">Collision point on shapeA in world space at t = 0, where collision will occur.
-    /// Zero if no hit is detected.</param>
-    /// <param name="pointB">Collision point on shapeB in world space at t = 0, where collision will occur.
-    /// Zero if no hit is detected.</param>
-    /// <param name="lambda">Time of impact. Infinity if no hit is detected.</param>
+    /// <param name="pointA">
+    /// t = 0 时世界空间中形状 A 上的碰撞点，碰撞将在此发生。如果没有检测到碰撞，则为零。<br></br><br></br>
+    /// Collision point on shapeA in world space at t = 0, where collision will occur.Zero if no hit is detected.
+    /// </param>
+    /// <param name="pointB">
+    /// t = 0 时世界空间中形状 B 上的碰撞点，碰撞将在此发生。如果没有检测到碰撞，则为零。<br></br><br></br>
+    /// Collision point on shapeA in world space at t = 0, where collision will occur.Zero if no hit is detected.
+    /// </param>
+    /// <param name="lambda">
+    /// 撞击时间。若未检测到撞击则为无限时间。<br></br><br></br>
+    /// Time of impact. Infinity if no hit is detected.
+    /// </param>
     /// <returns>True if the shapes hit, false otherwise.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Sweep(in ISupportMappable supportA, in ISupportMappable supportB,
@@ -1113,13 +1216,26 @@ public static class NarrowPhase
     }
 
     /// <summary>
+    /// 执行扫描测试，其中支撑形状 A 位于零位置，未旋转且无扫描 <br></br><br></br>
     /// Perform a sweep test where support shape A is at position zero, not rotated and has no sweep
     /// direction.
     /// </summary>
-    /// <param name="pointA">Collision point on shapeA in world space. Zero if no hit is detected.</param>
-    /// <param name="pointB">Collision point on shapeB in world space. Zero if no hit is detected.</param>
-    /// <param name="lambda">Time of impact. Infinity if no hit is detected.</param>
-    /// <returns>True if the shapes hit, false otherwise.</returns>
+    /// <param name="pointA">
+    /// 世界空间中形状 A 上的碰撞点。如果没有检测到碰撞，则为零。 <br></br><br></br>   
+    /// Collision point on shapeA in world space. Zero if no hit is detected.
+    /// </param>
+    /// <param name="pointB">
+    /// 世界空间中形状 B 上的碰撞点。如果没有检测到碰撞，则为零。 <br></br><br></br>   
+    /// Collision point on shapeA in world space. Zero if no hit is detected.
+    /// </param>    
+    /// <param name="lambda">
+    /// 撞击时间。若未检测到撞击则为无限时间。<br></br><br></br>
+    /// Time of impact. Infinity if no hit is detected.
+    /// </param>
+    /// <returns>
+    /// 如果形状命中则为 True，否则为 false。
+    /// True if the shapes hit, false otherwise.
+    /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Sweep(in ISupportMappable supportA, in ISupportMappable supportB,
         in JQuaternion orientationB, in JVector positionB, in JVector sweepB,

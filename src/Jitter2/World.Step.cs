@@ -36,7 +36,7 @@ using Jitter2.UnmanagedMemory;
 using ThreadPool = Jitter2.Parallelization.ThreadPool;
 
 namespace Jitter2;
-
+//世界步
 public sealed partial class World
 {
     // Note: A SlimBag of the reference type 'Arbiter' does not introduce GC problems (not setting
@@ -44,20 +44,53 @@ public sealed partial class World
     private readonly SlimBag<Arbiter> deferredArbiters = new();
     private readonly SlimBag<JHandle<ContactData>> brokenArbiters = new();
 
+    /// <summary>
+    /// 时间片
+    /// </summary>
     public enum Timings
     {
+        /// <summary>
+        /// 更新物体
+        /// </summary>
         UpdateBodies,
+        /// <summary>
+        /// 窄相位
+        /// </summary>
         NarrowPhase,
+        /// <summary>
+        /// 宽相位
+        /// </summary>
         BroadPhase,
+        /// <summary>
+        /// 添加仲裁器
+        /// </summary>
         AddArbiter,
+        /// <summary>
+        /// 移除仲裁器
+        /// </summary>
         RemoveArbiter,
+        /// <summary>
+        /// 求解
+        /// </summary>
         Solve,
+        /// <summary>
+        /// 更新接触
+        /// </summary>
         UpdateContacts,
+        /// <summary>
+        /// 检查停用
+        /// </summary>
         CheckDeactivation,
+        /// <summary>
+        /// 最后
+        /// </summary>
         Last
     }
 
     /// <summary>
+    /// 调试时间片
+    /// 包含最后一次调用 <see cref="World.Step(Real, bool)"/> 的各个阶段的时序。<br></br>
+    /// 数组元素对应于<see cref = "Timings" /> 中的枚举。可用于标识<br></br><br></br>
     /// Contains timings for the stages of the last call to <see cref="World.Step(Real, bool)"/>.
     /// Array elements correspond to the enums in <see cref="Timings"/>. Can be used to identify
     /// bottlenecks.
@@ -65,10 +98,16 @@ public sealed partial class World
     public double[] DebugTimings { get; } = new double[(int)Timings.Last];
 
     /// <summary>
+    /// 执行一个模拟步 <br></br><br></br>
     /// Performs a single simulation step.
     /// </summary>
-    /// <param name="dt">The duration of time to simulate. This should remain fixed and not exceed 1/60 of a second.</param>
-    /// <param name="multiThread">Indicates whether multithreading should be utilized. The behavior of the engine can be modified using <see cref="Parallelization.ThreadPool.Instance"/>.</param>
+    /// <param name="dt">
+    /// 模拟的持续时间。这应该保持固定，不超过1/60秒。<br></br><br></br>
+    /// The duration of time to simulate. This should remain fixed and not exceed 1/60 of a second.</param>
+    /// <param name="multiThread">
+    /// 指示是否应使用多线程。<br></br><br></br>
+    /// 可以使用 <see cref="Parallelization.ThreadPool.Instance"/> 来修改引擎的行为。<br></br><br></br>
+    /// Indicates whether multithreading should be utilized. The behavior of the engine can be modified using <see cref="Parallelization.ThreadPool.Instance"/>.</param>
     public void Step(Real dt, bool multiThread = true)
     {
         AssertNullBody();
@@ -438,6 +477,7 @@ public sealed partial class World
     }
 
     /// <summary>
+    /// 自旋循环用于防止多个线程访问同一块内存。<br></br><br></br>
     /// Spin-wait loop to prevent accessing a body from multiple threads.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -474,6 +514,7 @@ public sealed partial class World
     }
 
     /// <summary>
+    /// 自旋循环用于防止多个线程访问同一块内存。<br></br><br></br>
     /// Spin-wait loop to prevent accessing a body from multiple threads.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

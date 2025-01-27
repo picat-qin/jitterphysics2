@@ -27,6 +27,8 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示通用凸包，类似于 <see cref="ConvexHullShape"/>。<br></br><br></br>
+/// 该形状由点云隐式定义。点不必位于凸包上。为了优化性能，理想情况下，此形状应用于少量点（最多 20-30 个）。<br></br><br></br>
 /// Represents a generic convex hull, similar to <see cref="ConvexHullShape"/>. The shape is
 /// implicitly defined by a point cloud. It is not necessary for the points to lie on the convex hull.
 /// For performance optimization, this shape should ideally be used for a small number of points (maximum
@@ -43,9 +45,11 @@ public class PointCloudShape : RigidBodyShape
     private JVector shifted;
 
     /// <summary>
+    /// 初始化 <see cref="PointCloudShape"/> 类的新实例。
     /// Initializes a new instance of the <see cref="PointCloudShape"/> class.
     /// </summary>
     /// <param name="vertices">
+    /// 包含定义凸包的所有顶点的列表。该列表是引用的，在将其传递给构造函数后不应再修改。<br></br><br></br>
     /// A list containing all vertices that define the convex hull. The list is referenced and should
     /// not be modified after passing it to the constructor.
     /// </param>
@@ -61,6 +65,7 @@ public class PointCloudShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 创建此形状的副本。底层数据结构在实例之间共享。<br></br><br></br>
     /// Creates a copy of this shape. The underlying data structure is shared
     /// among the instances.
     /// </summary>
@@ -79,6 +84,7 @@ public class PointCloudShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 获取或设置形状的偏移值。构造包含一个或多个形状的刚体时可以使用此属性。<br></br><br></br>
     /// Gets or sets the shift value for the shape. This property can be used when constructing a rigid
     /// body that contains one or more shapes.
     /// </summary>
@@ -92,12 +98,18 @@ public class PointCloudShape : RigidBodyShape
         }
     }
 
+    /// <summary>
+    /// 更新形状
+    /// </summary>
     public void UpdateShape()
     {
         CalculateMassInertia();
         CalcInitBox();
     }
 
+    /// <summary>
+    /// 计算质量惯性
+    /// </summary>
     public void CalculateMassInertia()
     {
         ShapeHelper.CalculateMassInertia(this, out cachedInertia, out cachedCenter, out cachedMass);

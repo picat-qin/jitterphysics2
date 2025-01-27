@@ -32,6 +32,7 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics;
 
 /// <summary>
+/// 接触数据 <br></br><br></br>
 /// Holds four <see cref="Contact"/> structs. The <see cref="ContactData.UsageMask"/>
 /// indicates which contacts are actually in use. Every shape-to-shape collision in Jitter is managed
 /// by one of these structs.
@@ -79,6 +80,10 @@ public struct ContactData
     public Contact Contact2;
     public Contact Contact3;
 
+    /// <summary>
+    /// 预迭代
+    /// </summary>
+    /// <param name="dt"></param>
     public unsafe void PrepareForIteration(Real dt)
     {
         var ptr = (ContactData*)Unsafe.AsPointer(ref this);
@@ -99,6 +104,10 @@ public struct ContactData
         }
     }
 
+    /// <summary>
+    /// 迭代
+    /// </summary>
+    /// <param name="applyBias"></param>
     public unsafe void Iterate(bool applyBias)
     {
         var ptr = (ContactData*)Unsafe.AsPointer(ref this);
@@ -125,6 +134,9 @@ public struct ContactData
     /// </summary>
     public static bool IsHardwareAccelerated => Vector.IsHardwareAccelerated;
 
+    /// <summary>
+    /// 更新位置
+    /// </summary>
     public unsafe void UpdatePosition()
     {
         UsageMask &= MaskContactAll;
@@ -153,6 +165,11 @@ public struct ContactData
         }
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="body1"></param>
+    /// <param name="body2"></param>
     public void Init(RigidBody body1, RigidBody body2)
     {
         Body1 = body1.handle;
@@ -188,6 +205,7 @@ public struct ContactData
     // src/Bullet3OpenCL/NarrowphaseCollision/b3ContactCache.cpp
 
     /// <summary>
+    /// 添加接触 <br></br><br></br>
     /// Adds a new collision result to the contact manifold. Keeps at most four points.
     /// </summary>
     public unsafe void AddContact(in JVector point1, in JVector point2, in JVector normal, Real penetration)
@@ -349,7 +367,9 @@ public struct ContactData
     }
 
     // ---------------------------------------------------------------------------------------------------------
-
+    /// <summary>
+    /// 接触
+    /// </summary>
     [StructLayout(LayoutKind.Explicit)]
     public struct Contact
     {
@@ -704,6 +724,11 @@ public struct ContactData
             return vector.GetElement(0) + vector.GetElement(1) + vector.GetElement(2);
         }
 
+        /// <summary>
+        /// 预迭代加速
+        /// </summary>
+        /// <param name="cd"></param>
+        /// <param name="idt"></param>
         public unsafe void PrepareForIterationAccelerated(ContactData* cd, Real idt)
         {
             ref var b1 = ref cd->Body1.Data;
@@ -813,6 +838,11 @@ public struct ContactData
             Flag &= ~Flags.NewContact;
         }
 
+        /// <summary>
+        /// 迭代加速
+        /// </summary>
+        /// <param name="cd"></param>
+        /// <param name="applyBias"></param>
         public unsafe void IterateAccelerated(ContactData* cd, bool applyBias)
         {
             ref var b1 = ref cd->Body1.Data;

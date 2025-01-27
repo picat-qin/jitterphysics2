@@ -26,6 +26,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// ÀâÖùÁ¬½Ó <br><br></br></br>
 /// Constructs a prismatic joint utilizing a <see cref="PointOnLine"/> constraint in conjunction with
 /// <see cref="FixedAngle"/>, <see cref="HingeAngle"/>, and <see cref="LinearMotor"/> constraints.
 /// </summary>

@@ -30,6 +30,9 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.Collision;
 
+/// <summary>
+/// 单纯形求解器
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct SimplexSolver
 {
@@ -42,6 +45,9 @@ public unsafe struct SimplexSolver
 
     private uint usageMask;
 
+    /// <summary>
+    /// 重置掩码
+    /// </summary>
     public void Reset()
     {
         usageMask = 0;
@@ -228,6 +234,12 @@ public unsafe struct SimplexSolver
         return JVector.Zero;
     }
 
+    /// <summary>
+    /// 添加顶点
+    /// </summary>
+    /// <param name="vertex">顶点</param>
+    /// <param name="closest">最近的顶点</param>
+    /// <returns>是否成功</returns>
     public bool AddVertex(in JVector vertex, out JVector closest)
     {
         Unsafe.SkipInit(out closest);

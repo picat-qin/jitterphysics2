@@ -28,6 +28,8 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics;
 
 /// <summary>
+/// 仲裁器 <br></br><br></br>
+/// 保存对两个形状之间所有接触（最多 4 个）的引用。<br></br><br></br>
 /// Holds a reference to all contacts (maximum 4) between two shapes.
 /// </summary>
 public class Arbiter

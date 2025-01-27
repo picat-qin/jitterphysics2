@@ -21,18 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+// 碰撞
 namespace Jitter2.Collision;
 
 /// <summary>
-/// Interface for implementing a generic filter to exclude specific pairs of shapes
-/// that should not be considered in the collision system pipeline of Jitter.
+/// 用于实现通用过滤器的接口，以排除在 Jitter 的碰撞系统管道中不应考虑的特定形状对。<br></br>
+/// 更多详情参阅<see cref="World.BroadPhaseFilter"/><br></br><br></br>
+/// Interface for implementing a generic filter to exclude specific pairs of shapes <br></br>
+/// that should not be considered in the collision system pipeline of Jitter.<br></br>
 /// Refer to <see cref="World.BroadPhaseFilter"/> for more details.
 /// </summary>
 public interface IBroadPhaseFilter
 {
     /// <summary>
+    /// 过滤掉不应产生接触的形状对。<br></br>
     /// Filters out pairs of shapes that should not generate contacts.
     /// </summary>
-    /// <returns>False if the collision should be filtered out; true otherwise.</returns>
+    /// <returns>
+    /// 如果应过滤掉碰撞，则为 false ；否则为 true 。<br></br>
+    /// False if the collision should be filtered out; true otherwise.
+    /// </returns>
     bool Filter(IDynamicTreeProxy proxyA, IDynamicTreeProxy proxyB);
 }

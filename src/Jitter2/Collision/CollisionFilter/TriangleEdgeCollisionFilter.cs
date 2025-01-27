@@ -30,6 +30,10 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 关卡几何体通常由添加到 <see cref="Dynamics.RigidBody"/> 的多个 <see cref="Collision.Shapes.TriangleShape"/> <br></br>
+/// 实例表示。在这些三角形上滑动的其他刚体 <br></br>
+/// 可能会遇到“内部边缘”，从而导致抖动。<see cref="TriangleEdgeCollisionFilter"/> <br></br>
+/// 实现了 <see cref="INarrowPhaseFilter"/> 以帮助过滤掉这些内部边缘。<br></br><br></br>
 /// Level geometry is often represented by multiple instances of <see cref="Collision.Shapes.TriangleShape"/>
 /// added to a <see cref="Dynamics.RigidBody"/>. Other rigid bodies sliding over these triangles
 /// might encounter "internal edges", resulting in jitter. The <see cref="TriangleEdgeCollisionFilter"/>
@@ -38,6 +42,8 @@ namespace Jitter2.Collision;
 public class TriangleEdgeCollisionFilter : INarrowPhaseFilter
 {
     /// <summary>
+    /// 一个可调整的参数。距离三角形边缘小于此值的碰撞点 <br></br>
+    /// 被视为边缘碰撞，可能会被修改或完全丢弃。<br></br><br></br>
     /// A tweakable parameter. Collision points that are closer than this value to a triangle edge
     /// are considered as edge collisions and might be modified or discarded entirely.
     /// </summary>
@@ -46,11 +52,13 @@ public class TriangleEdgeCollisionFilter : INarrowPhaseFilter
     private Real cosAT = (Real)0.99;
 
     /// <summary>
+    /// 可调整的参数。<br></br><br></br>
     /// A tweakable parameter.
     /// </summary>
     public Real ProjectionThreshold { get; set; } = (Real)0.5;
 
     /// <summary>
+    /// 一个可调整的参数，定义阈值来确定何时两个法线被视为相同。<br></br><br></br>
     /// A tweakable parameter that defines the threshold to determine when two normals
     /// are considered identical.
     /// </summary>

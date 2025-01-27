@@ -26,8 +26,17 @@ using Jitter2.Collision.Shapes;
 
 namespace Jitter2.SoftBodies;
 
+/// <summary>
+/// ¶¯Ì¬Ê÷Åö×²¹ýÂËÆ÷
+/// </summary>
 public static class DynamicTreeCollisionFilter
 {
+    /// <summary>
+    /// ¹ýÂËÆ÷
+    /// </summary>
+    /// <param name="proxyA"></param>
+    /// <param name="proxyB"></param>
+    /// <returns></returns>
     public static bool Filter(IDynamicTreeProxy proxyA, IDynamicTreeProxy proxyB)
     {
         if (proxyA is RigidBodyShape rbsA && proxyB is RigidBodyShape rbsB)

@@ -27,19 +27,31 @@ using System.Runtime.InteropServices;
 namespace Jitter2.LinearMath;
 
 /// <summary>
+/// 空间三角形 <br></br><br></br>
+/// 表示由三个顶点定义的三角形。<br></br><br></br>
 /// Represents a triangle defined by three vertices.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 9*sizeof(Real))]
 public struct JTriangle : IEquatable<JTriangle>
 {
+    /// <summary>
+    /// 顶点0
+    /// </summary>
     [FieldOffset(0*sizeof(Real))]
     public JVector V0;
+    /// <summary>
+    /// 顶点1
+    /// </summary>
     [FieldOffset(3*sizeof(Real))]
     public JVector V1;
+    /// <summary>
+    /// 顶点2
+    /// </summary>
     [FieldOffset(6*sizeof(Real))]
     public JVector V2;
 
     /// <summary>
+    /// 通过三个顶点初始化空间三角形 <br></br><br></br>
     /// Initializes a new instance of the <see cref="JTriangle"/> structure with the specified vertices.
     /// </summary>
     /// <param name="v0">The first vertex of the triangle.</param>

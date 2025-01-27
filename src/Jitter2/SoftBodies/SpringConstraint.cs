@@ -32,33 +32,79 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.SoftBodies;
 
 /// <summary>
+/// 弹簧约束 <br></br><br></br>
+/// 约束一个物体参考系中的固定点与另一个物体参考系中的固定点之间的距离。<br></br>
+/// 这个约束会移除一个平移自由度。<br></br>
+/// 对于距离为零的情况，请使用 <see cref="BallSocket"/> 约束。<br></br><br></br>
 /// Constrains the distance between a fixed point in the reference frame of one body and a fixed
 /// point in the reference frame of another body. This constraint removes one translational degree
 /// of freedom. For a distance of zero, use the <see cref="BallSocket"/> constraint.
 /// </summary>
 public unsafe class SpringConstraint : Constraint
 {
+    /// <summary>
+    /// 弹簧数据
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct SpringData
     {
         internal int _internal;
+        /// <summary>
+        /// 迭代器
+        /// </summary>
         public delegate*<ref ConstraintData, void> Iterate;
+        /// <summary>
+        /// 预迭代器
+        /// </summary>
         public delegate*<ref ConstraintData, Real, void> PrepareForIteration;
 
+        /// <summary>
+        /// 主体1
+        /// </summary>
         public JHandle<RigidBodyData> Body1;
+        /// <summary>
+        /// 主体2
+        /// </summary>
         public JHandle<RigidBodyData> Body2;
 
+        /// <summary>
+        /// 本地锚点1
+        /// </summary>
         public JVector LocalAnchor1;
+        /// <summary>
+        /// 本地锚点2
+        /// </summary>
         public JVector LocalAnchor2;
 
+        /// <summary>
+        /// 偏移系数
+        /// </summary>
         public Real BiasFactor;
+        /// <summary>
+        /// 柔软系数
+        /// </summary>
         public Real Softness;
+        /// <summary>
+        /// 距离
+        /// </summary>
         public Real Distance;
 
+        /// <summary>
+        /// 有效质量
+        /// </summary>
         public Real EffectiveMass;
+        /// <summary>
+        /// 累积冲量
+        /// </summary>
         public Real AccumulatedImpulse;
+        /// <summary>
+        /// 偏置
+        /// </summary>
         public Real Bias;
 
+        /// <summary>
+        /// 雅可比向量
+        /// </summary>
         public JVector Jacobian;
     }
 
@@ -75,10 +121,17 @@ public unsafe class SpringConstraint : Constraint
     public override bool IsSmallConstraint { get; } = sizeof(SpringData) <= SmallConstraintData.ConstraintSize;
 
     /// <summary>
+    /// 初始化约束。<br></br><br></br>
     /// Initializes the constraint.
     /// </summary>
-    /// <param name="anchor1">Anchor point on the first rigid body, in world space.</param>
-    /// <param name="anchor2">Anchor point on the second rigid body, in world space.</param>
+    /// <param name="anchor1">
+    /// 世界空间中的第 1 个刚体上的锚点。<br></br><br></br>
+    /// Anchor point on the first rigid body, in world space.
+    /// </param>
+    /// <param name="anchor2">
+    /// 世界空间中的第 2 个刚体上的锚点。<br></br><br></br>
+    /// Anchor point on the second rigid body, in world space.
+    /// </param>
     public void Initialize(JVector anchor1, JVector anchor2)
     {
         ref SpringData data = ref handle.Data;
@@ -93,6 +146,9 @@ public unsafe class SpringConstraint : Constraint
         data.Distance = (anchor2 - anchor1).Length();
     }
 
+    /// <summary>
+    /// 冲量
+    /// </summary>
     public Real Impulse
     {
         get
@@ -102,6 +158,9 @@ public unsafe class SpringConstraint : Constraint
         }
     }
 
+    /// <summary>
+    /// 锚点1
+    /// </summary>
     public JVector Anchor1
     {
         set
@@ -119,6 +178,9 @@ public unsafe class SpringConstraint : Constraint
         }
     }
 
+    /// <summary>
+    /// 锚点2
+    /// </summary>
     public JVector Anchor2
     {
         set
@@ -136,6 +198,9 @@ public unsafe class SpringConstraint : Constraint
         }
     }
 
+    /// <summary>
+    /// 目标距离
+    /// </summary>
     public Real TargetDistance
     {
         set
@@ -146,6 +211,9 @@ public unsafe class SpringConstraint : Constraint
         get => handle.Data.Distance;
     }
 
+    /// <summary>
+    /// 距离
+    /// </summary>
     public Real Distance
     {
         get
@@ -166,6 +234,11 @@ public unsafe class SpringConstraint : Constraint
         }
     }
 
+    /// <summary>
+    /// 预迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void PrepareForIteration(ref ConstraintData constraint, Real idt)
     {
         ref SpringData data = ref Unsafe.AsRef<SpringData>(Unsafe.AsPointer(ref constraint));
@@ -196,18 +269,29 @@ public unsafe class SpringConstraint : Constraint
         body2.Velocity += body2.InverseMass * data.AccumulatedImpulse * data.Jacobian;
     }
 
+    /// <summary>
+    /// 柔软系数
+    /// </summary>
     public Real Softness
     {
         get => handle.Data.Softness;
         set => handle.Data.Softness = value;
     }
 
+    /// <summary>
+    /// 偏置系数
+    /// </summary>
     public Real Bias
     {
         get => handle.Data.BiasFactor;
         set => handle.Data.BiasFactor = value;
     }
 
+    /// <summary>
+    /// 迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void Iterate(ref ConstraintData constraint, Real idt)
     {
         ref SpringData data = ref Unsafe.AsRef<SpringData>(Unsafe.AsPointer(ref constraint));

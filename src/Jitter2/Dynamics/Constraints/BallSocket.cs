@@ -30,35 +30,73 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 球窝约束。<br></br>
+/// 此约束将一个物体的参考系中的固定点锚定到另一个物体的参考系中的固定点，从而消除了三个平移自由度。<br></br><br></br>
 /// Implements the BallSocket constraint. This constraint anchors a fixed point in the reference frame of
 /// one body to a fixed point in the reference frame of another body, eliminating three translational
 /// degrees of freedom.
 /// </summary>
 public unsafe class BallSocket : Constraint
 {
+    /// <summary>
+    /// 球约束数据
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct BallSocketData
     {
         internal int _internal;
 
+        /// <summary>
+        /// 迭代指针
+        /// </summary>
         public delegate*<ref ConstraintData, void> Iterate;
+        /// <summary>
+        /// 预迭代指针
+        /// </summary>
         public delegate*<ref ConstraintData, Real, void> PrepareForIteration;
 
+        /// <summary>
+        /// 物体1
+        /// </summary>
         public JHandle<RigidBodyData> Body1;
+        /// <summary>
+        /// 物体2
+        /// </summary>
         public JHandle<RigidBodyData> Body2;
 
+        /// <summary>
+        /// 本地锚点1
+        /// </summary>
         public JVector LocalAnchor1;
+        /// <summary>
+        /// 本地锚点2
+        /// </summary>
         public JVector LocalAnchor2;
 
         public JVector U;
         public JVector R1;
         public JVector R2;
 
+        /// <summary>
+        /// 偏差因子
+        /// </summary>
         public Real BiasFactor;
+        /// <summary>
+        /// 柔软值
+        /// </summary>
         public Real Softness;
 
+        /// <summary>
+        /// 有效质量
+        /// </summary>
         public JMatrix EffectiveMass;
+        /// <summary>
+        /// 累积冲量
+        /// </summary>
         public JVector AccumulatedImpulse;
+        /// <summary>
+        /// 偏移/偏见?
+        /// </summary>
         public JVector Bias;
     }
 
@@ -74,9 +112,13 @@ public unsafe class BallSocket : Constraint
     }
 
     /// <summary>
+    /// 初始化约束 <br></br><br></br>
     /// Initializes the constraint.
     /// </summary>
-    /// <param name="anchor">Anchor point for both bodies in world space.</param>
+    /// <param name="anchor">
+    /// 世界空间中两个物体的锚点。<br></br><br></br>
+    /// Anchor point for both bodies in world space.
+    /// </param>
     public void Initialize(JVector anchor)
     {
         ref BallSocketData data = ref handle.Data;
@@ -93,6 +135,11 @@ public unsafe class BallSocket : Constraint
         data.Softness = (Real)0.0;
     }
 
+    /// <summary>
+    /// 预迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void PrepareForIteration(ref ConstraintData constraint, Real idt)
     {
         ref BallSocketData data = ref Unsafe.AsRef<BallSocketData>(Unsafe.AsPointer(ref constraint));
@@ -132,20 +179,34 @@ public unsafe class BallSocket : Constraint
         body2.AngularVelocity += JVector.Transform(JVector.Transform(acc, cr2), body2.InverseInertiaWorld);
     }
 
+    /// <summary>
+    /// 柔软值
+    /// </summary>
     public Real Softness
     {
         get => handle.Data.Softness;
         set => handle.Data.Softness = value;
     }
 
+    /// <summary>
+    /// 偏移值/偏见值
+    /// </summary>
     public Real Bias
     {
         get => handle.Data.BiasFactor;
         set => handle.Data.BiasFactor = value;
     }
 
+    /// <summary>
+    /// 冲击
+    /// </summary>
     public JVector Impulse => handle.Data.AccumulatedImpulse;
 
+    /// <summary>
+    /// 迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void Iterate(ref ConstraintData constraint, Real idt)
     {
         ref BallSocketData data = ref Unsafe.AsRef<BallSocketData>(Unsafe.AsPointer(ref constraint));

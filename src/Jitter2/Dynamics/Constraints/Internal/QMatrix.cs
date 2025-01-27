@@ -33,6 +33,9 @@ internal unsafe struct QMatrix
 {
     private MemoryHelper.MemBlock16Real mem;
 
+    /// <summary>
+    /// 指针
+    /// </summary>
     public Real* Pointer => (Real*)Unsafe.AsPointer(ref mem);
 
     private static QMatrix Multiply(Real* left, Real* right)
@@ -56,6 +59,10 @@ internal unsafe struct QMatrix
         return res;
     }
 
+    /// <summary>
+    /// 投影
+    /// </summary>
+    /// <returns></returns>
     public JMatrix Projection()
     {
         Real* m = Pointer;
@@ -65,6 +72,11 @@ internal unsafe struct QMatrix
             m[0x7], m[0xB], m[0xF]);
     }
 
+    /// <summary>
+    /// 创建LM
+    /// </summary>
+    /// <param name="quat"></param>
+    /// <returns></returns>
     public static QMatrix CreateLM(in JQuaternion quat)
     {
         Unsafe.SkipInit(out QMatrix result);
@@ -90,6 +102,11 @@ internal unsafe struct QMatrix
         return result;
     }
 
+    /// <summary>
+    /// 创建RM
+    /// </summary>
+    /// <param name="quat"></param>
+    /// <returns></returns>
     public static QMatrix CreateRM(in JQuaternion quat)
     {
         Unsafe.SkipInit(out QMatrix result);
@@ -115,6 +132,12 @@ internal unsafe struct QMatrix
         return result;
     }
 
+    /// <summary>
+    /// 乘
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
     public static QMatrix Multiply(ref QMatrix left, ref QMatrix right)
     {
         fixed (QMatrix* lptr = &left)
@@ -126,6 +149,12 @@ internal unsafe struct QMatrix
         }
     }
 
+    /// <summary>
+    /// 项目左右乘法
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
     public static JMatrix ProjectMultiplyLeftRight(in JQuaternion left, in JQuaternion right)
     {
         Unsafe.SkipInit(out JMatrix res);

@@ -32,12 +32,18 @@ using Vertex = Jitter2.Collision.MinkowskiDifference.Vertex;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 表示在窄阶段用于碰撞检测的凸多面体构建器。<br></br>
+/// 注意：在使用此结构之前，请确保至少调用一次 <see cref="ConvexPolytope.InitHeap"/> <br></br>
+/// 为顶点和三角形分配必要的内存。<br></br><br></br>
 /// Represents a convex polytope builder used in collision detection during the narrow phase.
 /// Note: Ensure to call <see cref="ConvexPolytope.InitHeap"/> at least once before utilizing this structure
 /// to allocate necessary memory for vertices and triangles.
 /// </summary>
 public unsafe struct ConvexPolytope
 {
+    /// <summary>
+    /// 三角形
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct Triangle
     {
@@ -46,13 +52,28 @@ public unsafe struct ConvexPolytope
 
         public short this[int i] => ((short*)Unsafe.AsPointer(ref this))[i];
 
+        /// <summary>
+        /// 法向向量
+        /// </summary>
         public JVector Normal;
+        /// <summary>
+        /// 最靠近原点的向量
+        /// </summary>
         public JVector ClosestToOrigin;
 
+        /// <summary>
+        /// 法向标量的平方
+        /// </summary>
         public Real NormalSq;
+        /// <summary>
+        /// 最靠近原点的向量的标量的平方
+        /// </summary>
         public Real ClosestToOriginSq;
     }
 
+    /// <summary>
+    /// 边缘, 边
+    /// </summary>
     private struct Edge
     {
         public readonly short A;
@@ -88,8 +109,16 @@ public unsafe struct ConvexPolytope
 
     private JVector center;
 
+    /// <summary>
+    /// 船体三角形
+    /// </summary>
     public Span<Triangle> HullTriangles => new(triangles, tPointer);
 
+    /// <summary>
+    /// 获取顶点
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ref Vertex GetVertex(int index)
     {
@@ -98,12 +127,16 @@ public unsafe struct ConvexPolytope
     }
 
     /// <summary>
-    /// Indicates whether the origin is enclosed within the polyhedron.
+    /// 表示原点是否封闭在多面体内。<br></br>
+    /// 重要提示：调用 <see cref="GetClosestTriangle"/> 后，此属性返回正确的值。<br></br><br></br>
+    /// Indicates whether the origin is enclosed within the polyhedron.<br></br>
     /// Important: This property returns correct values after invoking <see cref="GetClosestTriangle"/>.
     /// </summary>
     public readonly bool OriginEnclosed => originEnclosed;
 
     /// <summary>
+    /// 计算投影到给定三角形上的原点的重心坐标。<br></br>
+    /// 这些坐标用于检索 A 空间和 B 空间中的点。<br></br><br></br>
     /// Computes the barycentric coordinates of the origin projected onto a given triangle.
     /// These coordinates are used to retrieve points in A- and B-space.
     /// </summary>
@@ -266,6 +299,7 @@ public unsafe struct ConvexPolytope
     }
 
     /// <summary>
+    /// 遍历凸多面体的所有三角形，并根据最小距离返回最接近原点 (0, 0, 0) 的三角形。<br></br><br></br>
     /// Iterates through all triangles of the convex polytope and returns the one closest
     /// to the origin (0, 0, 0), based on the minimum distance.
     /// </summary>
@@ -295,6 +329,7 @@ public unsafe struct ConvexPolytope
     }
 
     /// <summary>
+    /// 使用前四个顶点形成的四面体初始化结构。<br></br><br></br>
     /// Initializes the structure with a tetrahedron formed using the first four vertices.
     /// </summary>
     public void InitTetrahedron()
@@ -312,6 +347,7 @@ public unsafe struct ConvexPolytope
     }
 
     /// <summary>
+    /// 创建一个封装指定点的小四面体。<br></br><br></br>
     /// Creates a small tetrahedron that encapsulates the specified point.
     /// </summary>
     public void InitTetrahedron(in JVector point)
@@ -334,6 +370,9 @@ public unsafe struct ConvexPolytope
     }
 
     /// <summary>
+    /// 初始化 <see cref="vertices"/> 和 <see cref="triangles"/> 的内存。<br></br>
+    /// 必须在调用此结构中的任何其他方法之前调用。<br></br>
+    /// 注意：可以多次调用；但是，初始化只发生一次。<br></br><br></br>
     /// Initializes the memory for <see cref="vertices"/> and <see cref="triangles"/>.
     /// Must be invoked prior to calling any other method in this struct.
     /// Note: Can be called multiple times; however, initialization occurs only once.
@@ -346,11 +385,17 @@ public unsafe struct ConvexPolytope
     }
 
     /// <summary>
+    /// 向多面体添加一个顶点。<br></br>
+    /// 注意：此操作会使先前调用 <see cref="GetClosestTriangle"/> 返回的引用无效，
+    /// 无论此方法的返回值如何。<br></br><br></br>
     /// Adds a vertex to the polyhedron. Note: This operation invalidates the reference
     /// returned by previous calls to <see cref="GetClosestTriangle"/>, regardless of
     /// the return value of this method.
     /// </summary>
-    /// <returns>Indicates whether the polyhedron successfully incorporated the new vertex.</returns>
+    /// <returns>
+    /// 表示多面体是否成功合并新顶点。<br></br><br></br>
+    /// Indicates whether the polyhedron successfully incorporated the new vertex.
+    /// </returns>
     [System.Runtime.CompilerServices.SkipLocalsInit]
     public bool AddVertex(in Vertex vertex)
     {

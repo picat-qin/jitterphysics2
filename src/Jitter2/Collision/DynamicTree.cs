@@ -31,6 +31,8 @@ using Jitter2.Parallelization;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 表示动态轴对齐边界框 (AABB) 树。<br></br><br></br>
+/// 哈希集（请参阅 <see cref="PairHashSet"/>维护潜在重叠对的记录。<br></br><br></br>
 /// Represents a dynamic Axis Aligned Bounding Box (AABB) tree. A hashset (refer to <see cref="PairHashSet"/>)
 /// maintains a record of potential overlapping pairs.
 /// </summary>
@@ -46,9 +48,13 @@ public partial class DynamicTree
 
     private readonly SlimBag<IDynamicTreeProxy> movedProxies = new();
 
+    /// <summary>
+    /// 代理集
+    /// </summary>
     public ReadOnlyPartitionedSet<IDynamicTreeProxy> Proxies => new ReadOnlyPartitionedSet<IDynamicTreeProxy>(proxies);
 
     /// <summary>
+    /// 获取包含表示潜在冲突的对的对哈希集。不应直接修改。<br></br><br></br>
     /// Gets the PairHashSet that contains pairs representing potential collisions. This should not be modified directly.
     /// </summary>
     private readonly PairHashSet potentialPairs = new();
@@ -61,17 +67,22 @@ public partial class DynamicTree
     public const int PruningFraction = 128;
 
     /// <summary>
+    /// 指定动态树结构中边界框的扩展因子。<br></br><br></br>
+    /// 扩展计算如下：<see cref="IDynamicTreeProxy.Velocity"/> * 扩展因子 * alpha，
+    /// 其中 alpha 是 [1,2] 范围内的伪随机数。<br></br><br></br>
     /// Specifies the factor by which the bounding box in the dynamic tree structure is expanded. The expansion is calculated as
     /// <see cref="IDynamicTreeProxy.Velocity"/> * ExpandFactor * alpha, where alpha is a pseudo-random number in the range [1,2].
     /// </summary>
     public const Real ExpandFactor = (Real)0.1;
 
     /// <summary>
+    /// 指定边界框的一个小的额外扩展，该扩展是恒定的。<br></br><br></br>
     /// Specifies a small additional expansion of the bounding box which is constant.
     /// </summary>
     public const Real ExpandEps = (Real)0.1;
 
     /// <summary>
+    /// 表示AABB树中的一个节点。<br></br><br></br>
     /// Represents a node in the AABB tree.
     /// </summary>
     public struct Node
@@ -80,57 +91,113 @@ public partial class DynamicTree
         public int Parent;
 
         /// <summary>
+        /// 如果这是根节点，则树的高度。<br></br><br></br>
         /// The height of the tree if this was the root node.
         /// </summary>
         public int Height;
 
+        /// <summary>
+        /// 拓展盒子
+        /// </summary>
         public JBBox ExpandedBox;
+        /// <summary>
+        /// 代理
+        /// </summary>
         public IDynamicTreeProxy? Proxy;
 
+        /// <summary>
+        /// 强制更新
+        /// </summary>
         public bool ForceUpdate;
 
+        /// <summary>
+        /// 是叶子节点
+        /// </summary>
         public readonly bool IsLeaf => Proxy != null;
     }
 
+    /// <summary>
+    /// 节点
+    /// </summary>
     public Node[] Nodes = new Node[InitialSize];
     private readonly Stack<int> freeNodes = new();
     private int nodePointer = -1;
     private int root = NullNode;
 
     /// <summary>
+    /// 根节点 <br></br><br></br>
     /// Gets the root of the dynamic tree.
     /// </summary>
     public int Root => root;
 
+    /// <summary>
+    /// 过滤器 <br></br><br></br>
+    /// 用于在 Jitter 中排除属于同一主体的形状之间的碰撞。如果函数返回 false，则碰撞将被过滤掉。
+    /// </summary>
     public Func<IDynamicTreeProxy, IDynamicTreeProxy, bool> Filter { get; set; }
 
     /// <summary>
+    /// 初始化 <see cref="DynamicTree"/> 类的新实例。<br></br><br></br>
     /// Initializes a new instance of the <see cref="DynamicTree"/> class.
     /// </summary>
-    /// <param name="filter">A collision filter function, used in Jitter to exclude collisions between Shapes belonging to the same body. The collision is filtered out if the function returns false.</param>
+    /// <param name="filter">
+    /// 碰撞过滤函数，用于在 Jitter 中排除属于同一主体的形状之间的碰撞。如果函数返回 false，则碰撞将被过滤掉。<br></br><br></br>
+    /// A collision filter function, used in Jitter to exclude collisions between Shapes belonging to the same body. The collision is filtered out if the function returns false.
+    /// </param>
     public DynamicTree(Func<IDynamicTreeProxy, IDynamicTreeProxy, bool> filter)
     {
         Filter = filter;
     }
 
+    /// <summary>
+    /// 状态机?
+    /// </summary>
     public enum Timings
     {
+        /// <summary>
+        /// 剪枝无效对：移除不再有效的碰撞对
+        /// </summary>
         PruneInvalidPairs,
+
+        /// <summary>
+        /// 更新边界框：更新对象的边界框信息
+        /// </summary>
         UpdateBoundingBoxes,
+
+        /// <summary>
+        /// 扫描移动：检查哪些对象发生了移动
+        /// </summary>
         ScanMoved,
+
+        /// <summary>
+        /// 更新代理：更新碰撞检测代理的信息
+        /// </summary>
         UpdateProxies,
+
+        /// <summary>
+        /// 扫描重叠：检查哪些对象之间发生了重叠
+        /// </summary>
         ScanOverlaps,
+
+        /// <summary>
+        /// 最后一个阶段，通常用于标记枚举的结束
+        /// </summary>
         Last
     }
 
+    /// <summary>
+    /// 调试时间
+    /// </summary>
     public readonly double[] DebugTimings = new double[(int)Timings.Last];
 
     /// <summary>
+    /// 获取更新的代理的数量。<br></br><br></br>
     /// Gets the number of updated proxies.
     /// </summary>
     public int UpdatedProxies => movedProxies.Count;
 
     /// <summary>
+    /// 检索用于存储潜在重叠的内部哈希集的大小和填充信息。<br></br><br></br>
     /// Retrieve information of the size and filling of the internal hash set used to
     /// store potential overlaps.
     /// </summary>
@@ -158,6 +225,11 @@ public partial class DynamicTree
         }
     }
 
+    /// <summary>
+    /// 枚举重叠
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="multiThread"></param>
     public void EnumerateOverlaps(Action<IDynamicTreeProxy, IDynamicTreeProxy> action, bool multiThread = false)
     {
         OverlapEnumerationParam overlapEnumerationParam;
@@ -187,9 +259,13 @@ public partial class DynamicTree
     }
 
     /// <summary>
+    /// 更新活动列表中标记为活动的所有实体。<br></br><br></br>
     /// Updates all entities that are marked as active in the active list.
     /// </summary>
-    /// <param name="multiThread">A boolean indicating whether to perform a multi-threaded update.</param>
+    /// <param name="multiThread">
+    /// 指示是否执行多线程更新的布尔值。
+    /// A boolean indicating whether to perform a multi-threaded update.
+    /// </param>
     public void Update(bool multiThread, Real dt)
     {
         long time = Stopwatch.GetTimestamp();
@@ -269,6 +345,7 @@ public partial class DynamicTree
     }
 
     /// <summary>
+    /// 更新动态树结构中指定实体的状态。<br></br><br></br>
     /// Updates the state of the specified entity within the dynamic tree structure.
     /// </summary>
     /// <param name="proxy">The entity to update.</param>
@@ -281,6 +358,7 @@ public partial class DynamicTree
     }
 
     /// <summary>
+    /// 向树中添加一个实体。<br></br><br></br>
     /// Add an entity to the tree.
     /// </summary>
     public void AddProxy<T>(T proxy, bool active = true) where T : class, IDynamicTreeProxy
@@ -290,11 +368,22 @@ public partial class DynamicTree
         proxies.Add(proxy, active);
     }
 
+    /// <summary>
+    /// 查询代理是否处于激活状态
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="proxy"></param>
+    /// <returns></returns>
     public bool IsActive<T>(T proxy) where T : class, IDynamicTreeProxy
     {
         return proxies.IsActive(proxy);
     }
 
+    /// <summary>
+    /// 激活代理
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="proxy"></param>
     public void Activate<T>(T proxy) where T : class, IDynamicTreeProxy
     {
         if (proxies.MoveToActive(proxy))
@@ -303,12 +392,18 @@ public partial class DynamicTree
         }
     }
 
+    /// <summary>
+    /// 停用代理
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="proxy"></param>
     public void Deactivate<T>(T proxy) where T : class, IDynamicTreeProxy
     {
         proxies.MoveToInactive(proxy);
     }
 
     /// <summary>
+    /// 从树中移除一个实体 <br></br><br></br>
     /// Removes an entity from the tree.
     /// </summary>
     public void RemoveProxy(IDynamicTreeProxy proxy)
@@ -320,23 +415,32 @@ public partial class DynamicTree
     }
 
     /// <summary>
+    /// 计算树的成本函数。<br></br><br></br>
     /// Calculates the cost function of the tree.
     /// </summary>
-    /// <returns>The calculated cost.</returns>
+    /// <returns>
+    /// 计算出来的成本 <br></br><br></br>
+    /// The calculated cost.
+    /// </returns>
     public double CalculateCost()
     {
         return Cost(ref Nodes[root]);
     }
 
     /// <summary>
+    /// 获取树的高度 <br></br><br></br>
     /// Get the height of the tree.
     /// </summary>
     public int Height => root == NullNode ? 0 : Nodes[root].Height;
 
     /// <summary>
+    /// 枚举树中的所有边界框
     /// Enumerates all axis-aligned bounding boxes in the tree.
     /// </summary>
-    /// <param name="action">The action to perform on each bounding box and node height in the tree.</param>
+    /// <param name="action">
+    /// 对树中每个边界框和节点高度执行的操作。<br></br>
+    /// The action to perform on each bounding box and node height in the tree.
+    /// </param>
     public void EnumerateAABB(Action<JBBox, int> action)
     {
         if (root == -1) return;
@@ -388,11 +492,21 @@ public partial class DynamicTree
     [ThreadStatic] private static Stack<int>? stack;
 
     /// <summary>
+    /// 查询树来查找与指定射线相交的代理。<br></br><br></br>
     /// Queries the tree to find proxies which intersect the specified ray.
     /// </summary>
-    /// <param name="hits">An ICollection to store the entities found within the bounding box.</param>
-    /// <param name="rayOrigin">The origin of the ray.</param>
-    /// <param name="rayDirection">Direction of the ray.</param>
+    /// <param name="hits">
+    /// 一个 ICollection，用于存储边界框内找到的实体。<br></br><br></br>
+    /// An ICollection to store the entities found within the bounding box.
+    /// </param>
+    /// <param name="rayOrigin">
+    /// 射线的原点 <br></br><br></br>
+    /// The origin of the ray.
+    /// </param>
+    /// <param name="rayDirection">
+    /// 射线的方向向量 <br></br><br></br>
+    /// Direction of the ray.
+    /// </param>
     public void Query<T>(T hits, JVector rayOrigin, JVector rayDirection) where T : ICollection<IDynamicTreeProxy>
     {
         stack ??= new Stack<int>(256);
@@ -426,10 +540,17 @@ public partial class DynamicTree
     }
 
     /// <summary>
+    /// 查询树以查找指定轴对齐边界框内的实体。<br></br><br></br>
     /// Queries the tree to find entities within the specified axis-aligned bounding box.
     /// </summary>
-    /// <param name="hits">An ICollection to store the entities found within the bounding box.</param>
-    /// <param name="box">The axis-aligned bounding box used for the query.</param>
+    /// <param name="hits">
+    /// 一个 ICollection，用于存储边界框内找到的实体。<br></br><br></br>
+    /// An ICollection to store the entities found within the bounding box.
+    /// </param>
+    /// <param name="box">
+    /// 用于查询的轴对齐边界框。<br></br><br></br>
+    /// The axis-aligned bounding box used for the query.
+    /// </param>
     public void Query<T>(T hits, in JBBox box) where T : ICollection<IDynamicTreeProxy>
     {
         stack ??= new Stack<int>(256);
@@ -468,10 +589,17 @@ public partial class DynamicTree
     private Random? optimizeRandom;
 
     /// <summary>
+    /// 随机删除和添加实体到树中以便于优化。<br></br><br></br>
     /// Randomly removes and adds entities to the tree to facilitate optimization.
     /// </summary>
-    /// <param name="sweeps">The number of times to iterate over all proxies in the tree. Must be greater than zero.</param>
-    /// <param name="chance">The chance of a proxy to be removed and re-added to the tree for each sweep. Must be between 0 and 1.</param>
+    /// <param name="sweeps">
+    /// 迭代树中所有代理的次数。必须大于零。<br></br><br></br> 
+    /// The number of times to iterate over all proxies in the tree. Must be greater than zero.
+    /// </param>
+    /// <param name="chance">
+    /// 每次扫描时删除代理并将其重新添加到树中的几率。必须介于 0 和 1 之间。<br></br><br></br>
+    /// The chance of a proxy to be removed and re-added to the tree for each sweep. Must be between 0 and 1.
+    /// </param>
     public void Optimize(int sweeps = 100, Real chance = (Real)0.01)
     {
         optimizeRandom ??= new Random(0);

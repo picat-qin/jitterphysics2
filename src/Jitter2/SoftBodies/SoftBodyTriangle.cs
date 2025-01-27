@@ -27,24 +27,46 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.SoftBodies;
 
+/// <summary>
+/// 软体三角形
+/// </summary>
 public class SoftBodyTriangle : SoftBodyShape
 {
     private readonly RigidBody v1;
     private readonly RigidBody v2;
     private readonly RigidBody v3;
 
+    /// <summary>
+    /// 顶点1
+    /// </summary>
     public RigidBody Vertex1 => v1;
+    /// <summary>
+    /// 顶点2
+    /// </summary>
     public RigidBody Vertex2 => v2;
+    /// <summary>
+    /// 顶点3
+    /// </summary>
     public RigidBody Vertex3 => v3;
 
     private Real halfThickness = (Real)0.05;
 
+    /// <summary>
+    /// 厚度
+    /// </summary>
     public Real Thickness
     {
         get => halfThickness * (Real)2.0;
         set => halfThickness = value * (Real)0.5;
     }
 
+    /// <summary>
+    /// 软体三角形
+    /// </summary>
+    /// <param name="body">软体</param>
+    /// <param name="v1">顶点1</param>
+    /// <param name="v2">顶点2</param>
+    /// <param name="v3">顶点3</param>
     public SoftBodyTriangle(SoftBody body, RigidBody v1, RigidBody v2, RigidBody v3)
     {
         this.v1 = v1;

@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示圆锥形状。<br></br><br></br>
 /// Represents a cone shape.
 /// </summary>
 public class ConeShape : RigidBodyShape
@@ -35,6 +36,7 @@ public class ConeShape : RigidBodyShape
     private Real height;
 
     /// <summary>
+    /// 获取或设置圆锥底部的半径。<br></br><br></br>
     /// Gets or sets the radius of the cone at its base.
     /// </summary>
     public Real Radius
@@ -48,6 +50,7 @@ public class ConeShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 获取或设置圆锥体的高度。<br></br><br></br>
     /// Gets or sets the height of the cone.
     /// </summary>
     public Real Height
@@ -61,10 +64,17 @@ public class ConeShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 用指定的半径和高度初始化圆锥体类的新实例。圆锥体的对称轴沿 Y 轴对齐。<br></br><br></br>
     /// Initializes a new instance of the ConeShape class with specified radius and height. The symmetry axis of the cone is aligned along the Y-axis.
     /// </summary>
-    /// <param name="radius">The radius of the cone at its base.</param>
-    /// <param name="height">The height of the cone.</param>
+    /// <param name="radius">
+    /// 圆锥底部的半径。<br></br><br></br>
+    /// The radius of the cone at its base.
+    /// </param>
+    /// <param name="height">
+    /// 圆锥体的高度。<br></br><br></br>
+    /// The height of the cone.
+    /// </param>
     public ConeShape(Real radius = (Real)0.5, Real height = (Real)1.0)
     {
         this.radius = radius;

@@ -26,6 +26,9 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.SoftBodies;
 
+/// <summary>
+/// 软四面体
+/// </summary>
 public class SoftBodyTetrahedron : SoftBodyShape
 {
     public SoftBodyTetrahedron(SoftBody body, RigidBody v1, RigidBody v2, RigidBody v3, RigidBody v4)
@@ -40,6 +43,9 @@ public class SoftBodyTetrahedron : SoftBodyShape
         UpdateWorldBoundingBox();
     }
 
+    /// <summary>
+    /// 顶点集
+    /// </summary>
     public RigidBody[] Vertices { get; } = new RigidBody[4];
 
     public override JVector Velocity

@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 提供用于计算隐式定义形状的属性的辅助方法。<br></br><br></br>
 /// Provides helper methods for calculating the properties of implicitly defined shapes.
 /// </summary>
 public static class ShapeHelper
@@ -48,11 +49,21 @@ public static class ShapeHelper
     };
 
     /// <summary>
+    /// 计算隐式定义形状的凸包。<br></br><br></br>
     /// Calculates the convex hull of an implicitly defined shape.
     /// </summary>
-    /// <param name="support">The support map interface implemented by the shape.</param>
-    /// <param name="subdivisions">The number of subdivisions used for hull generation. Defaults to 3.</param>
-    /// <param name="hullCollection">An ICollection to which the triangles are added too.</param>
+    /// <param name="support">
+    /// 支撑形状 map 的接口由形状实现 <br></br><br></br>
+    /// The support map interface implemented by the shape.
+    /// </param>
+    /// <param name="subdivisions">
+    /// 用于包体生成的细分数。默认为 3。<br></br><br></br>
+    /// The number of subdivisions used for hull generation. Defaults to 3.
+    /// </param>
+    /// <param name="hullCollection">
+    /// 一个添加了三角形的 ICollection。<br></br><br></br>
+    /// An ICollection to which the triangles are added too.
+    /// </param>
     public static void MakeHull<T>(ISupportMappable support, T hullCollection, int subdivisions = 3) where T : ICollection<JTriangle>
     {
         for (int i = 0; i < 20; i++)
@@ -69,6 +80,19 @@ public static class ShapeHelper
         }
     }
 
+    /// <summary>
+    /// 细分
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="support"></param>
+    /// <param name="hullCollection"></param>
+    /// <param name="v1"></param>
+    /// <param name="v2"></param>
+    /// <param name="v3"></param>
+    /// <param name="p1"></param>
+    /// <param name="p2"></param>
+    /// <param name="p3"></param>
+    /// <param name="subdivisions"></param>
     private static void Subdivide<T>(ISupportMappable support, T hullCollection,
         JVector v1, JVector v2, JVector v3, JVector p1, JVector p2, JVector p3,
         int subdivisions = 3) where T : ICollection<JTriangle>
@@ -102,12 +126,25 @@ public static class ShapeHelper
     }
 
     /// <summary>
+    /// 计算隐式定义形状的凸包。<br></br><br></br>
     /// Calculates the convex hull of an implicitly defined shape.
     /// </summary>
-    /// <param name="support">The support map interface implemented by the shape.</param>
-    /// <param name="subdivisions">The number of subdivisions used for hull generation. Defaults to 3.</param>
-    /// <returns>An enumeration of triangles forming the convex hull.</returns>
-    /// <remarks>Allocates a new List and therefore generates garbage.</remarks>
+    /// <param name="support">
+    /// 支撑形状 map 的接口由形状实现 <br></br><br></br>
+    /// The support map interface implemented by the shape.
+    /// </param>
+    /// <param name="subdivisions">
+    /// 用于包体生成的细分数。默认为 3。<br></br><br></br>  
+    /// The number of subdivisions used for hull generation. Defaults to 3.
+    /// </param>
+    /// <returns>
+    /// 形成凸包的三角形的枚举。<br></br><br></br>
+    /// An enumeration of triangles forming the convex hull.
+    /// </returns>
+    /// <remarks>
+    /// 分配一个新的列表，因此产生垃圾。<br></br><br></br>
+    /// Allocates a new List and therefore generates garbage.
+    /// </remarks>
     public static IEnumerable<JTriangle> MakeHull(ISupportMappable support, int subdivisions = 3)
     {
         List<JTriangle> triangles = new();
@@ -115,6 +152,13 @@ public static class ShapeHelper
         return triangles;
     }
 
+    /// <summary>
+    /// 计算边界框
+    /// </summary>
+    /// <param name="support">支撑</param>
+    /// <param name="orientation">方向</param>
+    /// <param name="position">位置</param>
+    /// <param name="box">边框盒子</param>
     public static void CalculateBoundingBox(ISupportMappable support,
         in JQuaternion orientation, in JVector position, out JBBox box)
     {
@@ -143,12 +187,26 @@ public static class ShapeHelper
     }
 
     /// <summary>
+    /// 计算隐式定义形状的质量属性，假设单位质量密度。<br></br><br></br>
     /// Calculates the mass properties of an implicitly defined shape, assuming unit mass density.
     /// </summary>
-    /// <param name="support">The support map interface implemented by the shape.</param>
-    /// <param name="inertia">Output parameter for the calculated inertia matrix.</param>
-    /// <param name="centerOfMass">Output parameter for the calculated center of mass vector.</param>
-    /// <param name="mass">Output parameter for the calculated mass.</param>
+    /// <param name="support">
+    /// 支撑形状 map 的接口由形状实现 <br></br><br></br>
+    /// The support map interface implemented by the shape.
+    /// </param>
+    /// <param name="inertia">
+    /// 计算的惯性矩阵的输出参数。<br></br><br></br>
+    /// Output parameter for the calculated inertia matrix.
+    /// </param>
+    /// <param name="centerOfMass">
+    /// 计算质心矢量的输出参数。<br></br><br></br>
+    /// Output parameter for the calculated center of mass vector.
+    /// </param>
+    /// <param name="mass">
+    /// 计算质量的输出参数。<br></br><br></br>
+    /// Output parameter for the calculated mass.
+    /// </param>
+    /// <param name="subdivisions">细分</param>
     public static void CalculateMassInertia(ISupportMappable support, out JMatrix inertia, out JVector centerOfMass,
         out Real mass, int subdivisions = 4)
     {

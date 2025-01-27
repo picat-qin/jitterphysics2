@@ -29,7 +29,11 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
-/// The main entity of the collision system. Implements <see cref="ISupportMappable"/> for
+/// 碰撞系统的主要实体。<br></br><br></br>
+/// 实现 <see cref="ISupportMappable"/> 以进行窄相碰撞检测，<br></br>
+/// 并实现 <see cref="IDynamicTreeProxy"/> 以进行宽相碰撞检测。<br></br>
+/// 形状本身没有位置或方向。形状可以与<see cref="RigidBody"/> 的实例相关联。<br></br><br></br>
+/// he main entity of the collision system. Implements <see cref="ISupportMappable"/> for
 /// narrow-phase and <see cref="IDynamicTreeProxy"/> for broad-phase collision detection.
 /// The shape itself does not have a position or orientation. Shapes can be associated with
 /// instances of <see cref="RigidBody"/>.
@@ -39,12 +43,16 @@ public abstract class Shape : IDynamicTreeProxy, IUpdatableBoundingBox, ISupport
     int IPartitionedSetIndex.SetIndex { get; set; } = -1;
 
     /// <summary>
+    /// 表示形状 ID 的 64 位整数。<br></br>
+    /// 需要按照明确定义的顺序排列形状的算法会使用它。<br></br><br></br>
     /// A 64-bit integer representing the shape ID. This is used by algorithms that require
     /// arranging shapes in a well-defined order.
     /// </summary>
     public readonly ulong ShapeId = World.RequestId();
 
     /// <summary>
+    /// 世界空间中形状的边界框。<br></br><br></br>
+    /// 当 <see cref="RigidBody"/> 的相应实例的位置或方向发生变化时，它会自动更新。<br></br><br></br>
     /// The bounding box of the shape in world space. It is automatically updated when the position or
     /// orientation of the corresponding instance of <see cref="RigidBody"/> changes.
     /// </summary>
@@ -76,6 +84,9 @@ public abstract class Shape : IDynamicTreeProxy, IUpdatableBoundingBox, ISupport
         WorldBoundingBox = box;
     }
 
+    /// <summary>
+    /// 已注册
+    /// </summary>
     public bool IsRegistered => (this as IPartitionedSetIndex).SetIndex != -1;
 
     [ReferenceFrame(ReferenceFrame.World)]

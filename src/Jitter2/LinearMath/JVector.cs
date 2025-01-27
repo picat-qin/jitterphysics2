@@ -28,24 +28,53 @@ using System.Runtime.InteropServices;
 namespace Jitter2.LinearMath;
 
 /// <summary>
+/// 三维向量 <br></br><br></br>
+/// 表示具有 <see cref="Real"/> 类型分量的三维向量。<br></br><br></br>
 /// Represents a three-dimensional vector with components of type <see cref="Real"/>.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 3*sizeof(Real))]
 public struct JVector : IEquatable<JVector>
 {
+    /// <summary>
+    /// 零向量
+    /// </summary>
     internal static JVector InternalZero;
+    /// <summary>
+    /// 任意向量
+    /// </summary>
     internal static JVector Arbitrary;
 
     [FieldOffset(0*sizeof(Real))] public Real X;
     [FieldOffset(1*sizeof(Real))] public Real Y;
     [FieldOffset(2*sizeof(Real))] public Real Z;
 
+    /// <summary>
+    /// 纯 0 向量
+    /// </summary>
     public static readonly JVector Zero;
+    /// <summary>
+    /// X 单位向量
+    /// </summary>
     public static readonly JVector UnitX;
+    /// <summary>
+    /// Y 单位向量
+    /// </summary>
     public static readonly JVector UnitY;
+    /// <summary>
+    /// Z 单位向量
+    /// </summary>
     public static readonly JVector UnitZ;
+    /// <summary>
+    /// 纯 1 向量
+    /// </summary>
     public static readonly JVector One;
+    /// <summary>
+    /// 纯最小值向量
+    /// </summary>
     public static readonly JVector MinValue;
+    /// <summary>
+    /// 纯最大值向量
+    /// </summary>
     public static readonly JVector MaxValue;
 
     static JVector()
@@ -68,6 +97,12 @@ public struct JVector : IEquatable<JVector>
         Z = z;
     }
 
+    /// <summary>
+    /// 设置向量值
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
     public void Set(Real x, Real y, Real z)
     {
         X = x;
@@ -82,6 +117,11 @@ public struct JVector : IEquatable<JVector>
         Z = xyz;
     }
 
+    /// <summary>
+    /// 获取值
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe ref Real UnsafeGet(int index)
     {
@@ -178,6 +218,9 @@ public struct JVector : IEquatable<JVector>
         result.Z = value1.Z > value2.Z ? value1.Z : value2.Z;
     }
 
+    /// <summary>
+    /// 重置为纯 0 向量
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void MakeZero()
     {
@@ -187,6 +230,7 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 转置 <br></br><br></br>
     /// Calculates matrix \times vector, where vector is a column vector.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -196,6 +240,12 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 转置 <br></br><br></br>
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="quat"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector Transform(in JVector vector, in JQuaternion quat)
     {
@@ -204,6 +254,8 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 转置变换 <br></br><br></br>
+    /// 计算矩阵^\mathrf{T} \times 向量，其中向量为列向量。<br></br><br></br>
     /// Calculates matrix^\mathrf{T} \times vector, where vector is a column vector.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,6 +265,12 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 转置变换 <br></br><br></br>
+    /// </summary>
+    /// <param name="vector"></param>
+    /// <param name="quat"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector TransposedTransform(in JVector vector, in JQuaternion quat)
     {
@@ -221,6 +279,7 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 变换 <br></br><br></br>
     /// Calculates matrix \times vector, where vector is a column vector.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -236,6 +295,7 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 转置变换 <br></br><br></br>
     /// Calculates matrix^\mathrf{T} \times vector, where vector is a column vector.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -251,6 +311,8 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 变换 <br></br><br></br>
+    /// 通过四元数变换向量。<br></br><br></br>
     /// Transforms the vector by a quaternion.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -270,6 +332,8 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 共轭变换 <br></br><br></br>
+    /// 通过共轭四元数变换向量。<br></br><br></br>
     /// Transforms the vector by a conjugated quaternion.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -289,6 +353,7 @@ public struct JVector : IEquatable<JVector>
     }
 
     /// <summary>
+    /// 外积 <br></br><br></br>
     /// Calculates the outer product.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -307,12 +372,24 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 点积
+    /// </summary>
+    /// <param name="vector1"></param>
+    /// <param name="vector2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Real Dot(in JVector vector1, in JVector vector2)
     {
         return vector1.X * vector2.X + vector1.Y * vector2.Y + vector1.Z * vector2.Z;
     }
 
+    /// <summary>
+    /// 求和
+    /// </summary>
+    /// <param name="value1"></param>
+    /// <param name="value2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector Add(in JVector value1, in JVector value2)
     {
@@ -320,6 +397,12 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 求和
+    /// </summary>
+    /// <param name="value1"></param>
+    /// <param name="value2"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Add(in JVector value1, in JVector value2, out JVector result)
     {
@@ -328,6 +411,12 @@ public struct JVector : IEquatable<JVector>
         result.Z = value1.Z + value2.Z;
     }
 
+    /// <summary>
+    /// 求差
+    /// </summary>
+    /// <param name="value1"></param>
+    /// <param name="value2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector Subtract(JVector value1, JVector value2)
     {
@@ -335,6 +424,12 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 求差
+    /// </summary>
+    /// <param name="value1"></param>
+    /// <param name="value2"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Subtract(in JVector value1, in JVector value2, out JVector result)
     {
@@ -347,6 +442,12 @@ public struct JVector : IEquatable<JVector>
         result.Z = num2;
     }
 
+    /// <summary>
+    /// 求叉积
+    /// </summary>
+    /// <param name="vector1"></param>
+    /// <param name="vector2"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector Cross(in JVector vector1, in JVector vector2)
     {
@@ -354,6 +455,12 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 求叉积
+    /// </summary>
+    /// <param name="vector1"></param>
+    /// <param name="vector2"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Cross(in JVector vector1, in JVector vector2, out JVector result)
     {
@@ -380,6 +487,11 @@ public struct JVector : IEquatable<JVector>
         Z = -Z;
     }
 
+    /// <summary>
+    /// 求逆
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector Negate(in JVector value)
     {
@@ -387,6 +499,11 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 求逆
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Negate(in JVector value, out JVector result)
     {
@@ -406,6 +523,9 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 归一化
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Normalize()
     {
@@ -416,6 +536,11 @@ public struct JVector : IEquatable<JVector>
         Z *= num;
     }
 
+    /// <summary>
+    /// 归一化
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Normalize(in JVector value, out JVector result)
     {
@@ -426,24 +551,43 @@ public struct JVector : IEquatable<JVector>
         result.Z = value.Z * num;
     }
 
+    /// <summary>
+    /// 长度平方
+    /// </summary>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly Real LengthSquared()
     {
         return X * X + Y * Y + Z * Z;
     }
 
+    /// <summary>
+    /// 长度
+    /// </summary>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly Real Length()
     {
         return MathR.Sqrt(X * X + Y * Y + Z * Z);
     }
 
+    /// <summary>
+    /// 交换两个向量
+    /// </summary>
+    /// <param name="vector1"></param>
+    /// <param name="vector2"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Swap(ref JVector vector1, ref JVector vector2)
     {
         (vector2, vector1) = (vector1, vector2);
     }
 
+    /// <summary>
+    /// 求积
+    /// </summary>
+    /// <param name="value1"></param>
+    /// <param name="scaleFactor"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static JVector Multiply(in JVector value1, Real scaleFactor)
     {
@@ -451,6 +595,10 @@ public struct JVector : IEquatable<JVector>
         return result;
     }
 
+    /// <summary>
+    /// 求积
+    /// </summary>
+    /// <param name="factor"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Multiply(Real factor)
     {
@@ -459,6 +607,12 @@ public struct JVector : IEquatable<JVector>
         Z *= factor;
     }
 
+    /// <summary>
+    /// 求积
+    /// </summary>
+    /// <param name="value1"></param>
+    /// <param name="scaleFactor"></param>
+    /// <param name="result"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Multiply(in JVector value1, Real scaleFactor, out JVector result)
     {

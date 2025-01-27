@@ -30,6 +30,7 @@ using IslandSet = Jitter2.DataStructures.PartitionedSet<Jitter2.Collision.Island
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 用于更新岛屿的辅助类。此处的方法不是线程安全的。<br></br><br></br>
 /// Helper class to update islands. The methods here are not thread-safe.
 /// </summary>
 internal static class IslandHelper
@@ -51,6 +52,11 @@ internal static class IslandHelper
         pool.Push(island);
     }
 
+    /// <summary>
+    /// 仲裁者被创建
+    /// </summary>
+    /// <param name="islands"></param>
+    /// <param name="arbiter"></param>
     public static void ArbiterCreated(IslandSet islands, Arbiter arbiter)
     {
         RigidBody b1 = arbiter.Body1;
@@ -63,6 +69,11 @@ internal static class IslandHelper
         AddConnection(islands, b1, b2);
     }
 
+    /// <summary>
+    /// 仲裁者被移除
+    /// </summary>
+    /// <param name="islands"></param>
+    /// <param name="arbiter"></param>
     public static void ArbiterRemoved(IslandSet islands, Arbiter arbiter)
     {
         arbiter.Body1.contacts.Remove(arbiter);
@@ -71,6 +82,11 @@ internal static class IslandHelper
         RemoveConnection(islands, arbiter.Body1, arbiter.Body2);
     }
 
+    /// <summary>
+    /// 约束被创建
+    /// </summary>
+    /// <param name="islands"></param>
+    /// <param name="constraint"></param>
     public static void ConstraintCreated(IslandSet islands, Constraint constraint)
     {
         constraint.Body1.constraints.Add(constraint);
@@ -81,6 +97,11 @@ internal static class IslandHelper
         AddConnection(islands, constraint.Body1, constraint.Body2);
     }
 
+    /// <summary>
+    /// 约束被移除
+    /// </summary>
+    /// <param name="islands"></param>
+    /// <param name="constraint"></param>
     public static void ConstraintRemoved(IslandSet islands, Constraint constraint)
     {
         constraint.Body1.constraints.Remove(constraint);
@@ -89,6 +110,11 @@ internal static class IslandHelper
         RemoveConnection(islands, constraint.Body1, constraint.Body2);
     }
 
+    /// <summary>
+    /// 物体被添加
+    /// </summary>
+    /// <param name="islands"></param>
+    /// <param name="body"></param>
     public static void BodyAdded(IslandSet islands, RigidBody body)
     {
         body.island = GetFromPool();
@@ -96,6 +122,11 @@ internal static class IslandHelper
         body.island.bodies.Add(body);
     }
 
+    /// <summary>
+    /// 物体被移除
+    /// </summary>
+    /// <param name="islands"></param>
+    /// <param name="body"></param>
     public static void BodyRemoved(IslandSet islands, RigidBody body)
     {
         body.island.ClearLists();

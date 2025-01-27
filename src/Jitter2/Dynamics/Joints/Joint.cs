@@ -26,6 +26,9 @@ using Jitter2.DataStructures;
 
 namespace Jitter2.Dynamics.Constraints;
 
+/// <summary>
+/// Á¬½Ó
+/// </summary>
 public class Joint
 {
     private readonly List<Constraint> constraints = new(4);

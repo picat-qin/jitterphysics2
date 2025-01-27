@@ -31,6 +31,8 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 距离约束, 限制一个物体的参考系中的固定点与另一个物体的参考系中的固定点之间的距离。<br></br>
+/// 此约束会移除一个平移自由度。对于零距离，请使用 <see cref="BallSocket"/> 约束。<br></br><br></br>
 /// Constrains the distance between a fixed point in the reference frame of one body and a fixed
 /// point in the reference frame of another body. This constraint removes one translational degree
 /// of freedom. For a distance of zero, use the <see cref="BallSocket"/> constraint.

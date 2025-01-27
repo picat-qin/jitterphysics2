@@ -28,22 +28,25 @@ using System.Runtime.InteropServices;
 namespace Jitter2.LinearMath;
 
 /// <summary>
+/// 四元数 <br></br><br></br>
 /// Quaternion Q = Xi + Yj + Zk + W. Uses Hamilton's definition of ij=k.
 /// </summary>
-[StructLayout(LayoutKind.Explicit, Size = 4*sizeof(Real))]
+[StructLayout(LayoutKind.Explicit, Size = 4 * sizeof(Real))]
 public struct JQuaternion : IEquatable<JQuaternion>
 {
-    [FieldOffset(0*sizeof(Real))] public Real X;
-    [FieldOffset(1*sizeof(Real))] public Real Y;
-    [FieldOffset(2*sizeof(Real))] public Real Z;
-    [FieldOffset(3*sizeof(Real))] public Real W;
+    [FieldOffset(0 * sizeof(Real))] public Real X;
+    [FieldOffset(1 * sizeof(Real))] public Real Y;
+    [FieldOffset(2 * sizeof(Real))] public Real Z;
+    [FieldOffset(3 * sizeof(Real))] public Real W;
 
     /// <summary>
+    /// 单位四元数 <br></br><br></br>
     /// Gets the identity quaternion (0, 0, 0, 1).
     /// </summary>
     public static JQuaternion Identity => new(0, 0, 0, 1);
 
     /// <summary>
+    /// 构造四元数 <br></br>
     /// Initializes a new instance of the <see cref="JQuaternion"/> struct.
     /// </summary>
     /// <param name="x">The X component.</param>
@@ -59,9 +62,10 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 构造四元数 <br></br>
     /// Initializes a new instance of the <see cref="JQuaternion"/> struct.
     /// </summary>
-    /// <param name="w">The W component.</param>
+    /// <param name="w">W 值 <br></br><br></br>The W component.</param>
     /// <param name="v">The vector component.</param>
     public JQuaternion(Real w, in JVector v)
     {
@@ -72,6 +76,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 加法 <br></br><br></br>
     /// Adds two quaternions.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -85,6 +90,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 加法 <br></br><br></br>
     /// Adds two quaternions.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -100,6 +106,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 共轭 <br></br><br></br>
     /// Returns the conjugate of a quaternion.
     /// </summary>
     /// <param name="value">The quaternion to conjugate.</param>
@@ -116,6 +123,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 共轭四元数 <br></br>
     /// Returns the conjugate of the quaternion.
     /// </summary>
     /// <returns>The conjugate of the quaternion.</returns>
@@ -139,6 +147,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 减法 <br></br><br></br>
     /// Subtracts one quaternion from another.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -152,6 +161,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 减法 <br></br><br></br>
     /// Subtracts one quaternion from another.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -167,6 +177,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 乘法 <br></br><br></br>
     /// Multiplies two quaternions.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -180,6 +191,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 计算四元数对（1,0,0）^T的变换。<br></br><br></br>
     /// Calculates the transformation of (1,0,0)^T by the quaternion.
     /// </summary>
     /// <returns>The transformed vector.</returns>
@@ -195,6 +207,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 计算四元数对（0,1,0）^T的变换。<br></br><br></br>
     /// Calculates the transformation of (0,1,0)^T by the quaternion.
     /// </summary>
     /// <returns>The transformed vector.</returns>
@@ -210,6 +223,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 计算四元数对（0,0,1）^T的变换。<br></br><br></br>
     /// Calculates the transformation of (0,0,1)^T by the quaternion.
     /// </summary>
     /// <returns>The transformed vector.</returns>
@@ -225,6 +239,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 创建一个表示绕 X 轴旋转的四元数。<br></br><br></br>
     /// Creates a quaternion representing a rotation around the X-axis.
     /// </summary>
     /// <param name="radians">The angle of rotation in radians.</param>
@@ -237,6 +252,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 创建一个表示绕 Y 轴旋转的四元数。<br></br><br></br>
     /// Creates a quaternion representing a rotation around the Y-axis.
     /// </summary>
     /// <param name="radians">The angle of rotation in radians.</param>
@@ -249,6 +265,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 创建一个表示绕 Z 轴旋转的四元数。<br></br><br></br>
     /// Creates a quaternion representing a rotation around the Z-axis.
     /// </summary>
     /// <param name="radians">The angle of rotation in radians.</param>
@@ -261,6 +278,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 乘法 <br></br><br></br>
     /// Multiplies two quaternions.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -286,6 +304,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 共轭乘积 <br></br><br></br>
     /// Calculates quaternion1* \times quaternion2.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -311,6 +330,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 共轭乘积 <br></br><br></br>
     /// Calculates quaternion1* \times quaternion2.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -323,6 +343,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 乘积共轭 <br></br><br></br>
     /// Calculates quaternion1 \times quaternion2*.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -348,6 +369,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 乘积共轭 <br></br><br></br>
     /// Calculates quaternion1 \times quaternion2*.
     /// </summary>
     /// <param name="quaternion1">The first quaternion.</param>
@@ -360,6 +382,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 乘法 <br></br><br></br>
     /// Multiplies a quaternion by a scalar factor.
     /// </summary>
     /// <param name="quaternion1">The quaternion to multiply.</param>
@@ -372,7 +395,8 @@ public struct JQuaternion : IEquatable<JQuaternion>
         return result;
     }
 
-    /// <summary>
+    /// <summary> 
+    /// 乘法 <br></br><br></br>
     /// Multiplies a quaternion by a scalar factor.
     /// </summary>
     /// <param name="quaternion1">The quaternion to multiply.</param>
@@ -388,6 +412,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 计算四元数的长度。<br></br><br></br>
     /// Calculates the length of the quaternion.
     /// </summary>
     /// <returns>The length of the quaternion.</returns>
@@ -398,6 +423,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 归一到单位长度上 <br></br><br></br>
     /// Normalizes the quaternion to unit length.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -412,6 +438,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 从旋转矩阵创建四元数 <br></br><br></br>
     /// Creates a quaternion from a rotation matrix.
     /// </summary>
     /// <param name="matrix">The rotation matrix.</param>
@@ -424,6 +451,7 @@ public struct JQuaternion : IEquatable<JQuaternion>
     }
 
     /// <summary>
+    /// 从旋转矩阵创建四元数 <br></br><br></br>
     /// Creates a quaternion from a rotation matrix.
     /// </summary>
     /// <param name="matrix">The rotation matrix.</param>

@@ -31,29 +31,61 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 角约束, 表示驱动两个轴之间的相对角运动的运动约束，这两个轴固定在各自身体的参考系内。<br></br><br></br>
 /// Represents a motor constraint that drives relative angular movement between two axes, which are fixed within the reference frames of their respective bodies.
 /// </summary>
 public unsafe class AngularMotor : Constraint
 {
+    /// <summary>
+    /// 角驱动数据
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct AngularMotorData
     {
         internal int _internal;
+        /// <summary>
+        /// 迭代指针
+        /// </summary>
         public delegate*<ref ConstraintData, void> Iterate;
+        /// <summary>
+        /// 预迭代指针
+        /// </summary>
         public delegate*<ref ConstraintData, Real, void> PrepareForIteration;
 
         public JHandle<RigidBodyData> Body1;
         public JHandle<RigidBodyData> Body2;
 
+        /// <summary>
+        /// 本地轴1
+        /// </summary>
         public JVector LocalAxis1;
+        /// <summary>
+        /// 本地轴2
+        /// </summary>
         public JVector LocalAxis2;
 
+        /// <summary>
+        /// 速度
+        /// </summary>
         public Real Velocity;
+        /// <summary>
+        /// 最大力
+        /// </summary>
         public Real MaxForce;
+
+        /// <summary>
+        /// 最大距离?
+        /// </summary>
         public Real MaxLambda;
 
+        /// <summary>
+        /// 有效质量
+        /// </summary>
         public Real EffectiveMass;
 
+        /// <summary>
+        /// 累积冲量
+        /// </summary>
         public Real AccumulatedImpulse;
     }
 
@@ -68,10 +100,17 @@ public unsafe class AngularMotor : Constraint
     }
 
     /// <summary>
+    /// 初始化约束。<br></br><br></br>
     /// Initializes the constraint.
     /// </summary>
-    /// <param name="axis1">The axis on the first body, defined in world space.</param>
-    /// <param name="axis2">The axis on the second body, defined in world space.</param>
+    /// <param name="axis1">T
+    /// 第一个物体上的轴，在世界空间中定义。<br></br><br></br>
+    /// he axis on the first body, defined in world space.
+    /// </param>
+    /// <param name="axis2">
+    /// 第二个物体上的轴，在世界空间中定义。<br></br><br></br>
+    /// The axis on the second body, defined in world space.
+    /// </param>
     public void Initialize(JVector axis1, JVector axis2)
     {
         ref AngularMotorData data = ref handle.Data;
@@ -88,21 +127,37 @@ public unsafe class AngularMotor : Constraint
         data.Velocity = 0;
     }
 
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="axis"></param>
     public void Initialize(JVector axis)
     {
         Initialize(axis, axis);
     }
 
+    /// <summary>
+    /// 目标速度
+    /// </summary>
     public Real TargetVelocity
     {
         get => handle.Data.Velocity;
         set => handle.Data.Velocity = value;
     }
 
+    /// <summary>
+    /// 本地轴1
+    /// </summary>
     public JVector LocalAxis1 => handle.Data.LocalAxis1;
 
+    /// <summary>
+    /// 本地轴2
+    /// </summary>
     public JVector LocalAxis2 => handle.Data.LocalAxis2;
 
+    /// <summary>
+    /// 最大力
+    /// </summary>
     public Real MaximumForce
     {
         get => handle.Data.MaxForce;
@@ -117,6 +172,11 @@ public unsafe class AngularMotor : Constraint
         }
     }
 
+    /// <summary>
+    /// 预迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void PrepareForIteration(ref ConstraintData constraint, Real idt)
     {
         ref AngularMotorData data = ref Unsafe.AsRef<AngularMotorData>(Unsafe.AsPointer(ref constraint));
@@ -137,6 +197,11 @@ public unsafe class AngularMotor : Constraint
         body2.AngularVelocity += JVector.Transform(j2 * data.AccumulatedImpulse, body2.InverseInertiaWorld);
     }
 
+    /// <summary>
+    /// 迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void Iterate(ref ConstraintData constraint, Real idt)
     {
         ref AngularMotorData data = ref Unsafe.AsRef<AngularMotorData>(Unsafe.AsPointer(ref constraint));

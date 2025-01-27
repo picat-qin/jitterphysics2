@@ -28,6 +28,7 @@ using Jitter2.Dynamics;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 表示一个岛屿，它是一组直接或间接相互接触的物体的集合。<br></br><br></br>
 /// Represents an island, which is a collection of bodies that are either directly or indirectly in contact with each other.
 /// </summary>
 public sealed class Island : IPartitionedSetIndex
@@ -37,6 +38,7 @@ public sealed class Island : IPartitionedSetIndex
     internal bool NeedsUpdate;
 
     /// <summary>
+    /// 岛上所有物体的集合。<br></br><br></br>
     /// Gets a collection of all the bodies present in this island.
     /// </summary>
     public ReadOnlyHashSet<RigidBody> Bodies => new(bodies);
@@ -44,6 +46,7 @@ public sealed class Island : IPartitionedSetIndex
     int IPartitionedSetIndex.SetIndex { get; set; } = -1;
 
     /// <summary>
+    /// 初始化 <see cref="Island"/> 类的新实例。<br></br><br></br>
     /// Initializes a new instance of the <see cref="Island"/> class.
     /// </summary>
     public Island()
@@ -51,6 +54,7 @@ public sealed class Island : IPartitionedSetIndex
     }
 
     /// <summary>
+    /// 清除此岛内名单上的所有物体。
     /// Clears all the bodies from the lists within this island.
     /// </summary>
     internal void ClearLists()

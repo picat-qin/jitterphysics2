@@ -30,11 +30,21 @@ using Jitter2.UnmanagedMemory;
 
 namespace Jitter2.DataStructures;
 
+/// <summary>
+/// 分区集合索引接口
+/// </summary>
 public interface IPartitionedSetIndex
 {
+    /// <summary>
+    /// 设置的索引
+    /// </summary>
     int SetIndex { get; set; }
 }
 
+/// <summary>
+/// 只读分区集合
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public readonly struct ReadOnlyPartitionedSet<T> : IEnumerable<T> where T : class, IPartitionedSetIndex
 {
     private readonly PartitionedSet<T> partitionedSet;
@@ -44,7 +54,14 @@ public readonly struct ReadOnlyPartitionedSet<T> : IEnumerable<T> where T : clas
         this.partitionedSet = partitionedSet;
     }
 
+    /// <summary>
+    /// 激活状态
+    /// </summary>
     public int Active => partitionedSet.ActiveCount;
+
+    /// <summary>
+    /// 集合数量
+    /// </summary>
     public int Count => partitionedSet.Count;
 
     public T this[int i] => partitionedSet[i];
@@ -71,15 +88,24 @@ public readonly struct ReadOnlyPartitionedSet<T> : IEnumerable<T> where T : clas
 }
 
 /// <summary>
+/// 表示可分为活动子集和非活动子集的对象集合。<br></br><br></br>
 /// Represents a collection of objects that can be partitioned into active and inactive subsets.
 /// </summary>
-/// <typeparam name="T">The type of elements in the set, which must implement <see cref="IPartitionedSetIndex"/>.</typeparam>
+/// <typeparam name="T">
+/// 集合中元素的类型，必须实现<see cref="IPartitionedSetIndex"/>。<br></br><br></br>
+/// The type of elements in the set, which must implement <see cref="IPartitionedSetIndex"/>.
+/// </typeparam>
 /// <remarks>
+/// 方法 <see cref="Add(T, bool)"/>、<see cref="Remove(T)"/>、<see cref="Is Active(T)"/>、
+/// <see cref="MoveToActive(T)"/> 和 <see cref="MoveToInactive(T)"/> 全部以 O(1) 时间复杂度运行。<br></br><br></br>
 /// The methods <see cref="Add(T, bool)"/>, <see cref="Remove(T)"/>, <see cref="IsActive(T)"/>,
 /// <see cref="MoveToActive(T)"/>, and <see cref="MoveToInactive(T)"/> all operate in O(1) time complexity.
 /// </remarks>
 public class PartitionedSet<T> : IEnumerable<T> where T : class, IPartitionedSetIndex
 {
+    /// <summary>
+    /// 枚举器
+    /// </summary>
     public struct Enumerator : IEnumerator<T>
     {
         private readonly PartitionedSet<T> partitionedSet;
@@ -117,6 +143,9 @@ public class PartitionedSet<T> : IEnumerable<T> where T : class, IPartitionedSet
 
     private T[] elements;
 
+    /// <summary>
+    /// 激活状态的数量
+    /// </summary>
     public int ActiveCount { get; private set; }
 
     public PartitionedSet(int initialSize = 1024)
@@ -157,6 +186,11 @@ public class PartitionedSet<T> : IEnumerable<T> where T : class, IPartitionedSet
         if (active) MoveToActive(element);
     }
 
+    /// <summary>
+    /// 交换
+    /// </summary>
+    /// <param name="index0"></param>
+    /// <param name="index1"></param>
     private void Swap(int index0, int index1)
     {
         (elements[index0], elements[index1]) =
@@ -186,6 +220,11 @@ public class PartitionedSet<T> : IEnumerable<T> where T : class, IPartitionedSet
         return true;
     }
 
+    /// <summary>
+    /// 移动到非活动状态
+    /// </summary>
+    /// <param name="element"></param>
+    /// <returns></returns>
     public bool MoveToInactive(T element)
     {
         Debug.Assert(element.SetIndex != -1);

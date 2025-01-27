@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示三维盒子形状。<br></br><br></br>
 /// Represents a three-dimensional box shape.
 /// </summary>
 public class BoxShape : RigidBodyShape
@@ -34,6 +35,7 @@ public class BoxShape : RigidBodyShape
     private JVector halfSize;
 
     /// <summary>
+    /// 获取或设置盒子的尺寸。<br></br><br></br>
     /// Gets or sets the dimensions of the box.
     /// </summary>
     public JVector Size
@@ -47,9 +49,13 @@ public class BoxShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 创建具有指定尺寸的盒子形状。<br></br><br></br>
     /// Creates a box shape with specified dimensions.
     /// </summary>
-    /// <param name="size">The dimensions of the box.</param>
+    /// <param name="size">
+    /// 盒子的尺寸。<br></br><br></br>
+    /// The dimensions of the box.
+    /// </param>
     public BoxShape(JVector size)
     {
         halfSize = (Real)0.5 * size;
@@ -57,9 +63,13 @@ public class BoxShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 创建具有指定边长的立方体。
     /// Creates a cube shape with the specified side length.
     /// </summary>
-    /// <param name="size">The length of each side of the cube.</param>
+    /// <param name="size">
+    /// 立方体每边的长度。<br></br><br></br>
+    /// The length of each side of the cube.
+    /// </param>
     public BoxShape(Real size)
     {
         halfSize = new JVector(size * (Real)0.5);
@@ -67,11 +77,12 @@ public class BoxShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 创建具有指定长度、高度和宽度的盒子形状。
     /// Creates a box shape with the specified length, height, and width.
     /// </summary>
-    /// <param name="length">The length of the box.</param>
-    /// <param name="height">The height of the box.</param>
-    /// <param name="width">The width of the box.</param>
+    /// <param name="length">盒子长度 <br></br><br></br> The length of the box.</param>
+    /// <param name="height">盒子高度 <br></br><br></br> The height of the box.</param>
+    /// <param name="width">盒子宽度 <br></br><br></br> The width of the box.</param>
     public BoxShape(Real length, Real height, Real width)
     {
         halfSize = (Real)0.5 * new JVector(length, height, width);

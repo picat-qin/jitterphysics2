@@ -31,8 +31,12 @@ using Jitter2.LinearMath;
 
 namespace Jitter2;
 
+//检测
 public sealed partial class World
 {
+    /// <summary>
+    /// 凸包交集
+    /// </summary>
     private struct ConvexHullIntersection
     {
         private JVector[] manifoldData;
@@ -41,9 +45,18 @@ public sealed partial class World
         private int rightCount;
         private int manifoldCount;
 
+        /// <summary>
+        /// 流形 A
+        /// </summary>
         public Span<JVector> ManifoldA => manifoldData.AsSpan(0, manifoldCount);
+        /// <summary>
+        /// 流形 B
+        /// </summary>
         public Span<JVector> ManifoldB => manifoldData.AsSpan(6, manifoldCount);
 
+        /// <summary>
+        /// 数量 ( 流形数量 )
+        /// </summary>
         public int Count => manifoldCount;
 
         private void PushLeft(Span<JVector> left, in JVector v)
@@ -87,6 +100,15 @@ public sealed partial class World
             manifoldCount = 0;
         }
 
+        /// <summary>
+        /// 构建流形
+        /// </summary>
+        /// <param name="shapeA"></param>
+        /// <param name="shapeB"></param>
+        /// <param name="pA"></param>
+        /// <param name="pB"></param>
+        /// <param name="normal"></param>
+        /// <param name="penetration"></param>
         [System.Runtime.CompilerServices.SkipLocalsInit]
         public void BuildManifold(RigidBodyShape shapeA, RigidBodyShape shapeB,
             in JVector pA, in JVector pB, in JVector normal, Real penetration)
@@ -202,8 +224,16 @@ public sealed partial class World
         } // BuildManifold
     }
 
+    /// <summary>
+    /// 无效的碰撞类型异常
+    /// </summary>
     public class InvalidCollisionTypeException : Exception
     {
+        /// <summary>
+        /// 无效的碰撞类型异常
+        /// </summary>
+        /// <param name="proxyA"></param>
+        /// <param name="proxyB"></param>
         public InvalidCollisionTypeException(Type proxyA, Type proxyB)
             : base($"Don't know how to handle collision between {proxyA} and {proxyB}." +
                    $" Register a BroadPhaseFilter to handle and/or filter out these collision types.")
@@ -212,18 +242,26 @@ public sealed partial class World
     }
 
     /// <summary>
+    /// 指定用于碰撞检测的 <see cref="INarrowPhaseFilter"/> 的实现。<br></br><br></br>
+    /// 默认实例的类型为<see cref = "TriangleEdgeCollisionFilter" />。<br></br><br></br>
     /// Specifies an implementation of the <see cref="INarrowPhaseFilter"/> to be used in collision detection.
     /// The default instance is of type <see cref="TriangleEdgeCollisionFilter"/>.
     /// </summary>
     public INarrowPhaseFilter? NarrowPhaseFilter { get; set; } = new TriangleEdgeCollisionFilter();
 
     /// <summary>
+    /// 指定用于碰撞检测的<see cref="IBroadPhaseFilter"/>的实现。<br></br><br></br>
+    /// 默认值为 null。<br></br><br></br>
     /// Specifies an implementation of the <see cref="IBroadPhaseFilter"/> to be used in collision detection.
     /// The default value is null.
     /// </summary>
     public IBroadPhaseFilter? BroadPhaseFilter { get; set; }
 
     /// <summary>
+    /// 允许为接触的平面表面生成额外的接触。<br></br><br></br>
+    /// 传统上，碰撞系统报告两个物体之间的最深碰撞点。
+    /// 然后，使用接触缓存生成多个时间步的全接触流形，这可能是不稳定的。<br></br>
+    /// 该方法尝试在单个时间步内构建更完整或完整的接触流形。<br></br><br></br>
     /// Enables the generation of additional contacts for flat surfaces that are in contact.
     /// Traditionally, the collision system reports the deepest collision point between two objects.
     /// A full contact manifold is then generated over several time steps using contact caching, which
@@ -232,6 +270,11 @@ public sealed partial class World
     public bool EnableAuxiliaryContactPoints { set; get; } = true;
 
     /// <summary>
+    /// 投机性松弛系数<br></br><br></br>
+    /// 推测性接触会减缓物体的速度，使其在单个帧内不会穿透或穿过障碍物。
+    /// <see cref="SpeculativeRelaxationFactor"/>用于缩放减速，<br></br>
+    /// 范围从0（物体在本帧内立即停止）到1（物体和障碍物在下一个速度积分后刚刚接触）。<br></br>
+    /// 低于1的值是优选的，因为剩余的速度可能足以在下一个帧内触发另一个推测性接触。<br></br><br></br>
     /// A speculative contact slows a body down such that it does not penetrate or tunnel through
     /// an obstacle within one frame. The <see cref="SpeculativeRelaxationFactor"/> scales the
     /// slowdown, ranging from 0 (where the body stops immediately during this frame) to 1 (where the body and the
@@ -241,6 +284,10 @@ public sealed partial class World
     public Real SpeculativeRelaxationFactor { get; set; } = (Real)0.9;
 
     /// <summary>
+    /// 投机性速度阈值 <br></br><br></br>
+    /// 当朝向障碍物的速度超过阈值时，就会生成推测性接触。<br></br>
+    /// 为了防止直径为D的物体通过薄壁，应将此阈值设置为大约D/时间步，<br></br>
+    /// 例如，对于单位立方体和时间步长为0.01s。<br></br><br></br>
     /// Speculative contacts are generated when the velocity towards an obstacle exceeds
     /// the threshold value. To prevent bodies with a diameter of D from tunneling through thin walls, this
     /// threshold should be set to approximately D / timestep, e.g., 100 for a unit cube and a
@@ -248,6 +295,15 @@ public sealed partial class World
     /// </summary>
     public Real SpeculativeVelocityThreshold { get; set; } =(Real)10;
 
+    /// <summary>
+    /// 注册接触
+    /// </summary>
+    /// <param name="arbiter"></param>
+    /// <param name="point1"></param>
+    /// <param name="point2"></param>
+    /// <param name="normal"></param>
+    /// <param name="penetration"></param>
+    /// <param name="speculative"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void RegisterContact(Arbiter arbiter, in JVector point1, in JVector point2,
         in JVector normal, Real penetration, bool speculative = false)
@@ -261,6 +317,18 @@ public sealed partial class World
         }
     }
 
+    /// <summary>
+    /// 注册接触
+    /// </summary>
+    /// <param name="id0"></param>
+    /// <param name="id1"></param>
+    /// <param name="body1"></param>
+    /// <param name="body2"></param>
+    /// <param name="point1"></param>
+    /// <param name="point2"></param>
+    /// <param name="normal"></param>
+    /// <param name="penetration"></param>
+    /// <param name="speculative"></param>
     public void RegisterContact(ulong id0, ulong id1, RigidBody body1, RigidBody body2,
         in JVector point1, in JVector point2, in JVector normal, Real penetration, bool speculative = false)
     {
@@ -414,6 +482,14 @@ public sealed partial class World
         }
     }
 
+    /// <summary>
+    /// 获取仲裁器
+    /// </summary>
+    /// <param name="id0"></param>
+    /// <param name="id1"></param>
+    /// <param name="b0"></param>
+    /// <param name="b1"></param>
+    /// <param name="arbiter"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void GetArbiter(ulong id0, ulong id1, RigidBody b0, RigidBody b1, out Arbiter arbiter)
     {

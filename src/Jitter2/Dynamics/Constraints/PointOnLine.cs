@@ -31,6 +31,8 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 点在线上约束, 将一个物体的参考系中的固定点约束到另一个物体的参考系中固定的线。<br></br>
+/// 此约束会消除一个平移自由度；如果强制执行限制，则会消除两个。<br></br><br></br>
 /// Constrains a fixed point in the reference frame of one body to a line that is fixed in
 /// the reference frame of another body. This constraint removes one degree of translational
 /// freedom; two if the limit is enforced.
