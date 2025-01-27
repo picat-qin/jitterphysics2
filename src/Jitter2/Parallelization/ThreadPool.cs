@@ -30,7 +30,8 @@ using Jitter2.DataStructures;
 
 namespace Jitter2.Parallelization;
 
-/// <summary>
+/// <summary> 线程池 <br></br><br></br>
+/// 管理工作线程，可以运行任意委托<see cref="Action"/> <br></br><br></br>
 /// Manages worker threads, which can run arbitrary delegates <see cref="Action"/>
 /// multiThreaded.
 /// </summary>
@@ -70,6 +71,9 @@ public sealed class ThreadPool
         }
     }
 
+    /// <summary>
+    /// 每个处理器线程数
+    /// </summary>
     public const float ThreadsPerProcessor = 0.9f;
 
     // ManualResetEventSlim performs much better than the regular ManualResetEvent.
@@ -89,6 +93,7 @@ public sealed class ThreadPool
     private static ThreadPool? instance;
 
     /// <summary>
+    /// 线程数量
     /// Get the number of threads used by the ThreadManager to execute
     /// tasks.
     /// </summary>
@@ -117,9 +122,13 @@ public sealed class ThreadPool
         ChangeThreadCount(initialThreadCount);
     }
 
+    /// <summary>
+    /// 线程建议数量
+    /// </summary>
     public static int ThreadCountSuggestion => Math.Max((int)(Environment.ProcessorCount * ThreadsPerProcessor), 1);
 
     /// <summary>
+    /// 改变工作线程的数量 <br></br><br></br>
     /// Changes the number of worker threads.
     /// </summary>
     public void ChangeThreadCount(int numThreads)
@@ -158,6 +167,7 @@ public sealed class ThreadPool
     }
 
     /// <summary>
+    /// 添加一个任务到队列中, 调用 <see cref="Execute"/> 附加并执行任务 <br></br><br></br>
     /// Add a task to the task queue. Call <see cref="Execute"/> to
     /// execute added tasks.
     /// </summary>
@@ -170,12 +180,15 @@ public sealed class ThreadPool
     }
 
     /// <summary>
+    ///  指示 <see cref="ThreadPool"/> 实例是否已初始化 <br></br><br></br>
     /// Indicates whether the <see cref="ThreadPool"/> instance is initialized.
     /// </summary>
-    /// <value><c>true</c> if initialized; otherwise, <c>false</c>.</value>
+    /// <value><c>true</c> 如果已初始化；否则，<c>false</c>。<br></br><br></br> 
+    /// <c>true</c> if initialized; otherwise, <c>false</c>.</value>
     public static bool InstanceInitialized => instance != null;
 
     /// <summary>
+    /// 实现单例模式，提供一个ThreadPool的单一实例。<br></br><br></br>
     /// Implements the singleton pattern to provide a single instance of the ThreadPool.
     /// </summary>
     public static ThreadPool Instance
@@ -188,6 +201,7 @@ public sealed class ThreadPool
     }
 
     /// <summary>
+    /// 启动任务的执行，或者允许工作线程在连续循环中等待新任务。<br></br><br></br>
     /// Initiates the execution of tasks or allows worker threads to wait for new tasks in a continuous loop.
     /// </summary>
     public void SignalWait()
@@ -196,6 +210,7 @@ public sealed class ThreadPool
     }
 
     /// <summary>
+    /// 指示所有工作线程在完成所有当前任务后暂停。调用<see cref="SignalWait"/>以恢复处理新任务。<br></br><br></br>
     /// Instructs all worker threads to pause after completing all current tasks. Call <see cref="SignalWait"/> to resume processing new tasks.
     /// </summary>
     public void SignalReset()
@@ -220,6 +235,7 @@ public sealed class ThreadPool
     }
 
     /// <summary>
+    /// 启动线程池中添加的所有任务的执行。此方法仅在所有任务完成后才返回。<br></br><br></br>
     /// Initiates the execution of all tasks added to the ThreadPool. This method returns only after all tasks have been completed.
     /// </summary>
     public void Execute()

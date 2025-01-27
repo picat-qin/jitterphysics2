@@ -45,17 +45,34 @@ global using VectorReal = System.Runtime.Intrinsics.Vector128<System.Single>;
 #endif
 
 namespace Jitter2;
+
+/// <summary>
+/// 精度
+/// </summary>
 public static class Precision
 {
-    #if USE_DOUBLE_PRECISION
-        public const int ConstraintSizeFull = 512;
-        public const int ConstraintSizeSmall = 256;
-    #else
-        public const int ConstraintSizeFull = 256;
-        public const int ConstraintSizeSmall = 128;
-    #endif
+#if USE_DOUBLE_PRECISION
+    /// <summary>
+    /// 大尺寸约束
+    /// </summary>
+    public const int ConstraintSizeFull = 512;
+    /// <summary>
+    /// 小尺寸约束 
+    /// </summary>
+    public const int ConstraintSizeSmall = 256;
+#else
+    /// <summary>
+    /// 大尺寸约束
+    /// </summary>
+    public const int ConstraintSizeFull = 256;
+    /// <summary>
+    /// 小尺寸约束 
+    /// </summary>
+    public const int ConstraintSizeSmall = 128;
+#endif
 
     /// <summary>
+    /// 是否双精度运行引擎 <br></br><br></br>
     /// Gets a value indicating whether the engine is configured to use double-precision floating-point numbers.
     /// </summary>
     public static bool IsDoublePrecision => sizeof(Real) == sizeof(double);

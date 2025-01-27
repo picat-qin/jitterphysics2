@@ -27,47 +27,97 @@ using Jitter2.UnmanagedMemory;
 
 namespace Jitter2.Dynamics.Constraints;
 
+/// <summary>
+/// 小型约束数据
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Size = ConstraintSize)]
 public unsafe struct SmallConstraintData
 {
+    /// <summary>
+    /// 约束尺寸
+    /// </summary>
     public const int ConstraintSize = Jitter2.Precision.ConstraintSizeSmall;
 
     internal int _internal;
+    /// <summary>
+    /// 迭代指针
+    /// </summary>
     public delegate*<ref SmallConstraintData, Real, void> Iterate;
+    /// <summary>
+    /// 预迭代指针
+    /// </summary>
     public delegate*<ref SmallConstraintData, Real, void> PrepareForIteration;
 
+    /// <summary>
+    /// 物体1
+    /// </summary>
     public JHandle<RigidBodyData> Body1;
-    public JHandle<RigidBodyData> Body2;
-}
-
-[StructLayout(LayoutKind.Sequential, Size = ConstraintSize)]
-public unsafe struct ConstraintData
-{
-    public const int ConstraintSize = Jitter2.Precision.ConstraintSizeFull;
-
-    internal int _internal;
-    public delegate*<ref ConstraintData, Real, void> Iterate;
-    public delegate*<ref ConstraintData, Real, void> PrepareForIteration;
-
-    public JHandle<RigidBodyData> Body1;
+    /// <summary>
+    /// 物体2
+    /// </summary>
     public JHandle<RigidBodyData> Body2;
 }
 
 /// <summary>
+/// 约束数据
+/// </summary>
+[StructLayout(LayoutKind.Sequential, Size = ConstraintSize)]
+public unsafe struct ConstraintData
+{
+    /// <summary>
+    /// 约束大小
+    /// </summary>
+    public const int ConstraintSize = Jitter2.Precision.ConstraintSizeFull;
+
+    internal int _internal;
+    /// <summary>
+    /// 迭代器
+    /// </summary>
+    public delegate*<ref ConstraintData, Real, void> Iterate;
+    /// <summary>
+    /// 预迭代器
+    /// </summary>
+    public delegate*<ref ConstraintData, Real, void> PrepareForIteration;
+
+    /// <summary>
+    /// 物体1
+    /// </summary>
+    public JHandle<RigidBodyData> Body1;
+    /// <summary>
+    /// 物体2
+    /// </summary>
+    public JHandle<RigidBodyData> Body2;
+}
+
+/// <summary>
+/// 约束的基类。<br></br><br></br>
 /// The base class for constraints.
 /// </summary>
 public abstract class Constraint : IDebugDrawable
 {
+    /// <summary>
+    /// 物体1
+    /// </summary>
     public RigidBody Body1 { private set; get; } = null!;
+    /// <summary>
+    /// 物体2
+    /// </summary>
     public RigidBody Body2 { private set; get; } = null!;
 
+    /// <summary>
+    /// 是小约束
+    /// </summary>
     public virtual bool IsSmallConstraint { get; } = false;
 
     /// <summary>
+    /// 用于访问原始约束数据的句柄。<br></br><br></br>
     /// A handle for accessing the raw constraint data.
     /// </summary>
     public JHandle<ConstraintData> Handle { internal set; get; }
 
+    /// <summary>
+    /// 小约束句柄
+    /// </summary>
     public JHandle<SmallConstraintData> SmallHandle => JHandle<ConstraintData>.AsHandle<SmallConstraintData>(Handle);
 
     /// <summary>
@@ -82,6 +132,7 @@ public abstract class Constraint : IDebugDrawable
     protected unsafe delegate*<ref ConstraintData, Real, void> prepareForIteration = null;
 
     /// <summary>
+    /// 暂时启用或禁用此约束。要完全删除约束，使用 <see cref="World.Remove(Constraint)<br></br><br></br>
     /// Enables or disables this constraint temporarily. For a complete removal of the constraint,
     /// use <see cref="World.Remove(Constraint)"/>.
     /// </summary>

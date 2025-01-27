@@ -27,6 +27,8 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision;
 
 /// <summary>
+/// 存储表示闵可夫斯基差异（也称为配置空间对象 (CSO)）的数据，<br></br><br></br>
+/// 两个支持函数之间：支持 A 和支持 B。支持 B 根据指定的方向 B 和位置 B 进行转换。<br></br><br></br>
 /// Stores data representing the Minkowski Difference, also known as the Configuration Space Object (CSO),
 /// between two support functions: SupportA and SupportB. SupportB is transformed according to the specified
 /// OrientationB and PositionB.
@@ -34,6 +36,7 @@ namespace Jitter2.Collision;
 public struct MinkowskiDifference
 {
     /// <summary>
+    /// 表示对两个形状的闵可夫斯基和进行运算的算法中所使用的顶点。<br></br><br></br>
     /// Represents a vertex utilized in algorithms that operate on the Minkowski sum of two shapes.
     /// </summary>
     public struct Vertex
@@ -48,8 +51,17 @@ public struct MinkowskiDifference
         }
     }
 
+    /// <summary>
+    /// 支撑
+    /// </summary>
     public ISupportMappable SupportA, SupportB;
+    /// <summary>
+    /// 方向
+    /// </summary>
     public JQuaternion OrientationB;
+    /// <summary>
+    /// 位置
+    /// </summary>
     public JVector PositionB;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -62,6 +74,7 @@ public struct MinkowskiDifference
     }
 
     /// <summary>
+    /// 计算支撑函数 S {A-B}(d) = S {A}(d) - S {B}(-d)，其中“d”代表方向。<br></br><br></br>
     /// Calculates the support function S_{A-B}(d) = S_{A}(d) - S_{B}(-d), where "d" represents the direction.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,6 +87,7 @@ public struct MinkowskiDifference
     }
 
     /// <summary>
+    /// 检索闵可夫斯基差异内的点。
     /// Retrieves a point within the Minkowski Difference.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

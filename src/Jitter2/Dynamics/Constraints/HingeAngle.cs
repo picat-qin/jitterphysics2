@@ -31,6 +31,7 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 铰链约束, 约束两个物体仅允许绕指定轴旋转，从而消除两个角度自由度，如果强制限制则消除三个。<br></br><br></br>
 /// Constrains two bodies to only allow rotation around a specified axis, removing two angular degrees of freedom, or three if a limit is enforced.
 /// </summary>
 public unsafe class HingeAngle : Constraint

@@ -28,6 +28,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示检测到退化三角形时抛出的异常。<br></br><br></br>
 /// Represents an exception thrown when a degenerate triangle is detected.
 /// </summary>
 public class DegenerateTriangleException : Exception
@@ -46,6 +47,8 @@ public class DegenerateTriangleException : Exception
 }
 
 /// <summary>
+/// 封装三角形网格的数据。可将此实例提供给 <see cref="Jitter2.Collision.Shapes.TriangleShape"/>。<br></br>
+/// 此类中的三角形包含指向相邻三角形的索引。<br></br><br></br>
 /// Encapsulates the data of a triangle mesh. An instance of this can be supplied to the <see cref="Jitter2.Collision.Shapes.TriangleShape"/>.
 /// The triangles within this class contain indices pointing to neighboring triangles.
 /// </summary>
@@ -79,6 +82,7 @@ public class TriangleMesh
     }
 
     /// <summary>
+    /// 该结构封装了顶点索引以及指向相邻三角形的索引。<br></br><br></br>
     /// This structure encapsulates vertex indices along with indices pointing to
     /// neighboring triangles.
     /// </summary>
@@ -93,6 +97,7 @@ public class TriangleMesh
         public int NeighborC;
 
         /// <summary>
+        /// 三角形的单位法向量。<br></br><br></br>
         /// The normalized normal of the triangle.
         /// </summary>
         public JVector Normal;
@@ -109,22 +114,31 @@ public class TriangleMesh
     }
 
     /// <summary>
+    /// 包含组成三角形网格的顶点的数组。<br></br><br></br>
     /// An array containing the vertices that comprise the triangle mesh.
     /// </summary>
     public readonly JVector[] Vertices;
 
     /// <summary>
+    /// 构成三角网格的三角形。<br></br><br></br>
     /// The triangles constituting the triangle mesh.
     /// </summary>
     public readonly Triangle[] Indices;
 
     /// <summary>
+    /// 初始化三角形网格的新实例。<br></br><br></br>
     /// Initializes a new instance of the triangle mesh.
     /// </summary>
-    /// <param name="triangles">The triangles to be added. The reference to the list can be
-    /// modified/deleted after invoking this constructor.</param>
-    /// <exception cref="DegenerateTriangleException">This is thrown if the triangle mesh contains one or
-    /// more degenerate triangles.</exception>
+    /// <param name="triangles">
+    /// 要添加的三角形。调用此构造函数后，可以修改/删除对列表的引用。<br></br><br></br>
+    /// The triangles to be added. The reference to the list can be
+    /// modified/deleted after invoking this constructor.
+    /// </param>
+    /// <exception cref="DegenerateTriangleException">
+    /// 如果三角形网格包含一个或多个退化三角形，则会抛出此异常。<br></br><br></br>
+    /// This is thrown if the triangle mesh contains one or
+    /// more degenerate triangles.
+    /// </exception>
     public TriangleMesh(List<JTriangle> triangles)
     {
         Dictionary<JVector, int> tmpIndices = new();

@@ -28,11 +28,31 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.SoftBodies;
 
+/// <summary>
+/// 软体形状
+/// </summary>
 public abstract class SoftBodyShape : Shape
 {
+    /// <summary>
+    /// 获取最近的顶点
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public abstract RigidBody GetClosest(in JVector pos);
+
+    /// <summary>
+    /// 软体
+    /// </summary>
     public SoftBody SoftBody { get; internal init; } = null!;
 
+    /// <summary>
+    /// 发射射线
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="direction"></param>
+    /// <param name="normal"></param>
+    /// <param name="lambda"></param>
+    /// <returns></returns>
     public override bool RayCast(in JVector origin, in JVector direction, out JVector normal, out Real lambda)
     {
         return NarrowPhase.RayCast(this, origin, direction, out lambda, out normal);

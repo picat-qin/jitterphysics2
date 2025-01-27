@@ -31,6 +31,8 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 点在面上约束, 将一个物体的参考系中的固定点约束到另一个物体的参考系中固定的平面。<br></br>
+/// 如果强制执行限制，此约束将消除一个平移自由度。<br></br><br></br>
 /// Constrains a fixed point in the reference frame of one body to a plane that is fixed in
 /// the reference frame of another body. This constraint removes one degree of translational
 /// freedom if the limit is enforced.

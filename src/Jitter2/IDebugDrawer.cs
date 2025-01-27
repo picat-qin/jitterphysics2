@@ -25,14 +25,35 @@ using Jitter2.LinearMath;
 
 namespace Jitter2;
 
+/// <summary>
+/// 拥有调试模式下能进行渲染的能力
+/// </summary>
 public interface IDebugDrawable
 {
     public void DebugDraw(IDebugDrawer drawer);
 }
 
+/// <summary>
+/// 调试模式下渲染
+/// </summary>
 public interface IDebugDrawer
 {
+    /// <summary>
+    /// 渲染线段 
+    /// </summary>
+    /// <param name="pA"></param>
+    /// <param name="pB"></param>
     public void DrawSegment(in JVector pA, in JVector pB);
+    /// <summary>
+    /// 渲染三角形
+    /// </summary>
+    /// <param name="pA"></param>
+    /// <param name="pB"></param>
+    /// <param name="pC"></param>
     public void DrawTriangle(in JVector pA, in JVector pB, in JVector pC);
+    /// <summary>
+    /// 渲染点
+    /// </summary>
+    /// <param name="p"></param>
     public void DrawPoint(in JVector p);
 }

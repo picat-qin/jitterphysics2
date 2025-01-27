@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示圆柱形状。<br></br><br></br>
 /// Represents a cylinder shape.
 /// </summary>
 public class CylinderShape : RigidBodyShape
@@ -35,6 +36,7 @@ public class CylinderShape : RigidBodyShape
     private Real height;
 
     /// <summary>
+    /// 获取或设置圆柱体的半径。<br></br><br></br>
     /// Gets or sets the radius of the cylinder.
     /// </summary>
     public Real Radius
@@ -48,6 +50,7 @@ public class CylinderShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 获取或设置圆柱体的高度。<br></br><br></br>
     /// Gets or sets the height of the cylinder.
     /// </summary>
     public Real Height
@@ -61,10 +64,11 @@ public class CylinderShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 初始化 <see cref="CylinderShape"/> 类的新实例，创建具有指定高度和半径的圆柱形状。圆柱的对称轴沿 y 轴对齐。<br></br><br></br>
     /// Initializes a new instance of the <see cref="CylinderShape"/> class, creating a cylinder shape with the specified height and radius. The symmetry axis of the cylinder is aligned along the y-axis.
     /// </summary>
-    /// <param name="height">The height of the cylinder.</param>
-    /// <param name="radius">The radius of the cylinder at its base.</param>
+    /// <param name="height">圆柱体的高度。<br></br><br></br> The height of the cylinder.</param>
+    /// <param name="radius">圆柱体的半径。<br></br><br></br> The radius of the cylinder at its base.</param>
     public CylinderShape(Real height, Real radius)
     {
         this.radius = radius;

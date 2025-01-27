@@ -27,14 +27,29 @@ using Jitter2.Dynamics.Constraints;
 
 namespace Jitter2.SoftBodies;
 
+/// <summary>
+/// 软体
+/// </summary>
 public class SoftBody
 {
+    /// <summary>
+    /// 顶点集
+    /// </summary>
     public List<RigidBody> Vertices { get; } = new();
+    /// <summary>
+    /// 弹簧集
+    /// </summary>
     public List<Constraint> Springs { get; } = new();
+    /// <summary>
+    /// 形状集
+    /// </summary>
     public List<SoftBodyShape> Shapes { get; } = new();
 
     protected World world;
 
+    /// <summary>
+    /// 是否激活
+    /// </summary>
     public bool IsActive => Vertices[0].IsActive;
 
     public SoftBody(World world)
@@ -43,6 +58,9 @@ public class SoftBody
         world.PostStep += WorldOnPostStep;
     }
 
+    /// <summary>
+    /// 摧毁
+    /// </summary>
     public void Destroy()
     {
         world.PostStep -= WorldOnPostStep;

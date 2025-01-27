@@ -29,6 +29,8 @@ using System.Threading;
 namespace Jitter2.DataStructures;
 
 /// <summary>
+/// 基于数组的数据结构，没有固定顺序。删除位置 n 处的元素 
+/// 会导致数组的最后一个元素移动到位置 n，同时 <see cref="Count"/>减一。<br></br><br></br>
 /// A data structure based on an array, without a fixed order. Removing an element at position n
 /// results in the last element of the array being moved to position n, with the <see cref="Count"/>
 /// decrementing by one.
@@ -52,6 +54,7 @@ internal class SlimBag<T>
     }
 
     /// <summary>
+    /// 内部数组长度 <br></br><br></br>
     /// Gets the length of the internal array.
     /// </summary>
     /// <returns>The length of the internal array.</returns>
@@ -92,6 +95,7 @@ internal class SlimBag<T>
     private Jitter2.Parallelization.ReaderWriterLock rwLock;
 
     /// <summary>
+    /// 并发添加 <br></br><br></br>
     /// Adds an element to the <see cref="SlimBag{T}"/>.
     /// </summary>
     /// <param name="item">The element to add.</param>
@@ -181,6 +185,8 @@ internal class SlimBag<T>
     }
 
     /// <summary>
+    /// 应在将条目添加到 SlimBag 后调用此方法，以便跟踪此数据结构的内部数组中使用的最大索引。
+    /// 它将数组中的此项设置为其默认值以允许垃圾收集。<br></br><br></br>
     /// This should be called after adding entries to the SlimBag in order
     /// to keep track of the largest index used within the internal array of
     /// this datastructure. It will set this item in the array to its default value

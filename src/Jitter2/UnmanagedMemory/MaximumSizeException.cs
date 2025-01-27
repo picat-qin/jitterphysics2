@@ -26,6 +26,8 @@ using System;
 namespace Jitter2.UnmanagedMemory;
 
 /// <summary>
+/// 尺寸过小异常 <br></br><br></br>
+/// 当数据结构的尺寸限制达到时抛出的异常。<br></br><br></br>
 /// An exception thrown when a size limit of a data structure
 /// is reached.
 /// </summary>

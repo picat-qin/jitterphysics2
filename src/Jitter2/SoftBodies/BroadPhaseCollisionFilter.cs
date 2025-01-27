@@ -27,6 +27,9 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.SoftBodies;
 
+/// <summary>
+/// ¿íÏàÅö×²¹ıÂËÆ÷
+/// </summary>
 public class BroadPhaseCollisionFilter : IBroadPhaseFilter
 {
     private readonly World world;
@@ -36,6 +39,12 @@ public class BroadPhaseCollisionFilter : IBroadPhaseFilter
         this.world = world;
     }
 
+    /// <summary>
+    /// ¹ıÂËÆ÷
+    /// </summary>
+    /// <param name="proxyA"></param>
+    /// <param name="proxyB"></param>
+    /// <returns></returns>
     public bool Filter(IDynamicTreeProxy proxyA, IDynamicTreeProxy proxyB)
     {
         SoftBodyShape? i1 = proxyA as SoftBodyShape;

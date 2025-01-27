@@ -27,6 +27,8 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示网格内的单个三角形。<br></br><br></br>
+/// 三角形不是平面的，而是沿其负法线方向延伸。此延伸赋予三角形厚度，可通过 <see cref="Thickness"/> 参数控制。<br></br><br></br>
 /// Represents a single triangle within a mesh. The triangle is not flat but extends
 /// along its negative normal direction. This extension gives the triangle thickness,
 /// which can be controlled by the <see cref="Thickness"/> parameter.
@@ -36,9 +38,13 @@ public class FatTriangleShape : TriangleShape
     private Real thickness;
 
     /// <summary>
+    /// 设置或获取三角形的厚度。
     /// Set or get the thickness of the triangle.
     /// </summary>
-    /// <exception cref="ArgumentException">Thickness must be larger than 0.01 length units.</exception>
+    /// <exception cref="ArgumentException">
+    /// 厚度必须大于 0.01 长度单位。<br></br><br></br> 
+    /// Thickness must be larger than 0.01 length units.
+    /// </exception>
     public Real Thickness
     {
         get => thickness;
@@ -56,10 +62,18 @@ public class FatTriangleShape : TriangleShape
     }
 
     /// <summary>
+    /// 初始化三角形类的新实例。<br></br><br></br>
     /// Initializes a new instance of the TriangleShape class.
     /// </summary>
-    /// <param name="mesh">The triangle mesh to which this triangle belongs.</param>
-    /// <param name="index">The index representing the position of the triangle within the mesh.</param>
+    /// <param name="mesh">
+    /// 该三角形所属的三角形网格。<br></br><br></br>
+    /// The triangle mesh to which this triangle belongs.
+    /// </param>
+    /// <param name="index">
+    /// 表示网格内三角形位置的索引。<br></br><br></br>
+    /// The index representing the position of the triangle within the mesh.
+    /// </param>
+    /// <param name="thickness">厚度</param>
     public FatTriangleShape(TriangleMesh mesh, int index, Real thickness = (Real)0.2) : base(mesh, index)
     {
         this.thickness = thickness;

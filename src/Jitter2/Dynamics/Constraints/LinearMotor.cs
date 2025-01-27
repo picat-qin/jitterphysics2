@@ -31,6 +31,7 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 直线约束, 驱动沿两个轴相对平移运动的约束固定
 /// A motor constraint that drives relative translational movement along two axes fixed
 /// in the reference frames of the bodies.
 /// </summary>

@@ -26,15 +26,26 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.Collision.Shapes;
 
+/// <summary>
+/// 刚体形状
+/// </summary>
 public abstract class RigidBodyShape : Shape
 {
     /// <summary>
+    /// 此形状所附加到的 <see cref="RigidBody"/> 实例。<br></br><br></br>
     /// The instance of <see cref="RigidBody"/> to which this shape is attached.
     /// </summary>
     public RigidBody RigidBody { get; internal set; } = null!;
 
+    /// <summary>
+    /// 速度
+    /// </summary>
     public sealed override JVector Velocity => RigidBody?.Velocity ?? JVector.Zero;
 
+    /// <summary>
+    /// 更新世界边界框
+    /// </summary>
+    /// <param name="dt">时间?</param>
     public sealed override void UpdateWorldBoundingBox(Real dt = (Real)0.0)
     {
         JBBox box;
@@ -52,6 +63,12 @@ public abstract class RigidBodyShape : Shape
         if (RigidBody.EnableSpeculativeContacts) SweptExpandBoundingBox(dt);
     }
 
+    /// <summary>
+    /// 计算边界框
+    /// </summary>
+    /// <param name="orientation"></param>
+    /// <param name="position"></param>
+    /// <param name="box"></param>
     public virtual void CalculateBoundingBox(in JQuaternion orientation, in JVector position, out JBBox box)
     {
         ShapeHelper.CalculateBoundingBox(this, orientation, position, out box);

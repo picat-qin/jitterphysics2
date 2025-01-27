@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 代表一个球体。<br></br><br></br>
 /// Represents a sphere.
 /// </summary>
 public class SphereShape : RigidBodyShape
@@ -34,6 +35,7 @@ public class SphereShape : RigidBodyShape
     private Real radius;
 
     /// <summary>
+    /// 获取或设置球体的半径。<br></br><br></br>
     /// Gets or sets the radius of the sphere.
     /// </summary>
     public Real Radius
@@ -47,10 +49,15 @@ public class SphereShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 使用可选半径参数初始化 <see cref="SphereShape"/> 类的新实例。<br></br>
+    /// 默认半径为 1.0 个单位。<br></br><br></br>
     /// Initializes a new instance of the <see cref="SphereShape"/> class with an optional radius parameter.
     /// The default radius is 1.0 units.
     /// </summary>
-    /// <param name="radius">The radius of the sphere. Defaults to (Real)1.0.</param>
+    /// <param name="radius">
+    /// 球体的半径。默认为 (Real)1.0。<br></br><br></br>
+    /// The radius of the sphere. Defaults to (Real)1.0.
+    /// </param>
     public SphereShape(Real radius = (Real)1.0)
     {
         this.radius = radius;

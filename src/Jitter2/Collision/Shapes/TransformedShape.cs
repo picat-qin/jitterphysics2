@@ -26,6 +26,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 形状包装器, 包装任何形状并允许定位和平移它。<br></br><br></br>
 /// Wraps any shape and allows to orientate and translate it.
 /// </summary>
 public class TransformedShape : RigidBodyShape
@@ -42,12 +43,22 @@ public class TransformedShape : RigidBodyShape
     private TransformationType type;
 
     /// <summary>
+    /// 通过由线性映射和平移定义的仿射变换构造变换形状。<br></br><br></br>
     /// Constructs a transformed shape through an affine transformation define by
     /// a linear map and a translation.
     /// </summary>
-    /// <param name="shape">The original shape which should be transformed.</param>
-    /// <param name="translation">Shape is translated by this vector.</param>
-    /// <param name="transform">A linear map (may include sheer and scale) of the transformation.</param>
+    /// <param name="shape">
+    /// 需要平移的原始形状。<br></br><br></br>
+    /// The original shape which should be transformed.
+    /// </param>
+    /// <param name="translation">
+    /// 形状由此向量平移。<br></br><br></br>
+    /// Shape is translated by this vector.
+    /// </param>
+    /// <param name="transform">
+    /// 变换的线性映射（可能包括单纯和比例）。<br></br><br></br>
+    /// A linear map (may include sheer and scale) of the transformation.
+    /// </param>
     public TransformedShape(RigidBodyShape shape, in JVector translation, in JMatrix transform)
     {
         OriginalShape = shape;
@@ -63,8 +74,14 @@ public class TransformedShape : RigidBodyShape
     {
     }
 
+    /// <summary>
+    /// 源形状
+    /// </summary>
     public RigidBodyShape OriginalShape { get; }
 
+    /// <summary>
+    /// 转换向量
+    /// </summary>
     public JVector Translation
     {
         get => translation;
@@ -88,6 +105,9 @@ public class TransformedShape : RigidBodyShape
         }
     }
 
+    /// <summary>
+    /// 转换矩阵
+    /// </summary>
     public JMatrix Transformation
     {
         get => transformation;

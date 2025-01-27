@@ -26,6 +26,9 @@ using Jitter2.LinearMath;
 
 namespace Jitter2.Dynamics.Constraints;
 
+/// <summary>
+/// 角度限制
+/// </summary>
 public struct AngularLimit
 {
     public JAngle From { get; set; }
@@ -55,6 +58,9 @@ public struct AngularLimit
     }
 }
 
+/// <summary>
+/// 线性限制
+/// </summary>
 public struct LinearLimit
 {
     public Real From { get; set; }

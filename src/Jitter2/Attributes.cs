@@ -26,15 +26,24 @@ using System;
 namespace Jitter2;
 
 /// <summary>
+/// 表示参考框架的枚举。<br></br><br></br>
 /// Enum representing reference frames.
 /// </summary>
 public enum ReferenceFrame
 {
+    /// <summary>
+    /// 本地
+    /// </summary>
     Local,
+    /// <summary>
+    /// 全局
+    /// </summary>
     World
 }
 
 /// <summary>
+/// 参考特性 <br></br><br></br>
+/// 指示使用的参考系类型是本地还是全局
 /// Attribute to specify the reference frame of a member.
 /// </summary>
 [AttributeUsage(AttributeTargets.All)]

@@ -26,6 +26,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// ╫ба╢а╛╫с <br><br></br></br>
 /// Constructs a hinge joint utilizing a <see cref="HingeAngle"/>, a <see cref="BallSocket"/>, and an optional <see cref="AngularMotor"/>.
 /// </summary>
 public class HingeJoint : Joint

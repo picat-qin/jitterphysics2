@@ -32,6 +32,9 @@ using Vertex = Jitter2.Collision.MinkowskiDifference.Vertex;
 
 namespace Jitter2.Collision;
 
+/// <summary>
+/// 单纯形求解器AB
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct SimplexSolverAB
 {
@@ -59,6 +62,9 @@ public unsafe struct SimplexSolverAB
     private Barycentric barycentric;
     private uint usageMask;
 
+    /// <summary>
+    /// 重置掩码
+    /// </summary>
     public void Reset()
     {
         usageMask = 0;
@@ -266,6 +272,11 @@ public unsafe struct SimplexSolverAB
         return JVector.Zero;
     }
 
+    /// <summary>
+    /// 获取最近点
+    /// </summary>
+    /// <param name="pointA">A 最近点</param>
+    /// <param name="pointB">B 最近点</param>
     public void GetClosest(out JVector pointA, out JVector pointB)
     {
         pointA = JVector.Zero;
@@ -281,6 +292,12 @@ public unsafe struct SimplexSolverAB
         }
     }
 
+    /// <summary>
+    /// 添加顶点
+    /// </summary>
+    /// <param name="vertex">顶点</param>
+    /// <param name="closest">最近点</param>
+    /// <returns>是否成功</returns>
     public bool AddVertex(in JVector vertex, out JVector closest)
     {
         Unsafe.SkipInit(out Vertex fullVertex);
@@ -288,6 +305,12 @@ public unsafe struct SimplexSolverAB
         return AddVertex(fullVertex, out closest);
     }
 
+    /// <summary>
+    /// 添加顶点
+    /// </summary>
+    /// <param name="vertex">顶点</param>
+    /// <param name="closest">最近点</param>
+    /// <returns>是否成功</returns>
     public bool AddVertex(in Vertex vertex, out JVector closest)
     {
         Unsafe.SkipInit(out closest);

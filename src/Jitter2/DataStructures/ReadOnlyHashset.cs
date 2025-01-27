@@ -27,6 +27,7 @@ using System.Collections.Generic;
 namespace Jitter2.DataStructures;
 
 /// <summary>
+/// 为 <see cref="HashSet{T}"/> 实现包装器，消除枚举期间的垃圾收集 (GC) 开销。<br></br><br></br>
 /// Implements a wrapper for <see cref="HashSet{T}"/>, eliminating garbage collection (GC) overhead during enumeration.
 /// </summary>
 public readonly struct ReadOnlyHashSet<T> : IReadOnlyCollection<T>

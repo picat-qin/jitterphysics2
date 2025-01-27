@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示网格内的单个三角形。<br></br><br></br>
 /// Represents a single triangle within a mesh.
 /// </summary>
 public class TriangleShape : RigidBodyShape
@@ -35,10 +36,17 @@ public class TriangleShape : RigidBodyShape
     public readonly int Index;
 
     /// <summary>
+    /// 初始化三角形类的新实例。<br></br><br></br>
     /// Initializes a new instance of the TriangleShape class.
     /// </summary>
-    /// <param name="mesh">The triangle mesh to which this triangle belongs.</param>
-    /// <param name="index">The index representing the position of the triangle within the mesh.</param>
+    /// <param name="mesh">
+    /// 该三角形所属的三角形网格。<br></br><br></br>
+    /// The triangle mesh to which this triangle belongs.
+    /// </param>
+    /// <param name="index">
+    /// 表示网格内三角形位置的索引。<br></br><br></br>
+    /// The index representing the position of the triangle within the mesh.
+    /// </param>
     public TriangleShape(TriangleMesh mesh, int index)
     {
         Mesh = mesh;
@@ -56,11 +64,12 @@ public class TriangleShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 检索受刚体变换影响而变换到世界空间坐标的顶点。<br></br><br></br>
     /// Retrieves the vertices transformed to world space coordinates, as affected by the rigid body's transformation.
     /// </summary>
-    /// <param name="a">The transformed coordinate of the first vertex.</param>
-    /// <param name="b">The transformed coordinate of the second vertex.</param>
-    /// <param name="c">The transformed coordinate of the third vertex.</param>
+    /// <param name="a">第一个顶点的变换坐标。<br></br><br></br> The transformed coordinate of the first vertex.</param>
+    /// <param name="b">第二个顶点的变换坐标。<br></br><br></br> The transformed coordinate of the second vertex.</param>
+    /// <param name="c">第三个顶点的变换坐标。<br></br><br></br> The transformed coordinate of the third vertex.</param>
     public void GetWorldVertices(out JVector a, out JVector b, out JVector c)
     {
         ref var triangle = ref Mesh.Indices[Index];

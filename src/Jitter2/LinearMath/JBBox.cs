@@ -27,28 +27,57 @@ using System.Runtime.InteropServices;
 namespace Jitter2.LinearMath;
 
 /// <summary>
+/// 轴对齐包围盒 <br></br><br></br>
+/// 表示一个轴对齐的包围盒（AABB），一个矩形包围盒，其边缘与坐标轴平行。<br></br><br></br>
 /// Represents an axis-aligned bounding box (AABB), a rectangular bounding box whose edges are parallel to the coordinate axes.
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 6*sizeof(Real))]
 public struct JBBox : IEquatable<JBBox>
 {
+    /// <summary>
+    /// 处理精度
+    /// </summary>
     public const Real Epsilon = (Real)1e-12;
 
+    /// <summary>
+    /// 关系描述
+    /// </summary>
     public enum ContainmentType
     {
+        /// <summary>
+        /// 不相交
+        /// </summary>
         Disjoint,
+        /// <summary>
+        /// 包含
+        /// </summary>
         Contains,
+        /// <summary>
+        /// 相交
+        /// </summary>
         Intersects
     }
 
+    /// <summary>
+    /// 最小点
+    /// </summary>
     [FieldOffset(0*sizeof(Real))]
     public JVector Min;
 
+    /// <summary>
+    /// 最大点
+    /// </summary>
     [FieldOffset(3*sizeof(Real))]
     public JVector Max;
 
+    /// <summary>
+    /// 大盒子
+    /// </summary>
     public static readonly JBBox LargeBox;
 
+    /// <summary>
+    /// 小盒子
+    /// </summary>
     public static readonly JBBox SmallBox;
 
     static JBBox()
@@ -97,6 +126,10 @@ public struct JBBox : IEquatable<JBBox>
         JVector.Subtract(center, halfExtents, out Min);
     }
 
+    /// <summary>
+    /// 转换, 变换
+    /// </summary>
+    /// <param name="orientation"></param>
     public void Transform(ref JMatrix orientation)
     {
         JVector halfExtents = (Real)0.5 * (Max - Min);
@@ -131,6 +164,12 @@ public struct JBBox : IEquatable<JBBox>
         return true;
     }
 
+    /// <summary>
+    /// 线段相交
+    /// </summary>
+    /// <param name="origin">原点</param>
+    /// <param name="direction">方向</param>
+    /// <returns></returns>
     public bool SegmentIntersect(in JVector origin, in JVector direction)
     {
         Real enter = (Real)0.0, exit = (Real)1.0;
@@ -147,6 +186,12 @@ public struct JBBox : IEquatable<JBBox>
         return true;
     }
 
+    /// <summary>
+    /// 射线相交
+    /// </summary>
+    /// <param name="origin">原点</param>
+    /// <param name="direction">方向</param>
+    /// <returns></returns>
     public bool RayIntersect(in JVector origin, in JVector direction)
     {
         Real enter = (Real)0.0, exit = Real.MaxValue;
@@ -163,6 +208,13 @@ public struct JBBox : IEquatable<JBBox>
         return true;
     }
 
+    /// <summary>
+    /// 射线相交
+    /// </summary>
+    /// <param name="origin">原点</param>
+    /// <param name="direction">方向</param>
+    /// <param name="enter">进入的长度?</param>
+    /// <returns></returns>
     public bool RayIntersect(in JVector origin, in JVector direction, out Real enter)
     {
         enter = (Real)0.0;
@@ -180,6 +232,11 @@ public struct JBBox : IEquatable<JBBox>
         return true;
     }
 
+    /// <summary>
+    /// 获取和一个点的关系
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
     public ContainmentType Contains(in JVector point)
     {
         return Min.X <= point.X && point.X <= Max.X &&
@@ -189,6 +246,10 @@ public struct JBBox : IEquatable<JBBox>
             : ContainmentType.Disjoint;
     }
 
+    /// <summary>
+    /// 获取边角
+    /// </summary>
+    /// <param name="corners">边角向量数组引用, 共8个边角</param>
     public void GetCorners(JVector[] corners)
     {
         corners[0].Set(Min.X, Max.Y, Max.Z);
@@ -201,12 +262,21 @@ public struct JBBox : IEquatable<JBBox>
         corners[7].Set(Min.X, Min.Y, Min.Z);
     }
 
+    /// <summary>
+    /// 添加点
+    /// </summary>
+    /// <param name="point"></param>
     public void AddPoint(in JVector point)
     {
         JVector.Max(Max, point, out Max);
         JVector.Min(Min, point, out Min);
     }
 
+    /// <summary>
+    /// 通过点集创建 AABB 包盒
+    /// </summary>
+    /// <param name="points"></param>
+    /// <returns></returns>
     public static JBBox CreateFromPoints(JVector[] points)
     {
         JVector vector3 = new JVector(Real.MaxValue);
@@ -221,6 +291,11 @@ public struct JBBox : IEquatable<JBBox>
         return new JBBox(vector3, vector2);
     }
 
+    /// <summary>
+    /// 获取与一个 AABB 包盒的关系
+    /// </summary>
+    /// <param name="box"></param>
+    /// <returns></returns>
     public readonly ContainmentType Contains(in JBBox box)
     {
         ContainmentType result = ContainmentType.Disjoint;
@@ -236,18 +311,33 @@ public struct JBBox : IEquatable<JBBox>
         return result;
     }
 
+    /// <summary>
+    /// 是否与一个 AABB 包盒相交
+    /// </summary>
+    /// <param name="box"></param>
+    /// <returns></returns>
     public readonly bool NotDisjoint(in JBBox box)
     {
         return Max.X >= box.Min.X && Min.X <= box.Max.X && Max.Y >= box.Min.Y && Min.Y <= box.Max.Y &&
                Max.Z >= box.Min.Z && Min.Z <= box.Max.Z;
     }
 
+    /// <summary>
+    /// 是否与一个 AABB 包盒相交不相交
+    /// </summary>
+    /// <param name="box"></param>
+    /// <returns></returns>
     public readonly bool Disjoint(in JBBox box)
     {
         return !(Max.X >= box.Min.X && Min.X <= box.Max.X && Max.Y >= box.Min.Y && Min.Y <= box.Max.Y &&
                  Max.Z >= box.Min.Z && Min.Z <= box.Max.Z);
     }
 
+    /// <summary>
+    /// 是否包括一个 AABB 包盒
+    /// </summary>
+    /// <param name="box"></param>
+    /// <returns></returns>
     public readonly bool Encompasses(in JBBox box)
     {
         return Min.X <= box.Min.X && Max.X >= box.Max.X &&
@@ -255,26 +345,49 @@ public struct JBBox : IEquatable<JBBox>
                Min.Z <= box.Min.Z && Max.Z >= box.Max.Z;
     }
 
+    /// <summary>
+    /// 合并两个 AABB 包盒
+    /// </summary>
+    /// <param name="original">源 AABB 包盒</param>
+    /// <param name="additional">添加的 AABB 包盒</param>
+    /// <returns></returns>
     public static JBBox CreateMerged(in JBBox original, in JBBox additional)
     {
         CreateMerged(original, additional, out JBBox result);
         return result;
     }
 
+    /// <summary>
+    /// 合并两个 AABB 包盒
+    /// </summary>
+    /// <param name="original">源 AABB 包盒</param>
+    /// <param name="additional">添加的 AABB 包盒</param>
+    /// <param name="result">结果 AABB 包盒</param>
     public static void CreateMerged(in JBBox original, in JBBox additional, out JBBox result)
     {
         JVector.Min(original.Min, additional.Min, out result.Min);
         JVector.Max(original.Max, additional.Max, out result.Max);
     }
 
+    /// <summary>
+    /// 中心点
+    /// </summary>
     public readonly JVector Center => (Min + Max) * ((Real)(1.0 / 2.0));
 
+    /// <summary>
+    /// 获取体积
+    /// </summary>
+    /// <returns></returns>
     public Real GetVolume()
     {
         JVector len = Max - Min;
         return len.X * len.Y * len.Z;
     }
 
+    /// <summary>
+    /// 获取表面积
+    /// </summary>
+    /// <returns></returns>
     public Real GetSurfaceArea()
     {
         JVector len = Max - Min;

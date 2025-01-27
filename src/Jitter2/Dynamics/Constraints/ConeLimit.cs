@@ -31,33 +31,76 @@ using Jitter2.UnmanagedMemory;
 namespace Jitter2.Dynamics.Constraints;
 
 /// <summary>
+/// 圆锥限制约束，限制一个物体相对于另一个物体的倾斜。
 /// Implements the ConeLimit constraint, which restricts the tilt of one body relative to
 /// another body.
 /// </summary>
 public unsafe class ConeLimit : Constraint
 {
+    /// <summary>
+    /// 圆锥约束数据
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct ConeLimitData
     {
         internal int _internal;
+        /// <summary>
+        /// 迭代指针
+        /// </summary>
         public delegate*<ref ConstraintData, void> Iterate;
+        /// <summary>
+        /// 预迭代指针
+        /// </summary>
         public delegate*<ref ConstraintData, Real, void> PrepareForIteration;
 
+        /// <summary>
+        /// 物体1
+        /// </summary>
         public JHandle<RigidBodyData> Body1;
+        /// <summary>
+        /// 物体2
+        /// </summary>
         public JHandle<RigidBodyData> Body2;
 
+        /// <summary>
+        /// 本地轴
+        /// </summary>
         public JVector LocalAxis1, LocalAxis2;
 
+        /// <summary>
+        /// 偏差因子
+        /// </summary>
         public Real BiasFactor;
+        /// <summary>
+        /// 柔软因子
+        /// </summary>
         public Real Softness;
 
+        /// <summary>
+        /// 有效质量
+        /// </summary>
         public Real EffectiveMass;
+        /// <summary>
+        /// 累积冲量
+        /// </summary>
         public Real AccumulatedImpulse;
+        /// <summary>
+        /// 偏移/偏见
+        /// </summary>
         public Real Bias;
 
+        /// <summary>
+        /// 下限
+        /// </summary>
         public Real LimitLow;
+        /// <summary>
+        /// 上限
+        /// </summary>
         public Real LimitHigh;
 
+        /// <summary>
+        /// 钳子?
+        /// </summary>
         public short Clamp;
 
         public MemoryHelper.MemBlock6Real J0;
@@ -74,6 +117,7 @@ public unsafe class ConeLimit : Constraint
     }
 
     /// <summary>
+    /// 初始化 <br></br><br></br>
     /// Initializes the constraint.
     /// </summary>
     /// <param name="axis">The axis in world space.</param>
@@ -98,6 +142,9 @@ public unsafe class ConeLimit : Constraint
         data.LimitHigh = MathR.Cos(upper);
     }
 
+    /// <summary>
+    /// 角度
+    /// </summary>
     public JAngle Angle
     {
         get
@@ -114,6 +161,11 @@ public unsafe class ConeLimit : Constraint
         }
     }
 
+    /// <summary>
+    /// 预迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void PrepareForIteration(ref ConstraintData constraint, Real idt)
     {
         ref ConeLimitData data = ref Unsafe.AsRef<ConeLimitData>(Unsafe.AsPointer(ref constraint));
@@ -165,20 +217,34 @@ public unsafe class ConeLimit : Constraint
             JVector.Transform(data.AccumulatedImpulse * jacobian[1], body2.InverseInertiaWorld);
     }
 
+    /// <summary>
+    /// 柔软因子
+    /// </summary>
     public Real Softness
     {
         get => handle.Data.Softness;
         set => handle.Data.Softness = value;
     }
 
+    /// <summary>
+    /// 偏移/偏见值
+    /// </summary>
     public Real Bias
     {
         get => handle.Data.BiasFactor;
         set => handle.Data.BiasFactor = value;
     }
 
+    /// <summary>
+    /// 冲击
+    /// </summary>
     public Real Impulse => handle.Data.AccumulatedImpulse;
 
+    /// <summary>
+    /// 迭代
+    /// </summary>
+    /// <param name="constraint"></param>
+    /// <param name="idt"></param>
     public static void Iterate(ref ConstraintData constraint, Real idt)
     {
         ref ConeLimitData data = ref Unsafe.AsRef<ConeLimitData>(Unsafe.AsPointer(ref constraint));

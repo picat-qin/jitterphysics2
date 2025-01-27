@@ -27,6 +27,7 @@ using Jitter2.LinearMath;
 namespace Jitter2.Collision.Shapes;
 
 /// <summary>
+/// 表示胶囊形式的形状。<br></br><br></br>
 /// Represents a shape in the form of a capsule.
 /// </summary>
 public class CapsuleShape : RigidBodyShape
@@ -35,6 +36,7 @@ public class CapsuleShape : RigidBodyShape
     private Real halfLength;
 
     /// <summary>
+    /// 获取或设置胶囊的半径。<br></br><br></br>
     /// Gets or sets the radius of the capsule.
     /// </summary>
     public Real Radius
@@ -48,6 +50,7 @@ public class CapsuleShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 获取或设置胶囊圆柱部分的长度，不包括两端的半球。<br></br><br></br>
     /// Gets or sets the length of the cylindrical part of the capsule, excluding the half-spheres on both ends.
     /// </summary>
     public Real Length
@@ -61,10 +64,15 @@ public class CapsuleShape : RigidBodyShape
     }
 
     /// <summary>
+    /// 使用指定的半径和长度初始化 CapsuleShape 类的新实例。<br></br>
+    /// 胶囊的对称轴沿 Y 轴对齐。<br></br><br></br>
     /// Initializes a new instance of the CapsuleShape class with the specified radius and length. The symmetry axis of the capsule is aligned along the Y-axis.
     /// </summary>
-    /// <param name="radius">The radius of the capsule.</param>
-    /// <param name="length">The length of the cylindrical part of the capsule, excluding the half-spheres at both ends.</param>
+    /// <param name="radius">胶囊半径 <br></br><br></br> The radius of the capsule.</param>
+    /// <param name="length">
+    /// 胶囊圆柱部分的长度，不包括两端的半球。<br></br><br></br>
+    /// The length of the cylindrical part of the capsule, excluding the half-spheres at both ends.
+    /// </param>
     public CapsuleShape(Real radius = (Real)0.5, Real length = (Real)1.0)
     {
         this.radius = radius;
