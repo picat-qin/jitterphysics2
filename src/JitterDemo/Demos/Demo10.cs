@@ -9,7 +9,7 @@ namespace JitterDemo;
 
 public class Demo10 : IDemo
 {
-    public string Name => "Stacked Cubes";
+    public string Name => "·½¿é¶Ñµþ Stacked Cubes";
 
     public void Build()
     {

@@ -26,11 +26,22 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 线条着色器
+/// </summary>
 public class LineShader : BasicShader
 {
+    /// <summary>
+    /// 颜色
+    /// </summary>
     public UniformVector4 Color { get; }
-
+    /// <summary>
+    /// 视野
+    /// </summary>
     public UniformMatrix4 View { get; }
+    /// <summary>
+    /// 投影
+    /// </summary>
     public UniformMatrix4 Projection { get; }
 
     public LineShader() : base(vshader, fshader)
@@ -70,6 +81,9 @@ public class LineShader : BasicShader
 
 public class DebugRenderer
 {
+    /// <summary>
+    /// 颜色
+    /// </summary>
     public enum Color
     {
         White = 0,

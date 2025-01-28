@@ -467,7 +467,7 @@ public sealed class RigidBody : IPartitionedSetIndex, IDebugDrawable
     public object? Tag { get; set; }
 
     /// <summary>
-    /// 启用预测性接触
+    /// 启用推测性接触
     /// </summary>
     public bool EnableSpeculativeContacts { get; set; } = false;
 

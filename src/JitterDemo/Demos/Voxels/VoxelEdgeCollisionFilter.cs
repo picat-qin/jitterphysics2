@@ -4,10 +4,28 @@ using Jitter2.LinearMath;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 体素边缘碰撞过滤器
+/// </summary>
 public class VoxelEdgeCollisionFilter : INarrowPhaseFilter
 {
+    //TODO: magnet 待补充完善注释
+    /// <summary>
+    /// 阈值
+    /// </summary>
     public float Threshold { get; set; } = 0.1f;
 
+    //TODO: magnet 待补充完善注释
+    /// <summary>
+    /// 过滤器
+    /// </summary>
+    /// <param name="shapeA">刚体 A </param>
+    /// <param name="shapeB">刚体 B </param>
+    /// <param name="pAA">刚体 A 位置</param>
+    /// <param name="pBB">刚体 B 位置</param>
+    /// <param name="normal">法向量</param>
+    /// <param name="penetration">穿透系数</param>
+    /// <returns></returns>
     public bool Filter(RigidBodyShape shapeA, RigidBodyShape shapeB, ref JVector pAA, ref JVector pBB, ref JVector normal,
         ref float penetration)
     {

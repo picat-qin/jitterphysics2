@@ -12,8 +12,14 @@ using JitterDemo.Renderer;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 软体形状
+/// </summary>
 public class SoftBodySphere : SoftBodyCloth
 {
+    /// <summary>
+    /// 精度
+    /// </summary>
     public float Pressure { get; set; } = 400.0f;
 
     private class UnitSphere : ISupportMappable
@@ -61,6 +67,10 @@ public class SoftBodySphere : SoftBodyCloth
         }
     }
 
+    /// <summary>
+    /// 世界后处理步
+    /// </summary>
+    /// <param name="dt"></param>
     protected override void WorldOnPostStep(float dt)
     {
         base.WorldOnPostStep(dt);

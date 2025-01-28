@@ -270,7 +270,7 @@ public sealed partial class World
     public bool EnableAuxiliaryContactPoints { set; get; } = true;
 
     /// <summary>
-    /// 投机性松弛系数<br></br><br></br>
+    /// 推测性松弛系数<br></br><br></br>
     /// 推测性接触会减缓物体的速度，使其在单个帧内不会穿透或穿过障碍物。
     /// <see cref="SpeculativeRelaxationFactor"/>用于缩放减速，<br></br>
     /// 范围从0（物体在本帧内立即停止）到1（物体和障碍物在下一个速度积分后刚刚接触）。<br></br>
@@ -284,7 +284,7 @@ public sealed partial class World
     public Real SpeculativeRelaxationFactor { get; set; } = (Real)0.9;
 
     /// <summary>
-    /// 投机性速度阈值 <br></br><br></br>
+    /// 推测性速度阈值 <br></br><br></br>
     /// 当朝向障碍物的速度超过阈值时，就会生成推测性接触。<br></br>
     /// 为了防止直径为D的物体通过薄壁，应将此阈值设置为大约D/时间步，<br></br>
     /// 例如，对于单位立方体和时间步长为0.01s。<br></br><br></br>

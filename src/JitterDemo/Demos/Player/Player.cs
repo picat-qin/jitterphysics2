@@ -11,12 +11,27 @@ namespace JitterDemo;
 // Shows one way to implement a character controller.
 public class Player
 {
+    /// <summary>
+    /// 绑定的刚体
+    /// </summary>
     public RigidBody Body { get; }
+    /// <summary>
+    /// 角运动
+    /// </summary>
     public AngularMotor AngularMovement { get; }
 
     private readonly float capsuleHalfHeight;
     private readonly World world;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="world">
+    ///     所属世界
+    /// </param>
+    /// <param name="position">
+    ///     位置
+    /// </param>
     public Player(World world, JVector position)
     {
         Body = world.CreateRigidBody();
@@ -56,6 +71,12 @@ public class Player
         AngularMovement.MaximumForce = 1000;
     }
 
+    /// <summary>
+    ///     设置输入角度
+    /// </summary>
+    /// <param name="rotate">
+    ///     角度
+    /// </param>
     public void SetAngularInput(float rotate)
     {
         AngularMovement.TargetVelocity = rotate;
@@ -63,6 +84,11 @@ public class Player
 
     private DynamicTree.RayCastFilterPre? preFilter;
 
+    /// <summary>
+    /// 过滤形状
+    /// </summary>
+    /// <param name="shape"></param>
+    /// <returns></returns>
     public bool FilterShape(IDynamicTreeProxy shape)
     {
         if (shape is RigidBodyShape rbs)
@@ -173,6 +199,9 @@ public class Player
         */
     }
 
+    /// <summary>
+    /// 跳跃
+    /// </summary>
     public void Jump()
     {
         if (CanJump(out RigidBody? floorBody, out JVector hitPoint))
@@ -197,6 +226,10 @@ public class Player
         }
     }
 
+    /// <summary>
+    /// 设置线性输入
+    /// </summary>
+    /// <param name="deltaMove"></param>
     public void SetLinearInput(JVector deltaMove)
     {
         if (!CanJump(out var floor, out JVector hitpoint))

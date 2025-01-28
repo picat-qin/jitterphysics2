@@ -147,7 +147,7 @@ public class Icosahedron : RigidBodyShape
 
 public class Demo14 : IDemo
 {
-    public string Name => "Custom Shapes";
+    public string Name => "自定义形状 Custom Shapes";
 
     private Playground pg = null!;
 

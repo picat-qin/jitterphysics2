@@ -9,7 +9,7 @@ namespace JitterDemo;
 
 public class Demo09 : IDemo
 {
-    public string Name => "Restitution and Friction";
+    public string Name => "»Ö¸´ºÍÄ¦²Á Restitution and Friction";
 
     public void Build()
     {

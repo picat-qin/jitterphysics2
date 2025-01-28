@@ -25,6 +25,9 @@ using JitterDemo.Renderer.OpenGL.Native;
 
 namespace JitterDemo.Renderer.OpenGL;
 
+/// <summary>
+/// Œ∆¿Ì
+/// </summary>
 [GLObject(GLObjectType.Texture)]
 public class Texture : GLObject
 {
@@ -123,6 +126,9 @@ public class CubemapTexture : Texture
     }
 }
 
+/// <summary>
+/// 2DŒ∆¿Ì
+/// </summary>
 public class Texture2D : Texture
 {
     public static unsafe Texture2D EmptyTexture()

@@ -25,29 +25,66 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 相机
+/// </summary>
 public class Camera
 {
+    /// <summary>
+    /// 屏蔽鼠标输入
+    /// </summary>
     public bool IgnoreMouseInput { get; set; } = false;
+    /// <summary>
+    /// 屏蔽键盘输入
+    /// </summary>
     public bool IgnoreKeyboardInput { get; set; } = false;
+    /// <summary>
+    /// 视野矩阵
+    /// </summary>
     public Matrix4 ViewMatrix { get; protected set; } = Matrix4.Identity;
+    /// <summary>
+    /// 投影矩阵
+    /// </summary>
     public Matrix4 ProjectionMatrix { get; protected set; } = Matrix4.Identity;
 
+    /// <summary>
+    /// 位置
+    /// </summary>
     public Vector3 Position { get; set; }
+    /// <summary>
+    /// 方向
+    /// </summary>
     public Vector3 Direction { get; protected set; }
 
+    /// <summary>
+    /// 视野范围
+    /// </summary>
     public float FieldOfView { get; set; } = MathF.PI / 4.0f;
+
 
     public double Theta { get; set; } = Math.PI / 2.0d;
     public double Phi { get; set; }
 
+    /// <summary>
+    /// 接近的平面
+    /// </summary>
     public float NearPlane { get; protected set; } = 0.1f;
+    /// <summary>
+    /// 远的平面
+    /// </summary>
     public float FarPlane { get; protected set; } = 400.0f;
 
+    /// <summary>
+    /// 更新
+    /// </summary>
     public virtual void Update()
     {
     }
 }
 
+/// <summary>
+/// 自由相机
+/// </summary>
 public class FreeCamera : Camera
 {
     private const float MoveSpeed = 0.4f;

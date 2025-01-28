@@ -4,10 +4,14 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// Τ²Χ¶Με
+/// </summary>
 public class Cone : CSMInstance
 {
     public const int Tesselation = 20;
 
+    /// <inheritdoc/>
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()
     {
         static Vector3 GetSpherical(double alpha, double beta)
@@ -56,6 +60,10 @@ public class Cone : CSMInstance
         return (vertices.ToArray(), indices.ToArray());
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="shader"></param>
     public override void LightPass(PhongShader shader)
     {
         shader.MaterialProperties.SetDefaultMaterial();

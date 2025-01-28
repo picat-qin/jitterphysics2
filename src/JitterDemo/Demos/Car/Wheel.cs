@@ -36,6 +36,8 @@ using JitterDemo.Renderer;
 namespace JitterDemo;
 
 /// <summary>
+/// 一种向车身增加驱动力的轮子。<br></br><br></br>
+/// 可用于制造车辆。<br></br><br></br>
 /// A wheel which adds drive forces to a body.
 /// Can be used to create a vehicle.
 /// </summary>
@@ -59,82 +61,114 @@ public class Wheel
     private readonly DynamicTree.RayCastFilterPre rayCast;
 
     /// <summary>
+    /// 轮子角度 <br></br><br></br>
     /// Sets or gets the current steering angle of
     /// the wheel in degrees.
     /// </summary>
     public float SteerAngle { get; set; }
 
     /// <summary>
+    /// 获取车轮当前的旋转角度。<br></br><br></br>
     /// Gets the current rotation of the wheel in degrees.
     /// </summary>
     public float WheelRotation { get; private set; }
 
     /// <summary>
+    /// 悬挂弹簧的阻尼系数。<br></br><br></br>
     /// The damping factor of the supension spring.
     /// </summary>
     public float Damping { get; set; }
 
     /// <summary>
+    /// 悬挂弹簧。<br></br><br></br>
     /// The supension spring.
     /// </summary>
     public float Spring { get; set; }
 
     /// <summary>
+    /// 惯性 <br></br><br></br>
     /// Inertia of the wheel.
     /// </summary>
     public float Inertia { get; set; }
 
     /// <summary>
+    /// 半径
     /// The wheel radius.
     /// </summary>
     public float Radius { get; set; }
 
     /// <summary>
+    /// 汽车在侧向方向的摩擦。<br></br><br></br>
     /// The friction of the car in the side direction.
     /// </summary>
     public float SideFriction { get; set; }
 
     /// <summary>
+    /// 汽车在前进方向上的摩擦。<br></br><br></br>
     /// Friction of the car in forward direction.
     /// </summary>
     public float ForwardFriction { get; set; }
 
     /// <summary>
+    /// 悬挂弹簧的长度。<br></br><br></br>
     /// The length of the suspension spring.
     /// </summary>
     public float WheelTravel { get; set; }
 
     /// <summary>
+    /// 是否锁死轮子
     /// If set to true the wheel blocks.
     /// </summary>
     public bool Locked { get; set; }
 
     /// <summary>
+    /// 车轮可能达到的最高速度。<br></br><br></br>
     /// The highest possible velocity of the wheel.
     /// </summary>
     public float MaximumAngularVelocity { get; set; }
 
     /// <summary>
+    /// 用于轮子的射线数量 <br></br><br></br>
     /// The number of rays used for this wheel.
     /// </summary>
     public int NumberOfRays { get; set; }
 
     /// <summary>
+    /// 轮子在主体空间中的位置 <br></br><br></br>
     /// The position of the wheel in body space.
     /// </summary>
     public JVector Position { get; set; }
 
+    /// <summary>
+    /// 角速度
+    /// </summary>
     public float AngularVelocity => angVel;
 
+    /// <summary>
+    /// 上方向向量
+    /// </summary>
     public readonly JVector Up = JVector.UnitY;
 
     /// <summary>
-    /// Creates a new instance of the Wheel class.
+    ///     创建一个新的轮子实例 <br></br><br></br>
+    ///     Creates a new instance of the Wheel class.
     /// </summary>
-    /// <param name="world">The world.</param>
-    /// <param name="car">The RigidBody on which to apply the wheel forces.</param>
-    /// <param name="position">The position of the wheel on the body (in body space).</param>
-    /// <param name="radius">The wheel radius.</param>
+    /// <param name="world">
+    ///    所属世界 <br></br><br></br> 
+    ///    The world.
+    /// </param>
+    /// <param name="car">
+    ///     要附加到的刚体汽车 <br></br> 
+    ///     The RigidBody on which to apply the wheel forces.
+    /// </param>
+    /// <param name="position">
+    ///     主体空间中轮子位置 <br></br> 
+    ///     The position of the wheel on the body (in body space).
+    /// </param>
+    /// <param name="radius">
+    ///     轮子半径 <br></br><br></br> 
+    ///     The wheel radius.
+    /// </param>
     public Wheel(World world, RigidBody car, JVector position, float radius)
     {
         this.world = world;
@@ -154,23 +188,34 @@ public class Wheel
     }
 
     /// <summary>
-    /// Gets the position of the wheel in world space.
+    ///     获取轮子在世界中的位置 <br></br><br></br>
+    ///     Gets the position of the wheel in world space.
     /// </summary>
-    /// <returns>The position of the wheel in world space.</returns>
+    /// <returns>
+    ///     The position of the wheel in world space.
+    /// </returns>
     public JVector GetWheelCenter()
     {
         return Position + JVector.Transform(Up, car.Orientation) * displacement;
     }
 
     /// <summary>
-    /// Adds drivetorque.
+    ///     增加驱动扭矩。<br></br><br></br>
+    ///     Adds drivetorque.
     /// </summary>
-    /// <param name="torque">The amount of torque applied to this wheel.</param>
+    /// <param name="torque">
+    ///     施加到该车轮上的扭矩量。<br></br><br></br>
+    ///     The amount of torque applied to this wheel.
+    /// </param>
     public void AddTorque(float torque)
     {
         driveTorque += torque;
     }
 
+    /// <summary>
+    /// 位置步
+    /// </summary>
+    /// <param name="timeStep"></param>
     public void PostStep(float timeStep)
     {
         if (timeStep <= 0.0f) return;
@@ -206,6 +251,11 @@ public class Wheel
         }
     }
 
+    /// <summary>
+    /// 预处理步
+    /// </summary>
+    /// <param name="timeStep"></param>
+    /// <exception cref="Exception"></exception>
     public void PreStep(float timeStep)
     {
         // var dr = Playground.Instance.DebugRenderer;

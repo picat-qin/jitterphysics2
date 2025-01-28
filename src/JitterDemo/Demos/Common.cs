@@ -10,8 +10,14 @@ using JitterDemo.Renderer;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 通用静态类
+/// </summary>
 public static class Common
 {
+    /// <summary>
+    /// 忽略过滤器之间的碰撞
+    /// </summary>
     public class IgnoreCollisionBetweenFilter : IBroadPhaseFilter
     {
         private readonly struct Pair : IEquatable<Pair>
@@ -49,7 +55,12 @@ public static class Common
             if (shapeB.ShapeId < shapeA.ShapeId) (shapeA, shapeB) = (shapeB, shapeA);
             return !ignore.Contains(new Pair(shapeA, shapeB));
         }
-
+        
+        /// <summary>
+        /// 忽略两个过滤器之间的碰撞
+        /// </summary>
+        /// <param name="shapeA"></param>
+        /// <param name="shapeB"></param>
         public void IgnoreCollisionBetween(RigidBodyShape shapeA, RigidBodyShape shapeB)
         {
             if (shapeB.ShapeId < shapeA.ShapeId) (shapeA, shapeB) = (shapeB, shapeA);
@@ -57,21 +68,58 @@ public static class Common
         }
     }
 
+    /// <summary>
+    /// 布娃娃部件
+    /// </summary>
     public enum RagdollParts
     {
+        /// <summary>
+        /// 头
+        /// </summary>
         Head,
+        /// <summary>
+        /// 左大腿
+        /// </summary>
         UpperLegLeft,
+        /// <summary>
+        /// 右大腿
+        /// </summary>
         UpperLegRight,
+        /// <summary>
+        /// 左小腿
+        /// </summary>
         LowerLegLeft,
+        /// <summary>
+        /// 右小腿
+        /// </summary>
         LowerLegRight,
+        /// <summary>
+        /// 左大臂
+        /// </summary>
         UpperArmLeft,
+        /// <summary>
+        /// 右大臂
+        /// </summary>
         UpperArmRight,
+        /// <summary>
+        /// 左小臂
+        /// </summary>
         LowerArmLeft,
+        /// <summary>
+        /// 右小臂
+        /// </summary>
         LowerArmRight,
+        /// <summary>
+        /// 躯干
+        /// </summary>
         Torso
     }
 
-
+    /// <summary>
+    /// 生成一个布娃娃
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="action">对于每一个构成布娃娃部件的附加操作</param>
     public static void BuildRagdoll(JVector position, Action<RigidBody>? action = null)
     {
         Playground pg = (Playground)RenderWindow.Instance;
@@ -234,6 +282,12 @@ public static class Common
         }
     }
 
+    /// <summary>
+    /// 生成一个塔
+    /// </summary>
+    /// <param name="pos">位置</param>
+    /// <param name="height">高度</param>
+    /// <param name="action">对于每一个构成刚体的附加操作</param>
     public static void BuildTower(JVector pos, int height = 40, Action<RigidBody>? action = null)
     {
         Playground pg = (Playground)RenderWindow.Instance;
@@ -267,6 +321,12 @@ public static class Common
         }
     }
 
+    /// <summary>
+    /// 生成一个积木
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="size">尺寸</param>
+    /// <param name="action">对于每一个构成刚体的附加操作</param>
     public static void BuildJenga(JVector position, int size = 20, Action<RigidBody>? action = null)
     {
         Playground pg = (Playground)RenderWindow.Instance;
@@ -296,6 +356,13 @@ public static class Common
         }
     }
 
+    /// <summary>
+    /// 生成一堵墙
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="sizex">X 尺寸</param>
+    /// <param name="sizey">Y 尺寸</param>
+    /// <param name="action">对于每一个构成刚体的附加操作</param>
     public static void BuildWall(JVector position, int sizex = 20, int sizey = 14, Action<RigidBody>? action = null)
     {
         Playground pg = (Playground)RenderWindow.Instance;
@@ -314,6 +381,12 @@ public static class Common
         }
     }
 
+    /// <summary>
+    /// 生成一个圆柱体组成的金字塔
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="size">尺寸</param>
+    /// <param name="action">对于每一个构成刚体的附加操作</param>
     public static void BuildPyramidCylinder(JVector position, int size = 20, Action<RigidBody>? action = null)
     {
         Playground pg = (Playground)RenderWindow.Instance;

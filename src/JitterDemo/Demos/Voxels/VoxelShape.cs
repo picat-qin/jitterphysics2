@@ -5,12 +5,27 @@ using Jitter2.LinearMath;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 体素形状
+/// </summary>
 public class VoxelShape : RigidBodyShape
 {
+    /// <summary>
+    /// 位置
+    /// </summary>
     public JVector Position { get; }
+    /// <summary>
+    /// 体素索引
+    /// </summary>
     public int VoxelIndex { private set; get; }
+    /// <summary>
+    /// 体素网格
+    /// </summary>
     public VoxelGrid VoxelGrid { private set; get; }
 
+    /// <summary>
+    /// 临近体素
+    /// </summary>
     public uint Neighbours { private set; get; }
 
     public VoxelShape(VoxelGrid grid, int index)

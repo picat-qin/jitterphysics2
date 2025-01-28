@@ -6,7 +6,7 @@ namespace JitterDemo;
 
 public class Demo03 : IDemo
 {
-    public string Name => "Ancient Pyramids";
+    public string Name => "¹Å´ú½ğ×ÖËş Ancient Pyramids";
 
     public void Build()
     {

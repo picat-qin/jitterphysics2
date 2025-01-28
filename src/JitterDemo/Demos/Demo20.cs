@@ -117,7 +117,7 @@ public class Tester(JBBox box) : IDynamicTreeProxy
 
 public class Demo20 : IDemo, ICleanDemo
 {
-    public string Name => "Custom Collision (Octree)";
+    public string Name => "×Ô¶¨ÒåÅö×²(°Ë²æÊ÷) Custom Collision (Octree)";
 
     private Playground pg = null!;
     private World world = null!;

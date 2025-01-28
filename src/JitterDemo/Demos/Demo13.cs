@@ -8,7 +8,7 @@ namespace JitterDemo;
 
 public class Demo13 : IDemo
 {
-    public string Name => "Motor and Limit";
+    public string Name => "运动限制 Motor and Limit";
 
     public void Build()
     {

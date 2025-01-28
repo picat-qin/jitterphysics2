@@ -25,9 +25,18 @@ using System.IO;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 图像资产
+/// </summary>
 public class Image
 {
+     /// <summary>
+     /// 宽度
+     /// </summary>
     public int Width { private set; get; }
+    /// <summary>
+    /// 高度
+    /// </summary>
     public int Height { private set; get; }
 
     private readonly byte[] argbData;
@@ -40,10 +49,11 @@ public class Image
     }
 
     /// <summary>
+    /// 小型的  *.tga（Truevision TGA）加载器，用于运行时真彩色图像<br></br><br></br>
     /// Minimal  *.tga (Truevision TGA) loader for true color images with runtime
     /// length encoding support.
     /// </summary>
-    public static Image LoadImage(string filename)
+    public static Image LoadImage(string filename) 
     {
         const int dataOffset = 18;
 
@@ -117,6 +127,10 @@ public class Image
         return new Image(decoded, imageWidth, imageHeight);
     }
 
+    /// <summary>
+    /// 防止GC操作数据
+    /// </summary>
+    /// <param name="action"></param>
     public unsafe void FixedData(Action<Image, IntPtr> action)
     {
         fixed (void* ptr = argbData)

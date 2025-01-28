@@ -3,11 +3,17 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 颜色转换
+/// </summary>
 public struct TransformColor
 {
     public Matrix4 Transform;
     public Vector3 Color;
 
+    /// <summary>
+    /// 默认颜色
+    /// </summary>
     public static TransformColor Default = Default2();
 
     private static TransformColor Default2()
@@ -33,16 +39,30 @@ public class CSMInstance
     public TransformColor[] WorldMatrices = { TransformColor.Default };
     public int Count { set; get; } = 1;
 
+    /// <summary>
+    /// 提供顶点
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public virtual (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// 推送矩阵
+    /// </summary>
+    /// <param name="matrix"></param>
     public void PushMatrix(in Matrix4 matrix)
     {
         PushMatrix(matrix, new Vector3(1, 1, 1));
     }
 
+    /// <summary>
+    /// 推送矩阵
+    /// </summary>
+    /// <param name="matrix"></param>
+    /// <param name="color">颜色向量</param>
     public void PushMatrix(in Matrix4 matrix, in Vector3 color)
     {
         Count++;
@@ -59,6 +79,10 @@ public class CSMInstance
         WorldMatrices[Count - 1] = tc;
     }
 
+    /// <summary>
+    /// 光照通道
+    /// </summary>
+    /// <param name="shader"></param>
     public virtual void LightPass(PhongShader shader)
     {
         if (Count == 0) return;
@@ -69,12 +93,19 @@ public class CSMInstance
         GLDevice.DrawElementsInstanced(DrawMode.Triangles, IndexLen, IndexType.UnsignedInt, 0, Count);
     }
 
+    /// <summary>
+    /// 更新世界矩阵
+    /// </summary>
     public virtual void UpdateWorldMatrices()
     {
         if (Count == 0) return;
         worldMatrices.SetData(WorldMatrices, Count);
     }
 
+    /// <summary>
+    /// 影子通道
+    /// </summary>
+    /// <param name="shader"></param>
     public virtual void ShadowPass(ShadowShader shader)
     {
         if (Count == 0) return;
@@ -83,6 +114,9 @@ public class CSMInstance
         GLDevice.DrawElementsInstanced(DrawMode.Triangles, IndexLen, IndexType.UnsignedInt, 0, Count);
     }
 
+    /// <summary>
+    /// 加载
+    /// </summary>
     public virtual void Load()
     {
         Vao = new VertexArrayObject();

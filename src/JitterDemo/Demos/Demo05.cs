@@ -25,7 +25,7 @@ public class Dust : TriangleMesh
 
 public class Demo05 : IDemo
 {
-    public string Name => "Level Geometry";
+    public string Name => "水平几何图形 Level Geometry";
 
     private TriangleMesh tm = null!;
 

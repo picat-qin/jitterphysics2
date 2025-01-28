@@ -7,12 +7,21 @@ using Jitter2.LinearMath;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 八叉树
+/// </summary>
 public class Octree
 {
+    /// <summary>
+    /// 节点
+    /// </summary>
     public struct Node
     {
         #region public struct NeighborIndices
 
+        /// <summary>
+        /// 邻域指标
+        /// </summary>
         [StructLayout(LayoutKind.Explicit, Size = 8 * sizeof(uint))]
         public struct NeighborIndices
         {
@@ -33,16 +42,34 @@ public class Octree
 
         #endregion
 
+        /// <summary>
+        /// 盒子
+        /// </summary>
         public JBBox Box;
+        /// <summary>
+        /// 邻居
+        /// </summary>
         public NeighborIndices Neighbors;
 
         public List<uint>? Triangles;
     }
 
+    /// <summary>
+    /// 三角指标
+    /// </summary>
     public struct TriangleIndices
     {
+        /// <summary>
+        /// A 索引
+        /// </summary>
         public uint IndexA;
+        /// <summary>
+        /// B 索引
+        /// </summary>
         public uint IndexB;
+        /// <summary>
+        /// C 索引
+        /// </summary>
         public uint IndexC;
 
         public TriangleIndices(uint indexA, uint indexB, uint indexC)
@@ -62,11 +89,29 @@ public class Octree
 
     private int numLeafs;
 
+    /// <summary>
+    /// 尺寸
+    /// </summary>
     public JBBox Dimensions => nodes[0].Box;
 
+    /// <summary>
+    /// 顶点集
+    /// </summary>
     public JVector[] Vertices => vertices;
+    /// <summary>
+    /// 三角指标集
+    /// </summary>
     public TriangleIndices[] Indices => indices;
 
+    /// <summary>
+    ///     实例化八叉树
+    /// </summary>
+    /// <param name="indices">
+    ///     三角指标集
+    /// </param>
+    /// <param name="vertices">
+    ///     顶点集
+    /// </param>
     public Octree(TriangleIndices[] indices, JVector[] vertices)
     {
         this.indices = indices;

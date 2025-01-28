@@ -9,7 +9,7 @@ namespace JitterDemo;
 
 public class Demo16 : IDemo, ICleanDemo
 {
-    public string Name => "Soft Body Cubes";
+    public string Name => "ÈíÌå¿é Soft Body Cubes";
 
     private Playground pg = null!;
     private readonly List<SoftBodyCube> cubes = new();

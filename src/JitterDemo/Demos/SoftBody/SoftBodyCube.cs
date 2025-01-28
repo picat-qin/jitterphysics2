@@ -7,8 +7,14 @@ using Jitter2.SoftBodies;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 弹力块
+/// </summary>
 public class SoftBodyCube : SoftBody
 {
+    /// <summary>
+    /// 边缘集, 共12条边
+    /// </summary>
     public static readonly ValueTuple<int, int>[] Edges =
     {
         (0, 1), (1, 2), (2, 3), (3, 0),
@@ -16,10 +22,23 @@ public class SoftBodyCube : SoftBody
         (0, 4), (1, 5), (2, 6), (3, 7)
     };
 
+    /// <summary>
+    /// 中心, 绑定的刚体
+    /// </summary>
     public RigidBody Center { get; }
 
+    /// <summary>
+    ///     通过世界和偏移构造一个标准弹力块
+    /// </summary>
+    /// <param name="world">
+    ///     所属世界
+    /// </param>
+    /// <param name="offset">
+    ///     偏移 
+    /// </param>
     public SoftBodyCube(World world, JVector offset) : base(world)
     {
+        //TODO: magnet 待完善参数释义
         JVector[] vertices = new JVector[8];
 
         vertices[0] = new JVector(+1, -1, +1);

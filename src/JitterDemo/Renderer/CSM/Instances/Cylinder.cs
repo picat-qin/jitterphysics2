@@ -4,10 +4,20 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 圆柱体
+/// </summary>
 public class Cylinder : CSMInstance
 {
+    /// <summary>
+    /// 多边形化
+    /// </summary>
     public const int Tesselation = 20;
 
+    /// <summary>
+    /// 提供顶点
+    /// </summary>
+    /// <returns></returns>
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()
     {
         List<Vertex> vertices = new();
