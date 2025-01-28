@@ -12,6 +12,9 @@ namespace JitterDemo;
 
 #pragma warning disable CS8602
 
+/// <summary>
+/// 约束车
+/// </summary>
 public class ConstraintCar
 {
     private RigidBody car = null!;
@@ -29,6 +32,12 @@ public class ConstraintCar
     private const float MaxAngle = 40;
     private float steer;
 
+    /// <summary>
+    /// 构建车
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="position"></param>
+    /// <param name="action"></param>
     public void BuildCar(World world, JVector position, Action<RigidBody>? action = null)
     {
         List<RigidBody> bodies = new List<RigidBody>(9);
@@ -120,6 +129,9 @@ public class ConstraintCar
         if (action != null) bodies.ForEach(action);
     }
 
+    /// <summary>
+    /// 车辆更新控制
+    /// </summary>
     public void UpdateControls()
     {
         float accelerate;

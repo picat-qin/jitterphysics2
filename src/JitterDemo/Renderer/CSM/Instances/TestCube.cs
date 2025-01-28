@@ -2,6 +2,9 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// ²âÊÔ·½¿é
+/// </summary>
 public class TestCube : CSMInstance
 {
     private float timea;

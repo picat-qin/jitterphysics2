@@ -2,9 +2,18 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 通道着色器
+/// </summary>
 public class ShadowShader : BasicShader
 {
+    /// <summary>
+    /// 投影视图
+    /// </summary>
     public UniformMatrix4 ProjectionView { private set; get; }
+    /// <summary>
+    /// 模型
+    /// </summary>
     public UniformMatrix4 Model { private set; get; }
 
     public ShadowShader() : base(vshader, fshader)
@@ -36,29 +45,58 @@ public class ShadowShader : BasicShader
         ";
 }
 
+/// <summary>
+/// Phong光照模型着色器
+/// </summary>
 public class PhongShader : BasicShader
 {
+    /// <summary>
+    /// 材料
+    /// </summary>
     public class Material
     {
+        /// <summary>
+        /// 颜色
+        /// </summary>
         public UniformVector3 Color { get; }
+        /// <summary>
+        /// 镜面反射
+        /// </summary>
         public UniformVector3 Specular { get; }
+        /// <summary>
+        /// 光泽度
+        /// </summary>
         public UniformFloat Shininess { get; }
+        /// <summary>
+        /// 表示光滑程度, 越大物体越光滑
+        /// </summary>
         public UniformFloat Alpha { get; }
 
         private UniformFloat NormalMultiply { get; }
 
+        /// <summary>
+        /// 翻转法向量
+        /// </summary>
         public bool FlipNormal
         {
             set => NormalMultiply.Set(value ? -1.0f : 1.0f);
         }
 
         /// <summary>
+        /// 颜色混合 <br></br><br></br>
+        /// 逻辑: <br></br>
+        /// 环境 = ColorMixing.X * 顶点颜色 + ColorMixing.Y * 着色器颜色<br></br>
+        /// 扩散 = （1.0f - ColorMixing.Z） * vec3（0.6f） + ColorMixing.Z* textureColor。<br></br><br></br>
         /// Magic:
         /// Ambient = ColorMixing.X * vertexColor + ColorMixing.Y * shaderColor
         /// Diffusive = (1.0f - ColorMixing.Z) * vec3(0.6f) +  ColorMixing.Z * textureColor.
         /// </summary>
         public UniformVector3 ColorMixing { get; }
 
+        /// <summary>
+        /// 构造材料
+        /// </summary>
+        /// <param name="shader">渲染程序</param>
         public Material(ShaderProgram shader)
         {
             Color = shader.GetUniform<UniformVector3>("material.color");
@@ -69,6 +107,9 @@ public class PhongShader : BasicShader
             NormalMultiply = shader.GetUniform<UniformFloat>("material.flipnormal");
         }
 
+        /// <summary>
+        /// 设置默认材料
+        /// </summary>
         public void SetDefaultMaterial()
         {
             Color.Set(0.0f, 0.0f, 0.0f);
@@ -80,15 +121,42 @@ public class PhongShader : BasicShader
         }
     }
 
+    /// <summary>
+    /// 视图
+    /// </summary>
     public UniformMatrix4 View { private set; get; }
+    /// <summary>
+    /// 投影
+    /// </summary>
     public UniformMatrix4 Projection { private set; get; }
+    /// <summary>
+    /// 视图位置
+    /// </summary>
     public UniformVector3 ViewPosition { private set; get; }
+    /// <summary>
+    /// 太阳方向
+    /// </summary>
     public UniformVector3 SunDir { private set; get; }
+    /// <summary>
+    /// 材料属性
+    /// </summary>
     public Material MaterialProperties { private set; get; }
+    /// <summary>
+    /// 光
+    /// </summary>
     public UniformMatrix4 Lights { private set; get; }
+    /// <summary>
+    /// 测试
+    /// </summary>
     public UniformTexture Test { private set; get; }
+    /// <summary>
+    /// 模型
+    /// </summary>
     public UniformMatrix4 Model { private set; get; }
 
+    /// <summary>
+    /// 构造默认的 Phong 着色器
+    /// </summary>
     public PhongShader() : base(vshader, fshader)
     {
         View = GetUniform<UniformMatrix4>("view");

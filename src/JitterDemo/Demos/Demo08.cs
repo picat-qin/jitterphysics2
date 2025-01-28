@@ -7,7 +7,7 @@ namespace JitterDemo;
 
 public class Demo08 : IDemo
 {
-    public string Name => "Contact Manifold Test";
+    public string Name => "π‹Ω”¥•≤‚ ‘ Contact Manifold Test";
 
     public void Build()
     {

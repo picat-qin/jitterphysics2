@@ -3,6 +3,9 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// µØ°å
+/// </summary>
 public class JitterFloor : CSMInstance
 {
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()

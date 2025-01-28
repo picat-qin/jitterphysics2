@@ -26,7 +26,7 @@ public class Demo22 : IDemo
         }
     }
 
-    public string Name => "Kinematic bodies";
+    public string Name => "运动学物体 Kinematic bodies";
 
     private Playground pg = null!;
     private World world = null!;

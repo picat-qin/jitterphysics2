@@ -7,7 +7,7 @@ namespace JitterDemo;
 
 public class Demo04 : IDemo
 {
-    public string Name => "Many Ragdolls";
+    public string Name => "Ðí¶à²¼Å¼ Many Ragdolls";
 
 
     public void Build()

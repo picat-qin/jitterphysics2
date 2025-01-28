@@ -102,7 +102,7 @@ public class CarMesh : MultiMesh
 
 public class Demo06 : IDemo
 {
-    public string Name => "Ray-cast Car";
+    public string Name => "ÉäÏßÍ¶ÉäÆû³µ Ray-cast Car";
 
     private RayCastCar defaultCar = null!;
 

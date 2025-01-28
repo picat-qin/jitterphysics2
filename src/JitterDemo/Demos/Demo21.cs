@@ -8,7 +8,7 @@ namespace JitterDemo;
 
 public class Demo21 : IDemo
 {
-    public string Name => "Voxel Demo";
+    public string Name => "ÌåËØ Voxel Demo";
     private VoxelGrid voxelGrid = null!;
     private Playground pg = null!;
     private World world = null!;

@@ -13,7 +13,7 @@ namespace JitterDemo;
 
 public class Demo17 : IDemo, ICleanDemo
 {
-    public string Name => "Cloth";
+    public string Name => "≤º¡œ Cloth";
 
     private Playground pg = null!;
     private SoftBodyCloth cloth = null!;

@@ -11,7 +11,7 @@ namespace JitterDemo;
 
 public class Demo01 : IDemo
 {
-    public string Name => "Constraint car";
+    public string Name => "Ô¼Êø³µ Constraint car";
 
     private readonly ConstraintCar car = new();
     private readonly List<HingeJoint> hinges = new();

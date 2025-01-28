@@ -4,8 +4,14 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 半球体
+/// </summary>
 public class HalfSphere : CSMInstance
 {
+    /// <summary>
+    /// 多边形化
+    /// </summary>
     public const int Tesselation = 20;
 
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()

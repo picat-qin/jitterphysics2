@@ -4,10 +4,19 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// CSM 读取器
+/// </summary>
 public class CSMRenderer
 {
     private readonly Dictionary<Type, CSMInstance> csmInstances = new();
 
+    /// <summary>
+    /// 获取实例
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public T GetInstance<T>() where T : CSMInstance
     {
         if (!csmInstances.TryGetValue(typeof(T), out CSMInstance? rinst))
@@ -25,9 +34,16 @@ public class CSMRenderer
     }
 
     private readonly Matrix4[] lightMatrices = new Matrix4[3];
+
+    /// <summary>
+    /// 深度地图
+    /// </summary>
     public Texture2D[] depthMap = new Texture2D[3];
     private readonly FrameBuffer[] depthMapFBO = new FrameBuffer[3];
 
+    /// <summary>
+    /// 影子地图尺寸
+    /// </summary>
     public const int ShadowMapSize = 4096;
 
     private ShadowShader shadowShader = null!;
@@ -146,6 +162,9 @@ public class CSMRenderer
         FrameBuffer.Default.Bind();
     }
 
+    /// <summary>
+    /// 加载
+    /// </summary>
     public void Load()
     {
         for (int i = 0; i < 3; i++) CreateFramebuffer(out depthMap[i], out depthMapFBO[i]);
@@ -159,6 +178,9 @@ public class CSMRenderer
         phongShader.Model.Set(Matrix4.Identity);
     }
 
+    /// <summary>
+    /// 画
+    /// </summary>
     public void Draw()
     {
         Camera camera = RenderWindow.Instance.Camera;

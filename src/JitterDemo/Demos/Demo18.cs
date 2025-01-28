@@ -36,7 +36,7 @@ public class Demo18 : IDemo
         }
     }
 
-    public string Name => "PointTest";
+    public string Name => "µ„≤‚ ‘ PointTest";
 
     private Playground pg = null!;
     private World world = null!;

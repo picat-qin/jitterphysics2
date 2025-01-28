@@ -4,24 +4,66 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer.DearImGui;
 
+/// <summary>
+/// ImGui 输入文字回调
+/// </summary>
+/// <param name="data"></param>
+/// <returns></returns>
 public unsafe delegate int ImGuiInputTextCallback(ImGuiInputTextCallbackData* data);
 
+/// <summary>
+/// ImGui 尺寸回调
+/// </summary>
+/// <param name="data"></param>
 public unsafe delegate void ImGuiSizeCallback(ImGuiSizeCallbackData* data);
 
+/// <summary>
+/// ImGui 存储对
+/// </summary>
 public unsafe struct ImGuiStoragePair
 {
+    /// <summary>
+    /// 键
+    /// </summary>
     public uint key;
+    /// <summary>
+    /// <see langword="int"/> 值
+    /// </summary>
     public int val_i;
+    /// <summary>
+    /// <see langword="float"/> 值
+    /// </summary>
     public float val_f;
+    /// <summary>
+    ///  其他类型指针
+    /// </summary>
     public void* val_p;
 }
 
+/// <summary>
+/// Im 矢量
+/// </summary>
 public unsafe struct ImVector
 {
+    /// <summary>
+    /// 大小
+    /// </summary>
     public readonly int Size;
+    /// <summary>
+    /// 容量
+    /// </summary>
     public readonly int Capacity;
+    /// <summary>
+    /// 数据
+    /// </summary>
     public readonly IntPtr Data;
 
+    /// <summary>
+    /// 构造一个 Im 矢量
+    /// </summary>
+    /// <param name="size">大小</param>
+    /// <param name="capacity">容量</param>
+    /// <param name="data">数据</param>
     public ImVector(int size, int capacity, IntPtr data)
     {
         Size = size;
@@ -29,76 +71,211 @@ public unsafe struct ImVector
         Data = data;
     }
 
+    /// <summary>
+    /// 引用
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public ref T Ref<T>(int index)
     {
         return ref Unsafe.AsRef<T>((byte*)Data + index * Unsafe.SizeOf<T>());
     }
 
+    /// <summary>
+    /// 地址
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public IntPtr Address<T>(int index)
     {
         return (IntPtr)((byte*)Data + index * Unsafe.SizeOf<T>());
     }
 }
 
+/// <summary>
+/// Im 绘图标志
+/// </summary>
 [Flags]
 public enum ImDrawFlags
 {
+    /// <summary>
+    /// 无
+    /// </summary>
     None = 0,
+    /// <summary>
+    /// 关闭
+    /// </summary>
     Closed = 1,
+    /// <summary>
+    /// 圆角左上角
+    /// </summary>
     RoundCornersTopLeft = 16,
+    /// <summary>
+    /// 圆角右上角
+    /// </summary>
     RoundCornersTopRight = 32,
+    /// <summary>
+    /// 圆角左下角
+    /// </summary>
     RoundCornersBottomLeft = 64,
+    /// <summary>
+    /// 圆角右下角
+    /// </summary>
     RoundCornersBottomRight = 128,
+    /// <summary>
+    /// 没有圆角
+    /// </summary>
     RoundCornersNone = 256,
+    /// <summary>
+    /// 圆角顶部
+    /// </summary>
     RoundCornersTop = 48,
+    /// <summary>
+    /// 圆角底部
+    /// </summary>
     RoundCornersBottom = 192,
+    /// <summary>
+    /// 圆角左侧
+    /// </summary>
     RoundCornersLeft = 80,
+    /// <summary>
+    /// 圆角右侧
+    /// </summary>
     RoundCornersRight = 160,
+    /// <summary>
+    /// 所有圆角
+    /// </summary>
     RoundCornersAll = 240,
+    /// <summary>
+    /// 默认圆角
+    /// </summary>
     RoundCornersDefault = 240,
+    /// <summary>
+    /// 圆角遮罩
+    /// </summary>
     RoundCornersMask = 496
 }
 
+/// <summary>
+/// Im 绘画列表标志
+/// </summary>
 [Flags]
 public enum ImDrawListFlags
 {
+    /// <summary>
+    /// 无
+    /// </summary>
     None = 0,
+    /// <summary>
+    /// 抗锯齿线
+    /// </summary>
     AntiAliasedLines = 1,
+    /// <summary>
+    /// 抗锯齿线使用Tex
+    /// </summary>
     AntiAliasedLinesUseTex = 2,
+    /// <summary>
+    /// 抗锯齿填充
+    /// </summary>
     AntiAliasedFill = 4,
+    /// <summary>
+    /// 允许 Vtx 偏移
+    /// </summary>
     AllowVtxOffset = 8
 }
 
+/// <summary>
+/// Im 字体图集标志
+/// </summary>
 [Flags]
 public enum ImFontAtlasFlags
 {
+    /// <summary>
+    /// 无
+    /// </summary>
     None = 0,
+    /// <summary>
+    /// 没有双倍高度
+    /// </summary>
     NoPowerOfTwoHeight = 1,
+    /// <summary>
+    /// 没有鼠标光标
+    /// </summary>
     NoMouseCursors = 2,
+    /// <summary>
+    /// 没有描边
+    /// </summary>
     NoBakedLines = 4
 }
 
+/// <summary>
+/// Im 后端标志
+/// </summary>
 [Flags]
 public enum ImGuiBackendFlags
 {
     None = 0,
+    /// <summary>
+    /// 有游戏手柄
+    /// </summary>
     HasGamepad = 1,
+    /// <summary>
+    /// 有鼠标光标
+    /// </summary>
     HasMouseCursors = 2,
+    /// <summary>
+    /// 有设置鼠标位置
+    /// </summary>
     HasSetMousePos = 4,
+    /// <summary>
+    /// 渲染器右 Vtx 偏移
+    /// </summary>
     RendererHasVtxOffset = 8,
+    /// <summary>
+    /// 平台具有视口
+    /// </summary>
     PlatformHasViewports = 1024,
+    /// <summary>
+    /// 有鼠标悬停在视口上
+    /// </summary>
     HasMouseHoveredViewport = 2048,
+    /// <summary>
+    /// 渲染器有视口
+    /// </summary>
     RendererHasViewports = 4096
 }
 
+/// <summary>
+/// Im 按钮标志
+/// </summary>
 [Flags]
 public enum ImGuiButtonFlags
 {
+    /// <summary>
+    /// 无
+    /// </summary>
     None = 0,
+    /// <summary>
+    /// 鼠标左脚
+    /// </summary>
     MouseButtonLeft = 1,
+    /// <summary>
+    /// 鼠标右键
+    /// </summary>
     MouseButtonRight = 2,
+    /// <summary>
+    /// 鼠标中键
+    /// </summary>
     MouseButtonMiddle = 4,
+    /// <summary>
+    /// 鼠标遮罩
+    /// </summary>
     MouseButtonMask = 7,
+    /// <summary>
+    /// 默认鼠标 (左键)
+    /// </summary>
     MouseButtonDefault = 1
 }
 
@@ -210,6 +387,9 @@ public enum ImGuiComboFlags
     HeightMask = 30
 }
 
+/// <summary>
+/// 条件
+/// </summary>
 public enum ImGuiCond
 {
     None = 0,
@@ -323,6 +503,9 @@ public enum ImGuiHoveredFlags
     NoSharedDelay = 8192
 }
 
+/// <summary>
+/// 输入文本标志
+/// </summary>
 [Flags]
 public enum ImGuiInputTextFlags
 {

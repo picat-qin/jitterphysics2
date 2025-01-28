@@ -7,7 +7,7 @@ namespace JitterDemo;
 
 public class Demo12 : IDemo
 {
-    public string Name => "Speculative Contacts";
+    public string Name => "Õ∆≤‚–‘Ω”¥• Speculative Contacts";
 
     public void Build()
     {

@@ -16,7 +16,7 @@ public class Demo00 : IDemo
 {
     private ConvexDecomposition<Teapot> teapotDecomp = null!;
 
-    public string Name => "Convex Decomposition";
+    public string Name => "Í¹·Ö½â Convex Decomposition";
 
     public void Build()
     {

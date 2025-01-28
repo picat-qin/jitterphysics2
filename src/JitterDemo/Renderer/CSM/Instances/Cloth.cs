@@ -3,11 +3,17 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 布料
+/// </summary>
 public class Cloth : CSMInstance
 {
     private Vertex[] vertices;
     private TriangleVertexIndex[] indices;
 
+    /// <summary>
+    /// 默认布料
+    /// </summary>
     public Cloth()
     {
         // dummy data
@@ -22,8 +28,15 @@ public class Cloth : CSMInstance
         indices[1] = new TriangleVertexIndex(1, 2, 3);
     }
 
+    /// <summary>
+    /// 顶点集
+    /// </summary>
     public Vertex[] Vertices => vertices;
 
+    /// <summary>
+    /// 设置索引
+    /// </summary>
+    /// <param name="indices"></param>
     public void SetIndices(TriangleVertexIndex[] indices)
     {
         IndexLen = indices.Length * 3;
@@ -41,6 +54,9 @@ public class Cloth : CSMInstance
         this.indices = indices;
     }
 
+    /// <summary>
+    /// 顶点发生改变
+    /// </summary>
     public void VerticesChanged()
     {
         for (int i = 0; i < vertices.Length; i++)

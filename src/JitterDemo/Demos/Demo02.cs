@@ -6,7 +6,7 @@ namespace JitterDemo;
 
 public class Demo02 : IDemo
 {
-    public string Name => "Tower of Jitter";
+    public string Name => "Ëþ Tower of Jitter";
 
     public void Build()
     {

@@ -4,8 +4,14 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// Çò
+/// </summary>
 public class Sphere : CSMInstance
 {
+    /// <summary>
+    /// ¶à±ßÐÎ»¯
+    /// </summary>
     public const int Tesselation = 20;
 
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()

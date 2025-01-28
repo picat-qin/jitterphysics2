@@ -4,8 +4,14 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 管
+/// </summary>
 public class Tube : CSMInstance
 {
+    /// <summary>
+    /// 多边形化
+    /// </summary>
     public const int Tesselation = 30;
 
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()

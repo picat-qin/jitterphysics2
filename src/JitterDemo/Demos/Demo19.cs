@@ -35,7 +35,7 @@ public class Demo19 : IDemo
         }
     }
 
-    public string Name => "RayCastTest";
+    public string Name => "…‰œﬂ∑¢…‰≤‚ ‘ RayCastTest";
 
     private Playground pg = null!;
     private World world = null!;

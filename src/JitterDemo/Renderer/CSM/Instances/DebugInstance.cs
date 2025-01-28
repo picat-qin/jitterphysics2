@@ -1,5 +1,8 @@
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// µ÷ÊÔÊµÀı
+/// </summary>
 public class DebugInstance : CSMInstance
 {
     private readonly Vertex[] vertices;

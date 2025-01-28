@@ -2,8 +2,15 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 方块
+/// </summary>
 public class Cube : CSMInstance
 {
+    /// <summary>
+    /// 提供顶点
+    /// </summary>
+    /// <returns></returns>
     public override (Vertex[] vertices, TriangleVertexIndex[] indices) ProvideVertices()
     {
         // a 1x1x1 unit cube centered around the origin.

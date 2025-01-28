@@ -9,17 +9,41 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 网
+/// </summary>
 public class Mesh
 {
+    /// <summary>
+    /// 组
+    /// </summary>
     public struct Group
     {
+        /// <summary>
+        /// 名称
+        /// </summary>
         public string Name;
+        /// <summary>
+        /// 来自包容
+        /// </summary>
         public int FromInclusive;
+        /// <summary>
+        /// 供给独有
+        /// </summary>
         public int ToExclusive;
     }
 
+    /// <summary>
+    /// 顶点集
+    /// </summary>
     public readonly Vertex[] Vertices;
+    /// <summary>
+    /// 三角向量索引集
+    /// </summary>
     public readonly TriangleVertexIndex[] Indices;
+    /// <summary>
+    /// 组集
+    /// </summary>
     public readonly Group[] Groups;
 
     private Mesh(Vertex[] vertices, TriangleVertexIndex[] indices, Group[] groups)
@@ -29,6 +53,10 @@ public class Mesh
         Groups = groups;
     }
 
+    /// <summary>
+    /// 转置 4x4 矩阵
+    /// </summary>
+    /// <param name="matrix"></param>
     public void Transform(Matrix4 matrix)
     {
         for (int i = 0; i < Vertices.Length; i++)
@@ -37,6 +65,12 @@ public class Mesh
         }
     }
 
+    /// <summary>
+    /// 从 zip 中读取每行字符, 注意: 压缩包内只能有一个目标文件
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     private static IEnumerable<string> ReadFromZip(string filename)
     {
         using var zip = new ZipArchive(File.OpenRead(filename));
@@ -52,6 +86,12 @@ public class Mesh
         }
     }
 
+    /// <summary>
+    /// 加载网
+    /// </summary>
+    /// <param name="filename">zip或者文本格式的文件, zip格式中只能载具唯一一个文本文件</param>
+    /// <param name="revertWinding">恢复绕组</param>
+    /// <returns></returns>
     public static Mesh LoadMesh(string filename, bool revertWinding = false)
     {
         var format = new NumberFormatInfo { NumberDecimalSeparator = "." };

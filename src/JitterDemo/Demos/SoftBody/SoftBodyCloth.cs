@@ -9,6 +9,9 @@ using JitterDemo.Renderer;
 
 namespace JitterDemo;
 
+/// <summary>
+/// 软体布料
+/// </summary>
 public class SoftBodyCloth : SoftBody
 {
     private readonly struct Edge : IEquatable<Edge>
@@ -42,10 +45,22 @@ public class SoftBodyCloth : SoftBody
     private List<TriangleVertexIndex> triangles = null!;
     private List<Edge> edges = null!;
 
+    /// <summary>
+    /// 三角形集
+    /// </summary>
     public List<TriangleVertexIndex> Triangles => triangles;
 
+    /// <summary>
+    ///     初始化一个软体布料
+    /// </summary>
+    /// <param name="world">
+    ///     所属世界
+    /// </param>
+    /// <param name="triangles">
+    ///         空间三角形集, 用于描述布料
+    /// </param>
     public SoftBodyCloth(World world, IEnumerable<JTriangle> triangles) : base(world)
-    {
+    { 
         this.world = world;
         LoadMesh(triangles);
         Build();

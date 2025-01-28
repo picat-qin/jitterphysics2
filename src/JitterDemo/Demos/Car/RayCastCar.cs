@@ -34,6 +34,8 @@ using Jitter2.LinearMath;
 namespace JitterDemo;
 
 /// <summary>
+/// 具有4个轮子的Jitter默认汽车。<br></br><br></br>
+/// 要创建自定义汽车，请使用Wheel类并将其添加到车身中。<br></br><br></br>
 /// Creates the Jitter default car with 4 wheels. To create a custom car
 /// use the Wheel class and add it to a body.
 /// </summary>
@@ -42,6 +44,9 @@ public class RayCastCar
     // the default car has 4 wheels
     private readonly World world;
 
+    /// <summary>
+    /// 绑定的刚体?
+    /// </summary>
     public RigidBody Body { get; }
 
     private float destSteering;
@@ -50,23 +55,27 @@ public class RayCastCar
     private float accelerate;
 
     /// <summary>
+    /// 前轮的最大转向角度（以度为单位）<br></br><br></br>
     /// The maximum steering angle in degrees
     /// for both front wheels
     /// </summary>
     public float SteerAngle { get; set; }
 
     /// <summary>
+    /// 加速时施加在车辆上的最大扭矩。<br></br><br></br>
     /// The maximum torque which is applied to the
     /// car when accelerating.
     /// </summary>
     public float DriveTorque { get; set; }
 
     /// <summary>
+    /// 加速度补偿 <br></br><br></br>
     /// Lower/Higher the acceleration of the car.
     /// </summary>
     public float AccelerationRate { get; set; }
 
     /// <summary>
+    /// 转向率补偿 <br></br><br></br>
     /// Lower/Higher the steering rate of the car.
     /// </summary>
     public float SteerRate { get; set; }
@@ -76,10 +85,11 @@ public class RayCastCar
     private const float springFrac = 0.45f;
 
     /// <summary>
+    /// 初始化默认汽车的新的实例。<br></br><br></br>
     /// Initializes a new instance of the DefaultCar class.
     /// </summary>
-    /// <param name="world">The world the car should be in.</param>
-    /// <param name="shape">The shape of the car. Recommend is a box shape.</param>
+    /// <param name="world">汽车所在世界 <br></br> The world the car should be in.</param>
+    /// <param name="shape">汽车的形状, 推荐是一个盒子形状 <br></br><br></br> The shape of the car. Recommend is a box shape.</param>
     public RayCastCar(World world)
     {
         this.world = world;
@@ -124,6 +134,9 @@ public class RayCastCar
     }
 
     /// <summary>
+    /// 调整轮子的数值 <br></br><br></br>
+    /// 这将基于汽车质量、车轮半径和重力重新计算所有车轮的惯性、阻尼和弹簧。<br></br>
+    /// 应在操作车轮数据后调用。<br></br><br></br>
     /// This recalculates the inertia, damping and spring of all wheels based
     /// on the car mass, the wheel radius and the gravity. Should be called
     /// after manipulating wheel data.
@@ -142,19 +155,29 @@ public class RayCastCar
     }
 
     /// <summary>
+    /// 轮子集 <br></br><br></br>
     /// Access the wheels.
     /// </summary>
     public Wheel[] Wheels { get; } = new Wheel[4];
 
     /// <summary>
+    /// 设置汽车的动力轮 <br></br><br></br>
     /// Set input values for the car.
     /// </summary>
     /// <param name="accelerate">
+    /// 加减速 <br></br><br></br>
+    /// 介于-1和1之间的值（其他值会被限制）。<br></br>
+    /// 通过设置<see cref="DriveTorque" />来调整汽车的最高速度。<br></br>
+    /// 通过设置<see cref="AccelerationRate" />来调整最高加速度。<br></br><br></br>
     /// A value between -1 and 1 (other values get clamped). Adjust
     /// the maximum speed of the car by setting <see cref="DriveTorque" />. The maximum acceleration is adjusted
     /// by setting <see cref="AccelerationRate" />.
     /// </param>
     /// <param name="steer">
+    /// 转向率 <br></br><br></br>
+    /// 介于-1和1之间的值（其他值会被限制）。<br></br>
+    /// 通过设置<see cref="SteerAngle"/>来调整最大转向角度。<br></br>
+    /// 转向速度的变化通过<see cref="SteerRate"/>来调整。<br></br><br></br>
     /// A value between -1 and 1 (other values get clamped). Adjust
     /// the maximum steer angle by setting <see cref="SteerAngle" />. The speed of steering
     /// change is adjusted by <see cref="SteerRate" />.
@@ -165,6 +188,10 @@ public class RayCastCar
         destSteering = steer;
     }
 
+    /// <summary>
+    /// 步
+    /// </summary>
+    /// <param name="timestep"></param>
     public void Step(float timestep)
     {
         foreach (Wheel w in Wheels) w.PreStep(timestep);

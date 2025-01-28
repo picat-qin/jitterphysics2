@@ -25,6 +25,9 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 三维向量
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct Vertex
 {
@@ -54,6 +57,9 @@ public struct Vertex
     }
 }
 
+/// <summary>
+/// 三角形向量索引
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct TriangleVertexIndex
 {

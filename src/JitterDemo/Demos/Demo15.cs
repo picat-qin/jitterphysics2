@@ -8,7 +8,7 @@ namespace JitterDemo;
 
 public class Demo15 : IDemo, ICleanDemo
 {
-    public string Name => "Pressurized Soft Bodies";
+    public string Name => "软体施加压力 Pressurized Soft Bodies";
 
     private Playground pg = null!;
     private readonly List<SoftBodySphere> spheres = new();

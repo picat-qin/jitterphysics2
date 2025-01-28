@@ -10,7 +10,7 @@ namespace JitterDemo;
 
 public class Demo11 : IDemo
 {
-    public string Name => "Double Pendulum";
+    public string Name => "Ë«°Ú Double Pendulum";
 
     private RigidBody b0 = null!, b1 = null!;
 

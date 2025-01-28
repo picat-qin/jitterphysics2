@@ -2,10 +2,21 @@ using JitterDemo.Renderer.OpenGL;
 
 namespace JitterDemo.Renderer;
 
+/// <summary>
+/// 多网络
+/// </summary>
 public class MultiMesh : CSMInstance
 {
+    /// <summary>
+    /// 网
+    /// </summary>
     public readonly Mesh mesh;
 
+    /// <summary>
+    /// 从文件中初始化一个网
+    /// </summary>
+    /// <param name="filename">文件路径, 文本格式或者仅包含一个文本文件的 zip 文件</param>
+    /// <param name="scale">比例</param>
     public MultiMesh(string filename, float scale = 1.0f)
     {
         mesh = Mesh.LoadMesh(filename, true);
