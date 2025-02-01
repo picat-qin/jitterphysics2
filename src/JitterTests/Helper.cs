@@ -21,7 +21,7 @@ public static class Helper
         {
             orientation *= halfRotationStep;
 
-            for (int i = 0; i < 32; i++)
+            for (int i = 0; i < 10; i++)
             {
                 JVector position = pos + JVector.Transform(
                     new JVector(0, (Real)0.5 + e, (Real)19.5), orientation);

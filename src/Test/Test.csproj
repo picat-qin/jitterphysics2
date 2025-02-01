@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jitter2\Jitter2.csproj" />
+    <ProjectReference Include="..\JitterDemo\JitterDemo.csproj" />
+    <ProjectReference Include="..\JitterTests\JitterTests.csproj" />
+  </ItemGroup>
+
+</Project>
